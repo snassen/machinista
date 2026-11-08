@@ -46,6 +46,7 @@ Status: **prototype, working on the MK3** (2026-11-08, Pi 5).
 | `norns/run-norns.sh` | Starts numbered norns instance `<n>` in Docker (`stop <n>` removes it); scripts in `~/norns/code` are shared, `~/norns/data/<n>` and `~/norns/tape/<n>` are per instance |
 | `norns/bridge/` | Audio bridge: Norns Instrument / Norns Effect LV2 plug-ins, the JACK daemon, tests |
 | `norns/container/Dockerfile` | The `norns-station` image: norns-lab runtime plus sc3-plugins and mi-UGens |
+| `app/norns_midi.py` | NORNS MIDI BUS device and the MIDI patchbay (bus ↔ norns ↔ MK3 MIDI port) |
 | `norns/library/` | The script pack (`pack.txt`), its installer and `test-scripts.py` (load errors and CPU per script) |
 | `norns/container/post-ready.sh` | Runs in each container once norns is ready: builds and starts the bridge daemon |
 | `norns/tools/osc_send.py` | Sends a test OSC message to a norns instance |

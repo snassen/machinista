@@ -144,6 +144,22 @@ separate `docker-cli` package you get "docker: not found".
 - Containers are started with `norns/run-norns.sh A|B`. `-i` keeps stdin open;
   without it the runtime's REPL sees EOF and exits.
 
+## 11. Script library, image and MIDI (2026-11-08)
+```bash
+docker build -t norns-station norns/container   # after the norns-lab image
+norns/library/install-pack.sh                   # scripts into ~/norns/code
+```
+The MIDI bus needs a kernel module, loaded at every boot (sudo, once):
+```bash
+echo snd-virmidi | sudo tee /etc/modules-load.d/norns-midi.conf
+echo "options snd-virmidi midi_devs=1" | sudo tee /etc/modprobe.d/norns-midi.conf
+sudo modprobe snd-virmidi midi_devs=1
+```
+Then in Machinista: MIDI IN and MIDI OUT = NORNS MIDI BUS, MIDI SYNC = OUT
+(`config/settings.json`: `midi_in`/`midi_out` = `norns:bus`,
+`midi_sync` = `OUT`), and restart the norns instances with
+`norns/run-norns.sh <n>`.
+
 ## Open items for an unattended installer
 - Enabling SSH without the WebUI (or calling the WebUI endpoint).
 - Unique hostname per device.

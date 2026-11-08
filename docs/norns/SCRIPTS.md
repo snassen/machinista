@@ -10,9 +10,9 @@ daemon) in percent of one core; the Pi 5 has four. An instance with no
 script uses about **6%**. Scripts were measured right after loading, without
 playing them, so busy scripts can use more while played.
 
-**Result: 44 of 45 load without errors.** cheat_codes_2 needs at least one
-MIDI device to start; it will load once each norns has its virtual MIDI
-device (see ROADMAP.md, MIDI).
+**Result: all 45 load without errors.** cheat_codes_2 needs at least one
+MIDI device to start; it loads since each norns has its virtual MIDI device
+(DESIGN.md, MIDI).
 
 | Script | CPU % | Engine | Notes |
 |---|---:|---|---|
@@ -31,6 +31,7 @@ device (see ROADMAP.md, MIDI).
 | takt | 14.6 | Timber_Takt | |
 | sines | 14.1 | Sines | |
 | otis | 13.8 | Decimator | processes audio input |
+| cheat_codes_2 | 13.8 | PolyPerc | needs a MIDI device |
 | silos | 13.4 | Thresher | |
 | mlre | 13.2 | | processes audio input |
 | stwnsh | 12.4 | | |
@@ -60,7 +61,6 @@ device (see ROADMAP.md, MIDI).
 | nameless-nightmare | 6.2 | Nameless_Nightmare | |
 | tapedeck | 6.2 | | processes audio input |
 | dronecaster | 5.2 | Dronecaster | |
-| cheat_codes_2 | — | | needs a MIDI device |
 
 "Processes audio input" marks well-known input processors (delays, loopers,
 tape), the natural candidates for the Norns Effect slot. Scripts without an

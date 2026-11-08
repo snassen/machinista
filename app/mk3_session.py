@@ -12,6 +12,7 @@ from app.mk3_state import snapshot
 from app.mk2_protocol import LED_BUTTONS,TRANSPORT
 from app.connection_health import ReaderWatch
 from app.norns_mode import NornsMode, sound_norns  # norns-mode fork hook
+from app.norns_midi import Patchbay  # norns-mode fork hook
 
 
 def strip_leds(app,surface):
@@ -28,9 +29,11 @@ def strip_leds(app,surface):
 class Mk3Session(Mk2Session):
     source='mk3';surface_type=Mk3Surface;product=0x1600;display_interface=5;device_name='Maschine MK3'
     norns=None  # norns-mode fork hook
+    patchbay=None  # norns-mode fork hook
     def __init__(self,*args):
         super().__init__(*args);self.reader_watch=ReaderWatch();self.palette=[];self.pad_trigger=Mk3PadTrigger()
         self.norns=NornsMode(self.root,sides=lambda:sound_norns(self.app))  # norns-mode fork hook
+        self.patchbay=Patchbay() if Path('/proc/asound').exists() else None  # norns-mode fork hook
     def connect(self,now):
         self.next_scan=now+2;self.cleanup=[t for t in self.cleanup if t.is_alive()]
         if self.cleanup:return
@@ -51,6 +54,7 @@ class Mk3Session(Mk2Session):
     def poll(self,*args):
         super().poll(*args)
         if self.norns and self.norns.active:self.norns.flush()  # norns-mode fork hook
+        if self.patchbay:self.patchbay.tick(time.monotonic())  # norns-mode fork hook
     def handle_event(self,event):
         if self.norns and self.norns.handle_event(event):return True  # norns-mode fork hook
         if event['kind'].startswith('pad_'):

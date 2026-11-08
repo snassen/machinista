@@ -32,5 +32,11 @@ RUN git clone -q https://github.com/carlosedp/norns-mi-UGens.git /tmp/mi \
 # release v3.0.2 (260819).
 RUN echo 260819 > /home/we/version.txt
 
+# The ALSA sequencer (/dev/snd/seq, passed in by run-norns.sh) belongs to
+# group audio (gid 29 on Raspberry Pi OS and Ubuntu alike). norns' virtual
+# MIDI device needs it.
+USER root
+RUN usermod -aG audio we
+
 # The base image's entrypoint starts as root and drops to we.
 USER root

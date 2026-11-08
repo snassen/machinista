@@ -64,7 +64,7 @@ with its own JACK server.
 | Screen | norns 128×64 → MK3 display | PNG file per instance | Prototype |
 | Input | MK3 buttons/knobs → norns K1–K3, E1–E3 | OSC over UDP | Prototype |
 | Audio | norns ↔ Machinista Sound | Shared memory per instance (`/dev/shm/norns/<n>/bridge`) | Working |
-| Clock/MIDI | Machinista → norns | open | Not started |
+| Clock/MIDI | Machinista ↔ norns ↔ MK3 MIDI port | ALSA sequencer patchbay | Working |
 | Grid | Maschine Jam 8×8 ↔ norns grid API | open | Later |
 
 ## MK3 control map
@@ -162,6 +162,37 @@ Reused from the Pi 4 add-on and extended for numbered instances
 - Measured with the MK3: Awake on norns 1 → Norns Instrument → Norns Effect
   → norns 2 (input monitor + reverb) → back, peaks around 0.35 at each stage,
   no underruns. CPU at that point: load average about 0.3 on the Pi 5.
+
+## MIDI (built 2026-11-08)
+Agreed: a Linux MIDI patchbay; every norns follows Machinista's MIDI clock.
+- **One owner for the MK3 MIDI port.** Either Machinista opens it directly
+  (raw MIDI) or the ALSA sequencer routes it; each blocks the other ("busy").
+  So all MIDI goes through the sequencer.
+- **NORNS MIDI BUS:** a `snd-virmidi` port (one-time setup with sudo, see
+  INSTALL-NOTES.md). Machinista's MIDI IN and OUT are set to it, with MIDI
+  SYNC OUT, so its clock, start/stop and MIDI notes leave through it, and
+  MIDI arriving at the MK3 port reaches Machinista through it.
+  `app/norns_midi.py` adds it to Machinista's MIDI devices.
+- **norns:** each container gets `/dev/snd/seq` (its user is in group
+  `audio`), so norns' own virtual MIDI device becomes an ALSA sequencer
+  client on the Pi. `run-norns.sh` puts it on norns MIDI port 1 (unless port
+  1 was given to something else) and makes MIDI the clock source before
+  every start; the `machinista_bridge` mod does the same for a new instance
+  with no saved state (its startup hook runs before norns restores
+  `system.state`, which would overwrite it). `NORNS_MIDI_CLOCK=0` keeps the
+  instance's own clock; `NORNS_NO_MIDI=1` starts it without the sequencer.
+- **Patchbay** (`app/norns_midi.py`, run from the MK3 session's poll loop
+  every 2 s): reads `aconnect -l` and adds missing connections: bus → every
+  norns, bus → MK3, MK3 → bus, every norns → MK3. A norns client is a user
+  client with a "Virtual RawMIDI" port whose process is called `norns`. It
+  never removes connections, so hand-made ones stay. A connection that fails
+  (e.g. the MK3 port selected directly in Machinista) is logged once and
+  retried every 30 s.
+- **Consequences:** with MIDI as the clock source, norns scripts that use
+  the clock stand still while Machinista's transport is stopped. Everything
+  Machinista sends on the bus reaches every norns as well as the MK3 port,
+  including notes for external gear. Each norns script picks its own MIDI
+  channel; their output is merged unfiltered.
 
 ## Open questions
 - **CPU budget:** two SuperCollider servers plus Machinista on a Pi 5, to be

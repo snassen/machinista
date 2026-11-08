@@ -16,23 +16,13 @@ Nothing below is decided until it says "Agreed".
 **Wish:** every norns follows Machinista's tempo and transport (start, stop,
 position) without setting each one by hand.
 
-**Notes:**
-- norns clock sources: internal, MIDI, Link and crow. Scripts written with
-  `clock.sync` follow whichever is selected; start/stop reaches scripts
-  through `clock.transport.start/stop`.
-- Two routes:
-  - **MIDI clock:** the Norns Instrument already has a MIDI input that is
-    unused today. Machinista would send clock ticks, start and stop through
-    the bridge (or a virtual MIDI port in each container), and each norns
-    sets its clock source to MIDI. It works with any script that uses the
-    norns clock.
-  - **Ableton Link:** norns supports Link with start/stop sync. Machinista
-    would have to join a Link session. A bonus: it would also sync with
-    other gear and laptops, which fits playing Norns Station alongside other
-    instruments.
-- Either way, the clock source should be set automatically when an instance
-  starts, so nothing is set by hand.
-- **Decision needed:** MIDI clock, Link or both.
+**Built 2026-11-08 (agreed: MIDI clock through a Linux MIDI patchbay; every
+norns switches to MIDI clock at start):** see DESIGN.md, MIDI. Machinista's
+MIDI SYNC is OUT on the NORNS MIDI BUS, so every norns follows its tempo and
+start/stop. Tested with an outside clock (norns locked to 89.95 BPM from 90);
+still to hear on the MK3 with Machinista's own transport.
+- Later, possibly: Ableton Link as well, to sync with other gear and
+  laptops over the network.
 
 ## 2. Script library
 **Wish:** the scripts prepared for the Pi 4 are installed on every norns.
@@ -47,8 +37,7 @@ image):**
 - `norns/container/Dockerfile` builds the `norns-station` image:
   norns-lab's runtime plus sc3-plugins and mi-UGens (arm64).
 - Scripts are loaded from norns' own menu for now (K1 → SELECT).
-- Tested (SCRIPTS.md): 44 of 45 load; cheat_codes_2 needs a MIDI device
-  (comes with 2b). CPU per instance ranges from about 6% (idle) to 24% of
+- Tested (SCRIPTS.md): all 45 load (cheat_codes_2 once MIDI was in). CPU per instance ranges from about 6% (idle) to 24% of
   one core, so eight heavy instances would use about half the Pi 5. 4 is
   not a limit (the code allows 8).
 - Still to do: check by ear that effect scripts process the Sound's audio;
@@ -75,22 +64,12 @@ image):**
 **Wish:** norns scripts (sequencers above all) send MIDI out of the MK3's
 MIDI port, from several instances at once. Test it.
 
-**Notes:**
-- The containers have no ALSA sequencer today (`/dev/snd/seq` missing,
-  matron logs "failed to open alsa virtual device"), so norns sees no MIDI
-  devices at all.
-- Machinista already owns the MIDI ports (a Sound can target a MIDI
-  output), so it is the natural hub: each norns gets a virtual MIDI device
-  whose output reaches Machinista, which merges the instances onto the MK3
-  MIDI out. The same path carries MIDI in (clock, pads) in the other
-  direction, see 1 and 3.
-- Ways in: through the audio bridge's shared memory (one MIDI ring per
-  direction next to the audio rings), or by passing the host's ALSA
-  sequencer into the containers.
-- Open: how instances share the port (channel per instance or per script
-  setting), and whether merged output must be filtered (e.g. several
-  instances sending clock).
-- **Decision needed:** which transport, and channel handling.
+**Built 2026-11-08:** every norns' virtual MIDI device is connected to the
+MK3 MIDI port; Linux's MIDI sequencer merges them (DESIGN.md, MIDI). Tested
+from the REPL (note and CC reach the sequencer); still to try with a real
+sequencer script and external gear.
+- Each script picks its own MIDI channel; nothing is filtered. If several
+  norns send MIDI clock out (off by default), the MK3 port gets them all.
 
 ## 3. More control from the MK3 in NORNS mode
 **Wish:**

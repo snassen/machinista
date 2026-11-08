@@ -33,7 +33,14 @@ docker rm -f "norns-$n" >/dev/null 2>&1 || true
 # no script (its guard against crash loops). This is a deliberate start, so
 # reload the last script.
 state="$home/data/$n/system.state"
-[[ -f "$state" ]] && sed -i 's/^norns.state.clean_shutdown = false/norns.state.clean_shutdown = true/' "$state"
+if [[ -f "$state" ]]; then
+  sed -i 's/^norns.state.clean_shutdown = false/norns.state.clean_shutdown = true/' "$state"
+  # MIDI from Machinista: the virtual device on port 1 (unless port 1 was
+  # given to something else) and MIDI as the clock source at every start.
+  # The machinista_bridge mod does the same for a new instance with no state.
+  sed -i "s/^midi.vports\[1\].name = 'none'/midi.vports[1].name = 'virtual'/" "$state"
+  [[ "${NORNS_MIDI_CLOCK:-1}" == 0 ]] || sed -i 's/^norns.state.clock.source = [0-9]*/norns.state.clock.source = 2/' "$state"
+fi
 # -i keeps stdin open: the runtime's Lua REPL exits on EOF.
 # JACK needs the shm/memlock/rtprio settings inside Docker; period 256 keeps
 # the bridge latency low (norns-lab's default is 1024).
@@ -42,6 +49,7 @@ docker run -d -i --name "norns-$n" --restart unless-stopped \
   -e NORNS_FRAME_EXPORT_MS="${NORNS_FRAME_EXPORT_MS:-100}" \
   -e NORN_LAB_JACK_PERIOD=256 \
   -e NORN_LAB_POST_READY=/opt/machinista/container/post-ready.sh \
+  ${NORNS_NO_MIDI:+--env NORNS_NO_MIDI=1} ${NORNS_NO_MIDI:---device /dev/snd/seq} \
   -p "127.0.0.1:$port:10111/udp" \
   -v "$frames:/frames" \
   -v "$home/code:/home/we/dust/code" \

@@ -84,6 +84,8 @@ def discover(sound=Path('/sys/class/sound'), proc=Path('/proc/asound'), dev=Path
     midi.extend(discover_ble(proc,dev))
     from app.mk1_midi import discover_mk1
     midi.extend(discover_mk1())
+    from app.norns_midi import discover_bus  # norns-mode fork hook
+    midi.extend(discover_bus(proc,dev))  # norns-mode fork hook
     return sorted(audio, key=lambda d: d.key), sorted(midi, key=lambda d: d.key)
 
 
