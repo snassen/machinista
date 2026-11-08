@@ -7,9 +7,9 @@ This module lives in the controller process: it routes MK3 input to those
 OSC ports and builds the display state. Rendering happens in
 app/norns_display.py inside the existing renderer process.
 
-Layout: norns A on the left display, norns B on the right.
-  K1-K3 = DISPLAY 1-3 (A) and DISPLAY 5-7 (B)
-  E1-E3 = KNOB 1-3 (A) and KNOB 5-7 (B)
+Layout: norns 1 on the left display, norns 2 on the right.
+  K1-K3 = DISPLAY 1-3 (norns 1) and DISPLAY 5-7 (norns 2)
+  E1-E3 = KNOB 1-3 (norns 1) and KNOB 5-7 (norns 2)
 SHIFT + PLUG-IN enters and leaves the mode. Transport and pads stay with
 Machinista so the groovebox keeps running underneath.
 """
@@ -20,9 +20,12 @@ import struct
 import time
 from pathlib import Path
 
+# Numbered instances started by norns/run-norns.sh <n>: RAM folder /dev/shm/norns/<n>,
+# OSC on 10110 + n. Until the displays follow the selected Sound's Norns
+# Instrument and Norns Effect, the left display shows norns 1 and the right norns 2.
 DEFAULT_INSTANCES = (
-    {'name': 'A', 'frame': '/home/machinista/norns/A/screen.png', 'port': 10111},
-    {'name': 'B', 'frame': '/home/machinista/norns/B/screen.png', 'port': 10112},
+    {'name': '1', 'frame': '/dev/shm/norns/1/screen.png', 'port': 10111},
+    {'name': '2', 'frame': '/dev/shm/norns/2/screen.png', 'port': 10112},
 )
 # Raw MK3 knob counts per norns encoder step (the MK3 knobs report 1000
 # counts per revolution, so 10 = 100 steps per turn). 25 felt sluggish on

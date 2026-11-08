@@ -1,0 +1,8 @@
+*.so
+*.o
+norns_bridged
+norns_bridged_test
+bridge_stat
+bridge_test
+guard_test
+build/

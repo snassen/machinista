@@ -10,8 +10,8 @@ decision.
 - **Takeover mode.** Entering NORNS mode steps away from normal Machinista use
   and hands most of the MK3's controls to norns, in the spirit of Ableton
   Push 3's mode for third-party devices.
-- **Two norns side by side.** Left display = norns A, right display = norns B,
-  each with 1:1 norns controls.
+- **Two norns side by side** (superseded by "norns as instrument and effect"
+  below; the displays now follow the selected Sound's instrument and effect).
 - **Enter/exit:** SHIFT + PLUG-IN toggles the mode. The PLUG-IN LED stays lit
   and both displays carry a "NORNS" label, so the mode is never ambiguous.
 - **Machinista keeps playing underneath.** PLAY, STOP, REC, RESTART and the
@@ -23,6 +23,29 @@ decision.
 - **Deployment:** the fork runs on the Pi with Machinista's own updater
   disabled, because the updater would overwrite patched files.
 
+## norns as instrument and effect (agreed 2026-11-08)
+This replaces the fixed "norns A left, norns B right" model.
+- **Two plug-in roles in a Sound's chain:**
+  - **Norns Instrument** (instrument slot): generates sound.
+  - **Norns Effect** (effect slot): receives the chain's audio as its input
+    and returns norns' output.
+- **Every norns instance has a number** (norns 1, 2, 3…), one container each.
+  Nothing in the code assumes exactly two.
+- **Several sound-generating norns** = Norns Instruments on separate Sounds,
+  mixed in Machinista's mixer. They are never shown side by side.
+- **Instrument + effect** = a Norns Instrument and a Norns Effect on the same
+  Sound, e.g. a drone through a glitch script.
+- **NORNS mode displays follow the selected Sound:** the left display is its
+  Norns Instrument, the right display is always its Norns Effect, the effect
+  running on top of the first norns.
+- **Later:** how many instances fit on the Pi 5 (CPU, to be measured), how a
+  Sound picks its instance number, and the edge cases below.
+- **Edge cases (proposed defaults, not yet confirmed):** a Sound with only a
+  Norns Effect (e.g. after a sampler) shows "no norns instrument" on the left;
+  with several Norns Effects on one Sound, the right display shows the first.
+- **Latency to keep in mind:** a Norns Effect adds the bridge buffers in both
+  directions (about 45 ms with the Pi 4 settings).
+
 ## Architecture
 Machinista owns the MK3 and is the host. Each norns runs in its own container
 with its own JACK server.
@@ -31,7 +54,7 @@ with its own JACK server.
 |---|---|---|---|
 | Screen | norns 128×64 → MK3 display | PNG file per instance | Prototype |
 | Input | MK3 buttons/knobs → norns K1–K3, E1–E3 | OSC over UDP | Prototype |
-| Audio | norns JACK → Machinista | **open** | Not started |
+| Audio | norns ↔ Machinista Sound | Shared memory per instance (`/dev/shm/norns/<n>/bridge`) | Working |
 | Clock/MIDI | Machinista → norns | open | Not started |
 | Grid | Maschine Jam 8×8 ↔ norns grid API | open | Later |
 
@@ -110,11 +133,33 @@ browser-based test workflow on a desktop machine.
   every button except SHIFT and transport is swallowed. Should pads or
   GROUP buttons reach norns instead, e.g. as MIDI notes?
 
+## Audio bridge (built 2026-11-08)
+Reused from the Pi 4 add-on and extended for numbered instances
+(`norns/bridge/`):
+- Each instance has a RAM folder `/dev/shm/norns/<n>`, mounted as `/frames`
+  in its container. Its `bridge` file holds two lock-free rings, one per
+  direction. Both ends resample very slightly to absorb the drift between
+  norns' JACK clock and the MK3 (about 130 ppm measured).
+- **Norns Instrument** and **Norns Effect** are two LV2 plug-ins in one bundle
+  (`norns.lv2`). The **Norns** control (1–8) picks the instance; the plug-in
+  maps all eight at load, so switching while playing is safe. Only one
+  plug-in may use an instance; another one on the same number stays silent
+  (instrument) or dry (effect). The effect also stays dry while its norns is
+  not running.
+- `norns_bridged` runs inside each container (started by
+  `norns/container/post-ready.sh` through norns-lab's `NORN_LAB_POST_READY`)
+  and connects crone's outputs and inputs. JACK runs with 256-frame periods
+  (`NORN_LAB_JACK_PERIOD`).
+- Fixed on the way: after one side stopped, the reader re-locked onto old
+  audio still in the ring and replayed it in short bursts (inherited from the
+  Pi 4 bridge). It now locks only on audio written after the last underrun.
+- Tests (`norns/bridge/test.sh`): 13 guard checks plus drift runs for both
+  plug-ins at 0 and ±200 ppm, no clicks and no dropouts.
+- Measured with the MK3: Awake on norns 1 → Norns Instrument → Norns Effect
+  → norns 2 (input monitor + reverb) → back, peaks around 0.35 at each stage,
+  no underruns. CPU at that point: load average about 0.3 on the Pi 5.
+
 ## Open questions
-- **Audio path:** norns' JACK output into Machinista's ALSA engine. Options
-  include a JACK backend in Machinista, an ALSA loopback device, or running
-  norns' JACK on the MK3 directly (which would compete with Machinista for
-  the device).
 - **CPU budget:** two SuperCollider servers plus Machinista on a Pi 5, to be
   measured.
 - **Upstream merges:** the branch is based on beta 17; merging beta 18 is the

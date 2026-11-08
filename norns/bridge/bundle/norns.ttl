@@ -1,0 +1,57 @@
+@prefix atom: <http://lv2plug.in/ns/ext/atom#> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix lv2:  <http://lv2plug.in/ns/lv2core#> .
+@prefix midi: <http://lv2plug.in/ns/ext/midi#> .
+
+# Machinista lists a plug-in as INSTRUMENT when it has no (non-sidechain) audio
+# inputs and a MIDI input, and as EFFECT otherwise.
+
+<https://github.com/snassen/machinista/norns#instrument>
+    a lv2:Plugin , lv2:InstrumentPlugin ;
+    doap:name "Norns Instrument" ;
+    doap:license <https://www.gnu.org/licenses/gpl-3.0-or-later> ;
+    lv2:optionalFeature lv2:hardRTCapable ;
+    lv2:port [
+        a lv2:OutputPort , lv2:AudioPort ; lv2:index 0 ; lv2:symbol "out_l" ; lv2:name "Norns L"
+    ] , [
+        a lv2:OutputPort , lv2:AudioPort ; lv2:index 1 ; lv2:symbol "out_r" ; lv2:name "Norns R"
+    ] , [
+        a lv2:InputPort , lv2:AudioPort ; lv2:index 2 ; lv2:symbol "side_l" ; lv2:name "To norns L" ;
+        lv2:portProperty lv2:isSideChain , lv2:connectionOptional
+    ] , [
+        a lv2:InputPort , lv2:AudioPort ; lv2:index 3 ; lv2:symbol "side_r" ; lv2:name "To norns R" ;
+        lv2:portProperty lv2:isSideChain , lv2:connectionOptional
+    ] , [
+        a lv2:InputPort , atom:AtomPort ; lv2:index 4 ; lv2:symbol "midi_in" ; lv2:name "MIDI" ;
+        atom:bufferType atom:Sequence ; atom:supports midi:MidiEvent
+    ] , [
+        a lv2:InputPort , lv2:ControlPort ; lv2:index 5 ; lv2:symbol "gain" ; lv2:name "Gain" ;
+        lv2:default 1.0 ; lv2:minimum 0.0 ; lv2:maximum 2.0
+    ] , [
+        a lv2:InputPort , lv2:ControlPort ; lv2:index 6 ; lv2:symbol "norns" ; lv2:name "Norns" ;
+        lv2:portProperty lv2:integer ; lv2:default 1 ; lv2:minimum 1 ; lv2:maximum 8
+    ] .
+
+<https://github.com/snassen/machinista/norns#effect>
+    a lv2:Plugin , lv2:EffectPlugin ;
+    doap:name "Norns Effect" ;
+    doap:license <https://www.gnu.org/licenses/gpl-3.0-or-later> ;
+    lv2:optionalFeature lv2:hardRTCapable ;
+    lv2:port [
+        a lv2:InputPort , lv2:AudioPort ; lv2:index 0 ; lv2:symbol "in_l" ; lv2:name "In L"
+    ] , [
+        a lv2:InputPort , lv2:AudioPort ; lv2:index 1 ; lv2:symbol "in_r" ; lv2:name "In R"
+    ] , [
+        a lv2:OutputPort , lv2:AudioPort ; lv2:index 2 ; lv2:symbol "out_l" ; lv2:name "Out L"
+    ] , [
+        a lv2:OutputPort , lv2:AudioPort ; lv2:index 3 ; lv2:symbol "out_r" ; lv2:name "Out R"
+    ] , [
+        a lv2:InputPort , lv2:ControlPort ; lv2:index 4 ; lv2:symbol "gain" ; lv2:name "Gain" ;
+        lv2:default 1.0 ; lv2:minimum 0.0 ; lv2:maximum 2.0
+    ] , [
+        a lv2:InputPort , lv2:ControlPort ; lv2:index 5 ; lv2:symbol "mix" ; lv2:name "Mix" ;
+        lv2:default 1.0 ; lv2:minimum 0.0 ; lv2:maximum 1.0
+    ] , [
+        a lv2:InputPort , lv2:ControlPort ; lv2:index 6 ; lv2:symbol "norns" ; lv2:name "Norns" ;
+        lv2:portProperty lv2:integer ; lv2:default 2 ; lv2:minimum 1 ; lv2:maximum 8
+    ] .
