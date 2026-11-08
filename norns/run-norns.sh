@@ -6,8 +6,13 @@
 # Each instance has a RAM folder /dev/shm/norns/<n>, mounted as /frames in its
 # container: screen.png (the norns screen) and bridge (audio to and from the
 # Norns Instrument / Norns Effect plug-ins).
-# Needs the norns-lab runtime image (github.com/snassen/norns-lab):
-#   docker build -t norns-lab-runtime -f runtime/Dockerfile .
+# Persistent files live in $NORNS_HOME (default ~/norns):
+#   code/      the script library, shared by every instance
+#              (norns/library/install-pack.sh fills it)
+#   data/<n>/  this instance's settings, presets and script data
+#   tape/<n>/  this instance's tape recordings
+# Needs the norns-station image (norns/container/Dockerfile), built on the
+# norns-lab runtime image (github.com/snassen/norns-lab).
 set -euo pipefail
 if [[ "${1:-}" == stop ]]; then
   n="${2:?usage: run-norns.sh stop <1-8>}"
@@ -20,9 +25,15 @@ port=$((10110 + n))
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 root="${NORNS_SHM_ROOT:-/dev/shm/norns}"
 frames="$root/$n"
-image="${NORNS_IMAGE:-norns-lab-runtime}"
-mkdir -p "$frames"
+image="${NORNS_IMAGE:-norns-station}"
+home="${NORNS_HOME:-$HOME/norns}"
+mkdir -p "$frames" "$home/code" "$home/data/$n" "$home/tape/$n"
 docker rm -f "norns-$n" >/dev/null 2>&1 || true
+# docker rm -f is not a clean norns shutdown, and after one norns starts with
+# no script (its guard against crash loops). This is a deliberate start, so
+# reload the last script.
+state="$home/data/$n/system.state"
+[[ -f "$state" ]] && sed -i 's/^norns.state.clean_shutdown = false/norns.state.clean_shutdown = true/' "$state"
 # -i keeps stdin open: the runtime's Lua REPL exits on EOF.
 # JACK needs the shm/memlock/rtprio settings inside Docker; period 256 keeps
 # the bridge latency low (norns-lab's default is 1024).
@@ -33,6 +44,9 @@ docker run -d -i --name "norns-$n" --restart unless-stopped \
   -e NORN_LAB_POST_READY=/opt/machinista/container/post-ready.sh \
   -p "127.0.0.1:$port:10111/udp" \
   -v "$frames:/frames" \
+  -v "$home/code:/home/we/dust/code" \
+  -v "$home/data/$n:/home/we/dust/data" \
+  -v "$home/tape/$n:/home/we/dust/audio/tape" \
   -v "$here/bridge:/opt/machinista/bridge:ro" \
   -v "$here/container:/opt/machinista/container:ro" \
   -v "$here/mod/machinista_bridge:/home/we/dust/code/machinista_bridge:ro" \

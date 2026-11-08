@@ -37,7 +37,22 @@ position) without setting each one by hand.
 ## 2. Script library
 **Wish:** the scripts prepared for the Pi 4 are installed on every norns.
 
-**Notes:**
+**Built 2026-11-08 (agreed: shared code, own data; extras in a derived
+image):**
+- `norns/library/pack.txt`: the Pi 4 pack plus Awake, 45 scripts pinned to
+  commits. `norns/library/install-pack.sh` clones them into `~/norns/code`
+  (inside a container when the host has no git).
+- `~/norns/code` is shared by every instance; `~/norns/data/<n>` and
+  `~/norns/tape/<n>` are per instance. All persist across restarts.
+- `norns/container/Dockerfile` builds the `norns-station` image:
+  norns-lab's runtime plus sc3-plugins and mi-UGens (arm64).
+- Scripts are loaded from norns' own menu for now (K1 → SELECT).
+- Still to do: check that every script in the pack loads and makes sound in
+  a container, and measure CPU per script, including light ones such as
+  MIDI sequencers (which may need no audio engine at all). Then see how
+  many instances fit; 4 is not a limit (the code allows 8).
+
+**Notes from planning:**
 - The Pi 4 pack is in `snassen/machinista-norns` (`library/pack.txt`):
   44 community scripts pinned to commits, all of which loaded on a Pi 4.
   It includes effect scripts for the Norns Effect slot (otis,
@@ -53,6 +68,27 @@ position) without setting each one by hand.
   - **sc3-plugins and mi-UGens** in the runtime image; several scripts in
     the pack need them.
 - Also the way to choose a script from the MK3 (LOAD), see 3.
+
+## 2b. MIDI out from norns
+**Wish:** norns scripts (sequencers above all) send MIDI out of the MK3's
+MIDI port, from several instances at once. Test it.
+
+**Notes:**
+- The containers have no ALSA sequencer today (`/dev/snd/seq` missing,
+  matron logs "failed to open alsa virtual device"), so norns sees no MIDI
+  devices at all.
+- Machinista already owns the MIDI ports (a Sound can target a MIDI
+  output), so it is the natural hub: each norns gets a virtual MIDI device
+  whose output reaches Machinista, which merges the instances onto the MK3
+  MIDI out. The same path carries MIDI in (clock, pads) in the other
+  direction, see 1 and 3.
+- Ways in: through the audio bridge's shared memory (one MIDI ring per
+  direction next to the audio rings), or by passing the host's ALSA
+  sequencer into the containers.
+- Open: how instances share the port (channel per instance or per script
+  setting), and whether merged output must be filtered (e.g. several
+  instances sending clock).
+- **Decision needed:** which transport, and channel handling.
 
 ## 3. More control from the MK3 in NORNS mode
 **Wish:**
@@ -124,7 +160,8 @@ Its look and behavior can change.
 ## Suggested order
 1. Script library (2): almost everything else needs real scripts to test,
    especially effects and per-script mappings.
-2. Clock (1).
+2. Clock (1) and MIDI out (2b): both need MIDI between Machinista and the
+   containers, so they share the transport.
 3. Pads as MIDI and the KNOB 4/8 controls (3), then the layers.
 4. Tape into Machinista (4).
 5. Norns Station (5) runs alongside: decide the direction early, since it

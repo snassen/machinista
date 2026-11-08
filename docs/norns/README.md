@@ -41,8 +41,10 @@ Status: **prototype, working on the MK3** (2026-11-08, Pi 5).
 | `app/mk3_session.py`, `app/mk3_display.py` | Hooks, marked `norns-mode fork hook` |
 | `norns/mod/machinista_bridge/` | norns mod that exports the framebuffer as PNG |
 | `norns/data/system.mods` | Enables the mod inside the container |
-| `norns/run-norns.sh` | Starts numbered norns instance `<n>` in Docker (`stop <n>` removes it) |
+| `norns/run-norns.sh` | Starts numbered norns instance `<n>` in Docker (`stop <n>` removes it); scripts in `~/norns/code` are shared, `~/norns/data/<n>` and `~/norns/tape/<n>` are per instance |
 | `norns/bridge/` | Audio bridge: Norns Instrument / Norns Effect LV2 plug-ins, the JACK daemon, tests |
+| `norns/container/Dockerfile` | The `norns-station` image: norns-lab runtime plus sc3-plugins and mi-UGens |
+| `norns/library/` | The script pack (`pack.txt`) and its installer |
 | `norns/container/post-ready.sh` | Runs in each container once norns is ready: builds and starts the bridge daemon |
 | `norns/tools/osc_send.py` | Sends a test OSC message to a norns instance |
 | `tests/test_norns_mode.py` | Unit tests |
@@ -52,6 +54,8 @@ repository): upstream norns built for ARM64 Linux in Docker.
 
 ## Quick start (on the Pi)
 ```bash
+docker build -t norns-station norns/container   # once, after the norns-lab image
+norns/library/install-pack.sh   # the script pack into ~/norns/code (shared)
 norns/run-norns.sh 1        # OSC on 127.0.0.1:10111, files in /dev/shm/norns/1
 norns/run-norns.sh 2        # OSC on 127.0.0.1:10112, files in /dev/shm/norns/2
 norns/bridge/build.sh plugin
