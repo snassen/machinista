@@ -33,6 +33,10 @@ def _frame(side):
 
 def _side(side):
     c = Canvas()
+    if side.get('name') is None:
+        # The selected Sound has no Norns Instrument (left) or Norns Effect (right).
+        c.text(240, 120, 'NO NORNS ' + side.get('role', ''), 16, True, MUTED, width=440, center=True)
+        return c.image
     labels = ('K1', 'K2', 'K3', '')
     for i, label in enumerate(labels):
         c.rect(i * 120 + 3, 3, 114, 24, PANEL, radius=3)
@@ -46,12 +50,13 @@ def _side(side):
     for i, label in enumerate(('E1', 'E2', 'E3', '')):
         if label:
             c.text(i * 120 + 60, 244, label, 12, True, MUTED, width=106, center=True)
-    c.text(3 * 120 + 60, 244, 'NORNS ' + side['name'], 12, True, ACCENT, width=106, center=True)
+    role = {'INSTRUMENT': 'INSTR', 'EFFECT': 'EFFECT'}.get(side.get('role'), 'NORNS')
+    c.text(3 * 120 + 60, 244, role + ' ' + side['name'], 12, True, ACCENT, width=106, center=True)
     return c.image
 
 
 def images(state):
     sides = tuple(state.get('norns', ()))
     while len(sides) < 2:
-        sides += ({'name': '-', 'frame': '', 'mtime': None},)
+        sides += ({'name': None, 'role': ('INSTRUMENT', 'EFFECT')[len(sides)], 'frame': '', 'mtime': None},)
     return _side(sides[0]), _side(sides[1])

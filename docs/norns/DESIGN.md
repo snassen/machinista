@@ -38,8 +38,17 @@ This replaces the fixed "norns A left, norns B right" model.
 - **NORNS mode displays follow the selected Sound:** the left display is its
   Norns Instrument, the right display is always its Norns Effect, the effect
   running on top of the first norns.
-- **Later:** how many instances fit on the Pi 5 (CPU, to be measured), how a
-  Sound picks its instance number, and the edge cases below.
+- **Built 2026-11-08:** each plug-in's **Norns** control (1–8) picks its
+  instance. NORNS mode reads the selected Sound's first Norns Instrument and
+  first Norns Effect and shows those instances; a missing one shows
+  "NO NORNS INSTRUMENT" / "NO NORNS EFFECT" and its controls do nothing. The
+  footer says "INSTR n" / "EFFECT n". A key is always released on the norns
+  where it was pressed, even after switching Sound or leaving the mode.
+- **Measured:** four instances (two Sounds, each Instrument + Effect) running
+  Awake use about 6–9% CPU each; load average about 1.2 on the Pi 5. Heavier
+  scripts still need measuring.
+- **Later:** an instance pool (a Sound picks a free number by itself), and
+  the edge cases below.
 - **Edge cases (proposed defaults, not yet confirmed):** a Sound with only a
   Norns Effect (e.g. after a sampler) shows "no norns instrument" on the left;
   with several Norns Effects on one Sound, the right display shows the first.
@@ -61,7 +70,7 @@ with its own JACK server.
 ## MK3 control map
 Verified against `BUTTON_BITS` in `app/mk3_protocol.py`.
 
-| norns | norns A (left display) | norns B (right display) |
+| norns | Instrument (left display) | Effect (right display) |
 |---|---|---|
 | K1–K3 | DISPLAY 1–3 | DISPLAY 5–7 |
 | E1–E3 | KNOB 1–3 | KNOB 5–7 |
@@ -94,12 +103,12 @@ Machinista-side acceleration is a possible later improvement.
 - The norns mod `machinista_bridge` exports the native framebuffer to
   `/frames/screen.png` every `NORNS_FRAME_EXPORT_MS` (default 100 ms) using
   `_norns.screen_export_png`. The container's `/frames` is mounted from
-  `~/norns/<A|B>` on the host.
+  `/dev/shm/norns/<n>` on the host.
 - Machinista's renderer reads the newest PNG per side (it watches mtime) and
   draws it scaled 3× (384×192) on the 480×272 display, with K1–K3 labels under
   the display buttons and E1–E3 labels above the knobs. A missing or partly
-  written frame keeps the last good image. A side with no frame shows
-  "NORNS x OFFLINE".
+  written frame keeps the last good image. A side whose instance shows no
+  frame says it is offline.
 - The PNG is not written atomically: `_norns.screen_export_png` only queues
   the export (`matron/src/screen_events.cc`), so the mod can't rename the
   file once it is complete without waiting a tick. On the Pi the reader
@@ -112,13 +121,11 @@ Machinista-side acceleration is a possible later improvement.
 
 ## Input
 - Machinista sends OSC `/remote/key n z` and `/remote/enc n d` to each
-  container's published UDP port: A = 10111, B = 10112 (bound to 127.0.0.1).
-  matron handles these in `lua/core/osc.lua`.
+  container's published UDP port: norns n listens on 10110 + n (bound to
+  127.0.0.1). matron handles these in `lua/core/osc.lua`.
 - When a container is not running, input is dropped and Machinista carries on.
 - SHIFT is always passed through to Machinista, so its own shift state never
   sticks after leaving the mode.
-- Instance paths and ports can be overridden in `config/norns.json`
-  (`{"instances": [{"name", "frame", "port"}, …]}`, at most two).
 
 ## Earlier transport (replaced)
 The first plan used the norns-lab Node gateway (WebSocket on port 5151,
@@ -127,11 +134,8 @@ above, so the Pi needs no gateway. The gateway remains useful for the
 browser-based test workflow on a desktop machine.
 
 ## Proposed (needs a decision)
-- **Spare controls:** KNOB 4/8 = output level of norns A/B; DISPLAY 4/8 =
-  script menu, or choosing which norns instance sits on that side.
-- **Pads and other buttons** in NORNS mode: pads still reach Machinista;
-  every button except SHIFT and transport is swallowed. Should pads or
-  GROUP buttons reach norns instead, e.g. as MIDI notes?
+- **Spare controls, pads and layers:** see ROADMAP.md, item 3 (DISPLAY 4/8
+  as layer toggles, KNOB 4/8 as live controls, pads as MIDI notes).
 
 ## Audio bridge (built 2026-11-08)
 Reused from the Pi 4 add-on and extended for numbered instances

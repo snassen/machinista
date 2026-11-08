@@ -4,7 +4,8 @@ import struct
 import tempfile
 import unittest
 
-from app.norns_mode import NornsMode, osc_message, KNOB_TRAVEL, KNOB_IDLE_S, PACE_S, CONFIG_CHECK_S
+from app.norns_mode import (NornsMode, osc_message, sound_norns, KNOB_TRAVEL, KNOB_IDLE_S, PACE_S,
+                             CONFIG_CHECK_S, INSTRUMENT_URI, EFFECT_URI)
 
 
 def button(name, value):
@@ -45,8 +46,10 @@ class NornsModeTest(unittest.TestCase):
     def test_keys_route_to_sides(self):
         self.toggle()
         self.mode.handle_event(button('DISPLAY 2', 1))
+        self.mode.handle_event(button('DISPLAY 7', 1))
         self.mode.handle_event(button('DISPLAY 7', 0))
-        self.assertEqual(self.sent, [(10111, osc_message('/remote/key', 2, 1)), (10112, osc_message('/remote/key', 3, 0))])
+        self.assertEqual(self.sent, [(10111, osc_message('/remote/key', 2, 1)), (10112, osc_message('/remote/key', 3, 1)),
+                                     (10112, osc_message('/remote/key', 3, 0))])
 
     def test_knobs_accumulate_into_steps(self):
         self.toggle()
@@ -112,7 +115,6 @@ class NornsModeTest(unittest.TestCase):
             json.dump({'knob_travel': 4}, f)
         self.mode = self.make_mode(root)
         self.assertEqual(self.mode.knob_travel, 4)
-        self.assertEqual(self.mode.instances[0]['port'], 10111)
         self.toggle()
         self.turn(2, 2)
         self.assertEqual(self.sent, [(10111, osc_message('/remote/enc', 2, 1))])
@@ -123,10 +125,89 @@ class NornsModeTest(unittest.TestCase):
         self.assertFalse(self.mode.handle_event({'kind': 'pad_on', 'name': 'PAD_1', 'value': 100}))
         self.assertTrue(self.mode.handle_event(button('BROWSE', 1)))
 
+    def test_keys_follow_the_selected_sound(self):
+        sides = [(3, None)]
+        self.mode = NornsMode(tempfile.mkdtemp(), sides=lambda: sides[0],
+                              sender=lambda port, data: self.sent.append((port, data)), clock=lambda: self.now)
+        self.toggle()
+        self.assertTrue(self.mode.handle_event(button('DISPLAY 1', 1)))
+        self.assertTrue(self.mode.handle_event(button('DISPLAY 1', 0)))
+        # No Norns Effect on this Sound: the right side's keys go nowhere but stay consumed.
+        self.assertTrue(self.mode.handle_event(button('DISPLAY 5', 1)))
+        self.assertTrue(self.mode.handle_event(button('DISPLAY 5', 0)))
+        self.assertEqual(self.sent, [(10113, osc_message('/remote/key', 1, 1)), (10113, osc_message('/remote/key', 1, 0))])
+        self.sent.clear()
+        sides[0] = (4, 6)  # another Sound selected
+        self.turn(5, KNOB_TRAVEL)
+        self.assertEqual(self.sent, [(10116, osc_message('/remote/enc', 1, 1))])
+
+    def test_key_released_where_pressed(self):
+        sides = [(1, 2)]
+        self.mode = NornsMode(tempfile.mkdtemp(), sides=lambda: sides[0],
+                              sender=lambda port, data: self.sent.append((port, data)), clock=lambda: self.now)
+        self.toggle()
+        self.mode.handle_event(button('DISPLAY 2', 1))
+        sides[0] = (5, None)  # Sound changed while the key is held
+        self.toggle()         # and the mode was left
+        self.assertTrue(self.mode.handle_event(button('DISPLAY 2', 0)))
+        self.assertEqual(self.sent, [(10111, osc_message('/remote/key', 2, 1)), (10111, osc_message('/remote/key', 2, 0))])
+        # Not held any more: the next release belongs to Machinista again.
+        self.assertFalse(self.mode.handle_event(button('DISPLAY 2', 0)))
+
+    def test_reversing_a_knob_answers_at_once(self):
+        self.toggle()
+        half = KNOB_TRAVEL // 2
+        self.turn(1, KNOB_TRAVEL - half + 2)   # one step up, a little left over
+        self.assertEqual(self.sent, [(10111, osc_message('/remote/enc', 1, 1))])
+        self.turn(1, -KNOB_TRAVEL, after=PACE_S)  # a full step back, without paying off the leftover
+        self.assertEqual(self.sent[1:], [(10111, osc_message('/remote/enc', 1, -1))])
+
+    def test_display_state_shows_missing_sides(self):
+        self.mode = NornsMode(tempfile.mkdtemp(), sides=lambda: (None, 2), sender=lambda *a: None)
+        left, right = self.mode.display_state()['norns']
+        self.assertIsNone(left['name'])
+        self.assertEqual(left['role'], 'INSTRUMENT')
+        self.assertEqual((right['name'], right['role']), ('2', 'EFFECT'))
+        self.assertTrue(right['frame'].endswith('/2/screen.png'))
+
     def test_osc_encoding(self):
         data = osc_message('/remote/enc', 1, -3)
         self.assertEqual(len(data) % 4, 0)
         self.assertEqual(data[-4:], struct.pack('>i', -3))
+
+
+class FakeApp:
+    def __init__(self, plugins):
+        self.plugins = plugins
+
+    def track(self):
+        return {'plugins': self.plugins}
+
+
+class SoundNornsTest(unittest.TestCase):
+    def test_reads_first_instrument_and_effect(self):
+        app = FakeApp([
+            {'uri': INSTRUMENT_URI, 'controls': {'norns': 3.0}},
+            {'uri': 'urn:other', 'controls': {}},
+            {'uri': EFFECT_URI, 'controls': {'norns': 5}},
+            {'uri': EFFECT_URI, 'controls': {'norns': 7}},
+        ])
+        self.assertEqual(sound_norns(app), (3, 5))
+
+    def test_defaults_and_missing(self):
+        self.assertEqual(sound_norns(FakeApp([{'uri': EFFECT_URI, 'controls': {}}])), (None, 2))
+        self.assertEqual(sound_norns(FakeApp([{'uri': INSTRUMENT_URI, 'controls': {'norns': 42}}])), (1, None))
+        self.assertEqual(sound_norns(FakeApp([])), (None, None))
+        self.assertEqual(sound_norns(object()), (None, None))
+
+
+class NornsDisplayTest(unittest.TestCase):
+    def test_draws_empty_and_offline_sides(self):
+        from app.norns_display import images
+        left, right = images({'norns': ({'name': None, 'role': 'INSTRUMENT', 'frame': '', 'mtime': None},
+                                        {'name': '2', 'role': 'EFFECT', 'frame': '/nonexistent', 'mtime': None})})
+        self.assertEqual(left.size, (480, 272))
+        self.assertEqual(right.size, (480, 272))
 
 
 if __name__ == '__main__':

@@ -11,7 +11,7 @@ from app.mk2_display import leds
 from app.mk3_state import snapshot
 from app.mk2_protocol import LED_BUTTONS,TRANSPORT
 from app.connection_health import ReaderWatch
-from app.norns_mode import NornsMode  # norns-mode fork hook
+from app.norns_mode import NornsMode, sound_norns  # norns-mode fork hook
 
 
 def strip_leds(app,surface):
@@ -30,7 +30,7 @@ class Mk3Session(Mk2Session):
     norns=None  # norns-mode fork hook
     def __init__(self,*args):
         super().__init__(*args);self.reader_watch=ReaderWatch();self.palette=[];self.pad_trigger=Mk3PadTrigger()
-        self.norns=NornsMode(self.root)  # norns-mode fork hook
+        self.norns=NornsMode(self.root,sides=lambda:sound_norns(self.app))  # norns-mode fork hook
     def connect(self,now):
         self.next_scan=now+2;self.cleanup=[t for t in self.cleanup if t.is_alive()]
         if self.cleanup:return

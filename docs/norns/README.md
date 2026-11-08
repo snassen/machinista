@@ -5,14 +5,15 @@ This fork adds a **NORNS mode** to Machinista: the real monome norns stack
 Pi as Machinista and is played from the Maschine MK3.
 
 Status: **prototype, working on the MK3** (2026-11-08, Pi 5).
-- SHIFT + PLUG-IN enters NORNS mode: norns 1's screen on the left display,
-  norns 2's on the right; knobs and display buttons play norns, with paced
-  knob input that feels right in Awake.
+- SHIFT + PLUG-IN enters NORNS mode, which follows the selected Sound: its
+  Norns Instrument on the left display, its Norns Effect on the right.
+  Knobs and display buttons play those norns, with paced knob input that
+  feels right in Awake.
 - **Audio works:** the Norns Instrument and Norns Effect plug-ins connect a
-  Sound to numbered norns instances. Verified on the MK3: Awake on norns 1
-  (Norns Instrument) goes through norns 2 (Norns Effect) on the same Sound.
-- Not yet done: the displays following the selected Sound's Instrument and
-  Effect, PARAMS/LOAD, effect scripts, clock/MIDI.
+  Sound to numbered norns instances. Verified on the MK3 with four instances
+  on two Sounds (each Sound: Awake → Norns Instrument → Norns Effect).
+- Not yet done: see [ROADMAP.md](ROADMAP.md) (clock, script library, more
+  MK3 controls, tape into the sampler, Norns Station).
 
 ## Goals
 1. Machinista on a Raspberry Pi with a Maschine MK3, using the MK3's own
@@ -22,6 +23,8 @@ Status: **prototype, working on the MK3** (2026-11-08, Pi 5).
 3. Later: Maschine Jam 8×8 as a grid surface for norns scripts.
 
 ## Documents
+- [ROADMAP.md](ROADMAP.md): what is still to do, with notes and open
+  decisions.
 - [DESIGN.md](DESIGN.md): decisions, the MK3 control map, the bridges and
   open questions.
 - [INSTALL-NOTES.md](INSTALL-NOTES.md): the reference installation on a Pi 5,
