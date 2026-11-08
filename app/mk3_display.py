@@ -642,6 +642,9 @@ class Mk3Renderer:
 
     @themed
     def images(self,state):
+        if state.get('norns_mode'):  # norns-mode fork hook
+            from app.norns_display import images as norns_images
+            return norns_images(state)
         self.waveforms.collect()
         if not any(state.get(k) for k in ('wave','browser','sound_wave')):
             self.waveforms.prefetch(state.get('wave_preload'))
