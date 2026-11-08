@@ -31,12 +31,20 @@ def _frame(side):
     return image
 
 
-def _side(side):
+def _tempo(c, tempo):
+    # Machinista's TEMPO is selected: show the tempo in the free top slot.
+    if tempo is not None:
+        c.rect(3 * 120 + 3, 3, 114, 24, ACCENT, radius=3)
+        c.text(3 * 120 + 60, 6, tempo + ' BPM', 12, True, PANEL, width=106, center=True)
+    return c.image
+
+
+def _side(side, tempo=None):
     c = Canvas()
     if side.get('name') is None:
         # The selected Sound has no Norns Instrument (left) or Norns Effect (right).
         c.text(240, 120, 'NO NORNS ' + side.get('role', ''), 16, True, MUTED, width=440, center=True)
-        return c.image
+        return _tempo(c, tempo)
     labels = ('K1', 'K2', 'K3', '')
     for i, label in enumerate(labels):
         c.rect(i * 120 + 3, 3, 114, 24, PANEL, radius=3)
@@ -52,11 +60,11 @@ def _side(side):
             c.text(i * 120 + 60, 244, label, 12, True, MUTED, width=106, center=True)
     role = {'INSTRUMENT': 'INSTR', 'EFFECT': 'EFFECT'}.get(side.get('role'), 'NORNS')
     c.text(3 * 120 + 60, 244, role + ' ' + side['name'], 12, True, ACCENT, width=106, center=True)
-    return c.image
+    return _tempo(c, tempo)
 
 
 def images(state):
     sides = tuple(state.get('norns', ()))
     while len(sides) < 2:
         sides += ({'name': None, 'role': ('INSTRUMENT', 'EFFECT')[len(sides)], 'frame': '', 'mtime': None},)
-    return _side(sides[0]), _side(sides[1])
+    return _side(sides[0], state.get('tempo')), _side(sides[1])

@@ -47,6 +47,12 @@ PACE_S = 0.04
 CONFIG_CHECK_S = 1.0
 # Controls Machinista keeps while NORNS mode is active.
 PASS_THROUGH = frozenset(('PLAY', 'STOP', 'REC', 'RESTART'))
+# Tempo stays with Machinista in NORNS mode: TEMPO selects it, the master
+# encoder (raw control 0) changes it while TEMPO is selected, and SHIFT +
+# NOTE REPEAT taps it.
+TEMPO_BUTTON = 'TEMPO'
+TAP_BUTTON = 'NOTE REPEAT'
+MASTER_ENCODER = 0
 KEY_BUTTONS = {f'DISPLAY {i + 1}': (0, i + 1) for i in range(3)}
 KEY_BUTTONS.update({f'DISPLAY {i + 5}': (1, i + 1) for i in range(3)})
 KNOBS = {i + 1: (0, i + 1) for i in range(3)}
@@ -121,10 +127,16 @@ def sound_norns(app):
 
 
 class NornsMode:
-    def __init__(self, root, sides=None, sender=None, clock=time.monotonic):
-        """sides() returns (left, right) norns numbers or None; see sound_norns()."""
+    def __init__(self, root, sides=None, sender=None, clock=time.monotonic, tempo=None):
+        """sides() returns (left, right) norns numbers or None; see sound_norns().
+
+        tempo() returns Machinista's tempo text while its TEMPO mode is
+        selected, else None.
+        """
         self.root = root
         self.sides = sides or (lambda: (1, 2))
+        self.tempo = tempo or (lambda: None)
+        self.passed = set()  # buttons whose press went to Machinista: so does their release
         self.config_mtime = config_mtime(root)
         config = load_config(root)
         self.knob_travel = load_knob_travel(config)
@@ -169,6 +181,9 @@ class NornsMode:
                 # sticks after leaving NORNS mode.
                 self.shift = pressed
                 return False
+            if not pressed and name in self.passed:
+                self.passed.discard(name)
+                return False
             if not pressed and name in self.held:
                 # A norns key is always released where it was pressed, even
                 # after leaving the mode or selecting another Sound meanwhile.
@@ -183,6 +198,9 @@ class NornsMode:
                 return True
             if not self.active:
                 return False
+            if pressed and (name == TEMPO_BUTTON or (name == TAP_BUTTON and self.shift)):
+                self.passed.add(name)
+                return False
             if name in KEY_BUTTONS:
                 side, key = KEY_BUTTONS[name]
                 port = self.port(side)
@@ -193,6 +211,8 @@ class NornsMode:
             return name not in PASS_THROUGH
         if kind == 'encoder' and self.active:
             index = event['raw_control']
+            if index == MASTER_ENCODER and self.tempo() is not None:
+                return False
             if index in KNOBS:
                 side, enc = KNOBS[index]
                 value = event['value']
@@ -259,7 +279,7 @@ class NornsMode:
             except OSError:
                 mtime = None
             sides.append(dict(name=str(number), role=role, frame=frame, mtime=mtime))
-        return {'norns_mode': True, 'norns': tuple(sides), 'shift': self.shift}
+        return {'norns_mode': True, 'norns': tuple(sides), 'shift': self.shift, 'tempo': self.tempo()}
 
     def close(self):
         if self.sock is not None:

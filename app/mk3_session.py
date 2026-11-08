@@ -32,7 +32,7 @@ class Mk3Session(Mk2Session):
     patchbay=None  # norns-mode fork hook
     def __init__(self,*args):
         super().__init__(*args);self.reader_watch=ReaderWatch();self.palette=[];self.pad_trigger=Mk3PadTrigger()
-        self.norns=NornsMode(self.root,sides=lambda:sound_norns(self.app))  # norns-mode fork hook
+        self.norns=NornsMode(self.root,sides=lambda:sound_norns(self.app),tempo=self.norns_tempo)  # norns-mode fork hook
         self.patchbay=Patchbay() if Path('/proc/asound').exists() else None  # norns-mode fork hook
     def connect(self,now):
         self.next_scan=now+2;self.cleanup=[t for t in self.cleanup if t.is_alive()]
@@ -51,6 +51,9 @@ class Mk3Session(Mk2Session):
                 self.next_frame=self.next_led=0
                 print(self.device_name+' connected: '+path,flush=True);return
             except Exception as error:print('MK3 connect: '+str(error),flush=True);self.disconnect()
+    def norns_tempo(self):  # norns-mode fork hook
+        if getattr(self.surface,'master_mode',None)!='TEMPO':return None
+        return f"{self.app.project['tempo']:.2f}"
     def poll(self,*args):
         super().poll(*args)
         if self.norns and self.norns.active:self.norns.flush()  # norns-mode fork hook

@@ -23,6 +23,39 @@ local function has_virtual()
   return false
 end
 
+-- Machinista's transport, as seen on the virtual MIDI device: true after
+-- START/CONTINUE, false after STOP, nil before either. Machinista sends clock
+-- ticks only while it plays.
+local transport = nil
+local last_tick = -1
+local dispatch = _norns.midi.event
+_norns.midi.event = function(id, data)
+  local d = midi.devices[id]
+  if d ~= nil and d.name == "virtual" then
+    local status = data[1]
+    if status == 0xfa or status == 0xfb then transport = true
+    elseif status == 0xfc then transport = false
+    elseif status == 0xf8 then last_tick = util.time() end
+  end
+  return dispatch(id, data)
+end
+
+local function machinista_playing()
+  if transport ~= nil then return transport end
+  return last_tick >= 0 and util.time() - last_tick < 0.5
+end
+
+-- Many scripts (Awake among them) start running when they load and only obey
+-- the transport after a START or STOP arrives. A script loaded while
+-- Machinista is stopped gets its STOP at once, so it waits for PLAY.
+mod.hook.register("script_post_init", "machinista_bridge transport", function()
+  if midi_clock and params.lookup["clock_source"] and params:string("clock_source") == "midi"
+     and not machinista_playing() and clock.transport.stop then
+    clock.transport.stop()
+    print("MACHINISTA_BRIDGE_TRANSPORT stopped (Machinista is stopped)")
+  end
+end)
+
 mod.hook.register("system_post_startup", "machinista_bridge", function()
   timer.time = export_ms / 1000
   timer.count = -1

@@ -76,7 +76,8 @@ Verified against `BUTTON_BITS` in `app/mk3_protocol.py`.
 | E1–E3 | KNOB 1–3 | KNOB 5–7 |
 | spare | DISPLAY 4, KNOB 4 | DISPLAY 8, KNOB 8 |
 
-Free for later functions: 16 pads, GROUP A–H, the master encoder
+Machinista's tempo controls stay active: TEMPO + master encoder, SHIFT +
+NOTE REPEAT (tap). Free for later functions: 16 pads, GROUP A–H, the master encoder
 (push/4-way/touch), touch strip, SHIFT combinations and knob-touch sensing.
 
 Knob scaling: the MK3 knobs report 1000 counts per revolution. `KNOB_TRAVEL`
@@ -188,6 +189,17 @@ Agreed: a Linux MIDI patchbay; every norns follows Machinista's MIDI clock.
   never removes connections, so hand-made ones stay. A connection that fails
   (e.g. the MK3 port selected directly in Machinista) is logged once and
   retried every 30 s.
+- **Transport at script load:** many scripts (Awake among them) start
+  running when they load and only obey the transport after a START or STOP
+  arrives, so they ran free until the first PLAY. The mod watches the
+  virtual device (START/CONTINUE, STOP, clock ticks) and stops a script
+  that loads while Machinista is stopped (`clock.transport.stop()`), so it
+  waits for PLAY.
+- **Tempo in NORNS mode:** TEMPO, the master encoder (while TEMPO is
+  selected) and SHIFT + NOTE REPEAT (tap) reach Machinista; the tempo shows
+  in the free top slot of the left display while TEMPO is selected. The
+  master encoder stays with NORNS mode otherwise, so it never changes
+  something on a hidden Machinista page.
 - **Consequences:** with MIDI as the clock source, norns scripts that use
   the clock stand still while Machinista's transport is stopped. Everything
   Machinista sends on the bus reaches every norns as well as the MK3 port,

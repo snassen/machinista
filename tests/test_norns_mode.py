@@ -162,6 +162,31 @@ class NornsModeTest(unittest.TestCase):
         self.turn(1, -KNOB_TRAVEL, after=PACE_S)  # a full step back, without paying off the leftover
         self.assertEqual(self.sent[1:], [(10111, osc_message('/remote/enc', 1, -1))])
 
+    def test_tempo_stays_with_machinista(self):
+        tempo = [None]
+        self.mode = NornsMode(tempfile.mkdtemp(), sender=lambda port, data: self.sent.append((port, data)),
+                              clock=lambda: self.now, tempo=lambda: tempo[0])
+        self.toggle()
+        master = {'kind': 'encoder', 'raw_control': 0, 'value': 5}
+        self.assertTrue(self.mode.handle_event(master))  # no TEMPO selected: nothing hidden changes
+        self.assertFalse(self.mode.handle_event(button('TEMPO', 1)))
+        self.assertFalse(self.mode.handle_event(button('TEMPO', 0)))
+        tempo[0] = '120.00'
+        self.assertFalse(self.mode.handle_event(master))
+        self.assertEqual(self.mode.display_state()['tempo'], '120.00')
+        self.assertEqual(self.sent, [])
+        self.assertTrue(self.mode.handle_event({'kind': 'encoder', 'raw_control': 1, 'value': 5}))
+        self.assertEqual(len(self.sent), 1)  # the knobs still play norns
+
+    def test_tap_tempo_press_and_release_reach_machinista(self):
+        self.toggle()
+        self.assertTrue(self.mode.handle_event(button('NOTE REPEAT', 1)))  # without SHIFT: swallowed
+        self.assertTrue(self.mode.handle_event(button('NOTE REPEAT', 0)))
+        self.assertFalse(self.mode.handle_event(button('SHIFT', 1)))
+        self.assertFalse(self.mode.handle_event(button('NOTE REPEAT', 1)))
+        self.assertFalse(self.mode.handle_event(button('SHIFT', 0)))
+        self.assertFalse(self.mode.handle_event(button('NOTE REPEAT', 0)))  # released after SHIFT
+
     def test_display_state_shows_missing_sides(self):
         self.mode = NornsMode(tempfile.mkdtemp(), sides=lambda: (None, 2), sender=lambda *a: None)
         left, right = self.mode.display_state()['norns']
