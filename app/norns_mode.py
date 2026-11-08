@@ -1,6 +1,6 @@
 """NORNS mode: an MK3 takeover mode that hands controls to up to two norns.
 
-Each norns instance runs in its own container (see norns/README.md). The
+Each norns instance runs in its own container (see docs/norns/README.md). The
 container's `machinista_bridge` mod writes its native 128x64 framebuffer to
 a PNG file, and matron listens for OSC /remote/key and /remote/enc on UDP.
 This module lives in the controller process: it routes MK3 input to those
@@ -17,15 +17,26 @@ import json
 import os
 import socket
 import struct
+import time
 from pathlib import Path
 
 DEFAULT_INSTANCES = (
     {'name': 'A', 'frame': '/home/machinista/norns/A/screen.png', 'port': 10111},
     {'name': 'B', 'frame': '/home/machinista/norns/B/screen.png', 'port': 10112},
 )
-# Raw MK3 knob counts per norns encoder step. Placeholder value: calibrate on
-# hardware (the MK3 knobs report 0..999 per revolution).
-KNOB_TRAVEL = 25
+# Raw MK3 knob counts per norns encoder step (the MK3 knobs report 1000
+# counts per revolution, so 10 = 100 steps per turn). 25 felt sluggish on
+# hardware. Override with "knob_travel" in config/norns.json.
+KNOB_TRAVEL = 10
+# After a knob has rested this long, its next movement starts half a step
+# ahead, so the first nudge answers quickly instead of needing a full step.
+KNOB_IDLE_S = 0.3
+# norns multiplies encoder deltas that arrive less than 30 ms apart by 2-6
+# (encoders.process_with_accel). Sending at most one message per knob per
+# PACE_S keeps that acceleration out, so Machinista alone decides the feel.
+PACE_S = 0.04
+# How often a running session looks for changes to config/norns.json.
+CONFIG_CHECK_S = 1.0
 # Controls Machinista keeps while NORNS mode is active.
 PASS_THROUGH = frozenset(('PLAY', 'STOP', 'REC', 'RESTART'))
 KEY_BUTTONS = {f'DISPLAY {i + 1}': (0, i + 1) for i in range(3)}
@@ -42,24 +53,59 @@ def osc_message(address, *values):
     return pad(address.encode()) + pad(tags.encode()) + b''.join(struct.pack('>i', int(v)) for v in values)
 
 
-def load_instances(root):
-    path = Path(root) / 'config' / 'norns.json'
+def config_path(root):
+    return Path(root) / 'config' / 'norns.json'
+
+
+def config_mtime(root):
     try:
-        data = json.loads(path.read_text())
+        return config_path(root).stat().st_mtime_ns
+    except OSError:
+        return None
+
+
+def load_config(root):
+    try:
+        return json.loads(config_path(root).read_text())
+    except (OSError, ValueError):
+        return {}
+
+
+def load_knob_travel(data):
+    try:
+        travel = int(data['knob_travel'])
+        if travel >= 1:
+            return travel
+    except (KeyError, TypeError, ValueError):
+        pass
+    return KNOB_TRAVEL
+
+
+def load_instances(data):
+    try:
         instances = tuple(dict(name=str(i['name']), frame=str(i['frame']), port=int(i['port'])) for i in data['instances'][:2])
         if instances:
             return instances
-    except (OSError, ValueError, KeyError, TypeError):
+    except (ValueError, KeyError, TypeError):
         pass
     return DEFAULT_INSTANCES
 
 
 class NornsMode:
-    def __init__(self, root, sender=None):
-        self.instances = load_instances(root)
+    def __init__(self, root, sender=None, clock=time.monotonic):
+        self.root = root
+        self.config_mtime = config_mtime(root)
+        config = load_config(root)
+        self.instances = load_instances(config)
+        self.knob_travel = load_knob_travel(config)
         self.active = False
         self.shift = False
         self.remainders = {}
+        self.last_turn = {}
+        self.pending = {}
+        self.last_sent = {}
+        self.clock = clock
+        self.next_config_check = clock() + CONFIG_CHECK_S
         self.sock = None
         self.sender = sender or self._send
 
@@ -90,6 +136,7 @@ class NornsMode:
                 if pressed:
                     self.active = not self.active
                     self.remainders.clear()
+                    self.pending.clear()
                 return True
             if not self.active:
                 return False
@@ -102,13 +149,54 @@ class NornsMode:
             index = event['raw_control']
             if index in KNOBS:
                 side, enc = KNOBS[index]
-                total = self.remainders.get(index, 0) + event['value']
-                steps = int(total / KNOB_TRAVEL)
-                self.remainders[index] = total - steps * KNOB_TRAVEL
+                value = event['value']
+                now = self.clock()
+                idle = now - self.last_turn.get(index, float('-inf')) > KNOB_IDLE_S
+                self.last_turn[index] = now
+                travel = self.knob_travel
+                if idle:
+                    remainder = travel // 2 if value > 0 else -(travel // 2)
+                else:
+                    remainder = self.remainders.get(index, 0)
+                total = remainder + value
+                steps = int(total / travel)
+                self.remainders[index] = total - steps * travel
                 if steps:
-                    self.send(side, '/remote/enc', enc, steps)
+                    self.pending[index] = self.pending.get(index, 0) + steps
+                    self.flush(now)
             return True
         return False
+
+    def flush(self, now=None):
+        """Send collected knob steps, at most one message per knob per PACE_S.
+
+        Called after each knob event and from the session's poll loop, so the
+        last steps of a turn go out once the pacing window has passed.
+        """
+        now = self.clock() if now is None else now
+        if now >= self.next_config_check:
+            self.next_config_check = now + CONFIG_CHECK_S
+            self.reload_config()
+        for index, steps in list(self.pending.items()):
+            if now - self.last_sent.get(index, float('-inf')) < PACE_S:
+                continue
+            del self.pending[index]
+            if steps:
+                side, enc = KNOBS[index]
+                self.send(side, '/remote/enc', enc, steps)
+                self.last_sent[index] = now
+
+    def reload_config(self):
+        """Pick up a changed knob_travel without restarting Machinista."""
+        mtime = config_mtime(self.root)
+        if mtime == self.config_mtime:
+            return
+        self.config_mtime = mtime
+        travel = load_knob_travel(load_config(self.root))
+        if travel != self.knob_travel:
+            self.knob_travel = travel
+            self.remainders.clear()
+            print('NORNS knob_travel ' + str(travel), flush=True)
 
     def display_state(self):
         sides = []

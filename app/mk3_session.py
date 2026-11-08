@@ -27,6 +27,7 @@ def strip_leds(app,surface):
 
 class Mk3Session(Mk2Session):
     source='mk3';surface_type=Mk3Surface;product=0x1600;display_interface=5;device_name='Maschine MK3'
+    norns=None  # norns-mode fork hook
     def __init__(self,*args):
         super().__init__(*args);self.reader_watch=ReaderWatch();self.palette=[];self.pad_trigger=Mk3PadTrigger()
         self.norns=NornsMode(self.root)  # norns-mode fork hook
@@ -47,8 +48,11 @@ class Mk3Session(Mk2Session):
                 self.next_frame=self.next_led=0
                 print(self.device_name+' connected: '+path,flush=True);return
             except Exception as error:print('MK3 connect: '+str(error),flush=True);self.disconnect()
+    def poll(self,*args):
+        super().poll(*args)
+        if self.norns and self.norns.active:self.norns.flush()  # norns-mode fork hook
     def handle_event(self,event):
-        if self.norns.handle_event(event):return True  # norns-mode fork hook
+        if self.norns and self.norns.handle_event(event):return True  # norns-mode fork hook
         if event['kind'].startswith('pad_'):
             a=self.app
             for pad in self.pad_trigger.process(event,a.settings['controllers'][self.source]['pad_sensitivity']):
@@ -91,7 +95,7 @@ class Mk3Session(Mk2Session):
         for name in ('PITCH','MOD','NOTES'):values[name]=85 if self.surface.strip_mode==name else 8
         for name in ('FILE','SETTINGS','MACRO','VARIATION','TAP','STOP'):values[name]=85 if name in self.surface.held else 8
         if a.shift:values['TAP']=85 if a.timing()['metro'] else 8
-        if self.norns.active:values['PLUG-IN']=85  # norns-mode fork hook
+        if self.norns and self.norns.active:values['PLUG-IN']=85  # norns-mode fork hook
         report=[]
         for i,name in enumerate(LED_NAMES):
             value=127 if name in self.surface.held else values.get(name,8)
@@ -108,7 +112,7 @@ class Mk3Session(Mk2Session):
         try:
             if now>=self.next_led:self.output.submit_leds(self.reports(now));self.next_led=now+.05
             if now>=self.next_frame:
-                if self.norns.active:state=self.norns.display_state()  # norns-mode fork hook
+                if self.norns and self.norns.active:state=self.norns.display_state()  # norns-mode fork hook
                 else:
                     state=snapshot(self.surface);state['touches']=tuple(sorted(self.surface.touched))
                 self.output.submit(state);self.next_frame=now+1/30
