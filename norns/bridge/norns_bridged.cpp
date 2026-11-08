@@ -2,10 +2,17 @@
 // inside that instance's container). Sends crone's outputs to Machinista and
 // Machinista's audio (instrument sidechain or effect input) to crone's inputs.
 // Based on the Pi 4 add-on's daemon; the bridge file is now a path argument.
+// It also passes the Norns Instrument's MIDI to matron as OSC
+// /machinista/midi (status, data1, data2); the machinista_bridge mod plays it
+// as MIDI from the virtual device on port 1.
 //
-// Usage: norns_bridged [--no-crone] [path]   (path defaults to /frames/bridge)
+// Usage: norns_bridged [--no-crone] [--no-midi] [path]   (path defaults to /frames/bridge)
 #include "bridge_shm.h"
+#include <arpa/inet.h>
 #include <csignal>
+#include <cstring>
+#include <netinet/in.h>
+#include <sys/socket.h>
 #include <cstdio>
 #include <jack/jack.h>
 #include <string_view>
@@ -26,11 +33,25 @@ static int process(jack_nframes_t n, void*) {
     return 0;
 }
 
+constexpr int kMatronOscPort = 10111;
+
+// One OSC message: /machinista/midi ,iii status data1 data2 (data2 = -1 for a
+// two-byte message).
+static size_t osc_midi(uint32_t word, char* out) {
+    static const char head[] = "/machinista/midi\0\0\0\0,iii\0\0\0\0";  // address and tags, padded to 4
+    std::memcpy(out, head, 28);  // 16 + 4 and 4 + 4 bytes
+    const int n = int(word >> 24);
+    const int32_t v[3] = {int32_t((word >> 16) & 0xff), int32_t((word >> 8) & 0xff), n > 2 ? int32_t(word & 0xff) : -1};
+    for (int i = 0; i < 3; ++i) { const uint32_t be = htonl(uint32_t(v[i])); std::memcpy(out + 28 + 4 * i, &be, 4); }
+    return 40;
+}
+
 int main(int argc, char** argv) {
-    bool wire_crone = true;
+    bool wire_crone = true, midi = true;
     const char* path = "/frames/bridge";
     for (int i = 1; i < argc; ++i) {
         if (std::string_view(argv[i]) == "--no-crone") wire_crone = false;
+        else if (std::string_view(argv[i]) == "--no-midi") midi = false;
         else path = argv[i];
     }
     shared = nb::bridge_open(path);
@@ -60,7 +81,20 @@ int main(int argc, char** argv) {
     }
     std::signal(SIGINT, [](int) { running = 0; });
     std::signal(SIGTERM, [](int) { running = 0; });
-    while (running) pause();
+    // MIDI written while no daemon ran is stale: start from now.
+    shared->midi.read.store(shared->midi.write.load(std::memory_order_acquire), std::memory_order_release);
+    const int sock = midi ? socket(AF_INET, SOCK_DGRAM, 0) : -1;
+    sockaddr_in matron{};
+    matron.sin_family = AF_INET;
+    matron.sin_port = htons(kMatronOscPort);
+    matron.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+    while (running) {
+        if (sock < 0) { pause(); continue; }
+        uint32_t word; char msg[40];
+        while (shared->midi.pop(word))
+            sendto(sock, msg, osc_midi(word, msg), 0, reinterpret_cast<sockaddr*>(&matron), sizeof matron);
+        usleep(1000);
+    }
     jack_client_close(client);
     return 0;
 }

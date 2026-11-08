@@ -7,6 +7,9 @@
 //   norns' output, mixed with the dry signal. While its norns isn't running, it
 //   passes the dry signal through instead of going silent.
 //
+// Norns Instrument also passes the MIDI it gets (the Sound's notes: pads and
+// Machinista's patterns) to its norns, which plays them as MIDI on port 1.
+//
 // The "Norns" control picks the instance (1-8). Only one plug-in may use an
 // instance at a time; another one on the same number stays silent (instrument)
 // or dry (effect).
@@ -32,6 +35,9 @@ typedef struct LV2_Descriptor {
 namespace {
 constexpr const char* kInstrumentUri = "https://github.com/snassen/machinista/norns#instrument";
 constexpr const char* kEffectUri = "https://github.com/snassen/machinista/norns#effect";
+constexpr const char* kUridMap = "http://lv2plug.in/ns/ext/urid#map";
+constexpr const char* kMidiEvent = "http://lv2plug.in/ns/ext/midi#MidiEvent";
+struct UridMap { void* handle; uint32_t (*map)(void*, const char*); };
 constexpr uint32_t kChunk = 1024;  // frames handled per step; larger host blocks are split
 
 // Port indices, as declared in norns.ttl.
@@ -47,14 +53,21 @@ struct Plugin {
     float* out_l = nullptr; float* out_r = nullptr;
     const float* in_l = nullptr; const float* in_r = nullptr;  // sidechain (instrument) or chain input (effect)
     const float* gain = nullptr; const float* mix = nullptr; const float* norns = nullptr;
+    const uint8_t* midi = nullptr;  // atom sequence (instrument)
+    uint32_t midi_type = 0;         // URID of midi:MidiEvent, 0 = host has no URID map
     float zero[kChunk] = {};
     float dry_l[kChunk] = {}; float dry_r[kChunk] = {};
 };
 
-LV2_Handle instantiate(const LV2_Descriptor* d, double rate, const char*, const LV2_Feature* const*) {
+LV2_Handle instantiate(const LV2_Descriptor* d, double rate, const char*, const LV2_Feature* const* features) {
     auto* p = new Plugin;
     p->effect = std::strcmp(d->URI, kEffectUri) == 0;
     p->rate = rate;
+    for (int i = 0; features && features[i]; ++i)
+        if (std::strcmp(features[i]->URI, kUridMap) == 0 && features[i]->data) {
+            auto* m = static_cast<UridMap*>(features[i]->data);
+            p->midi_type = m->map(m->handle, kMidiEvent);
+        }
     // Map every instance now: opening files is not allowed on the audio thread,
     // and the "Norns" control can change while playing.
     char path[256];
@@ -83,6 +96,7 @@ void connect_port(LV2_Handle h, uint32_t port, void* data) {
             case I_OUT_R: p->out_r = f; break;
             case I_SIDE_L: p->in_l = f; break;
             case I_SIDE_R: p->in_r = f; break;
+            case I_MIDI: p->midi = static_cast<const uint8_t*>(data); break;
             case I_GAIN: p->gain = f; break;
             case I_NORNS: p->norns = f; break;
             default: break;
@@ -141,6 +155,28 @@ void process(Plugin* p, uint32_t offset, uint32_t n) {
     s->plugin_blocks.fetch_add(1, std::memory_order_relaxed);
 }
 
+// Passes the block's MIDI events to the norns, if this plug-in owns its bridge.
+// An atom sequence: {size, type, unit, pad}, then events {frames (8 bytes),
+// size, type, data}, each padded to 8 bytes. Event times are dropped: notes
+// land within one block.
+void forward_midi(Plugin* p) {
+    nb::Shared* s = p->shared[p->current];
+    if (!p->midi || !s || s->owner.load(std::memory_order_relaxed) != id(p)) return;
+    uint32_t size; std::memcpy(&size, p->midi, 4);
+    if (size < 8) return;
+    const uint8_t* at = p->midi + 16;
+    const uint8_t* end = p->midi + 8 + size;
+    while (at + 16 <= end) {
+        uint32_t esize, etype;
+        std::memcpy(&esize, at + 8, 4); std::memcpy(&etype, at + 12, 4);
+        const uint8_t* bytes = at + 16;
+        if (bytes + esize > end) break;
+        if ((p->midi_type == 0 || etype == p->midi_type) && esize >= 1 && esize <= 3 && bytes[0] >= 0x80 && bytes[0] < 0xf0)
+            s->midi.push(bytes, esize);
+        at += 16 + ((esize + 7) & ~7u);
+    }
+}
+
 void run(LV2_Handle h, uint32_t n) {
     auto* p = static_cast<Plugin*>(h);
     const int want = wanted(p);
@@ -151,6 +187,7 @@ void run(LV2_Handle h, uint32_t n) {
     }
     for (uint32_t offset = 0; offset < n; offset += kChunk)
         process(p, offset, std::min(kChunk, n - offset));
+    if (!p->effect) forward_midi(p);
 }
 
 void cleanup(LV2_Handle h) {

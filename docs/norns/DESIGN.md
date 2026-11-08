@@ -203,6 +203,15 @@ Agreed: a Linux MIDI patchbay; every norns follows Machinista's MIDI clock.
   waiting syncs from the real beat (switching the clock source to internal
   and back) and calls the script's transport start. Measured: first Awake
   step about 150 ms after CONTINUE (the next quarter beat), was about 6 s.
+- **Notes from the Sound (built 2026-11-08):** the Norns Instrument passes
+  the MIDI it gets (pads in keyboard or pad mode, Machinista's patterns,
+  in and out of NORNS mode) to its own norns: plug-in → a MIDI ring in the
+  bridge file (`MidiRing` in `bridge_shm.h`, lock-free, 1024 messages) →
+  `norns_bridged` in the container → OSC `/machinista/midi` to matron → the
+  mod plays it as MIDI from the virtual device. Scripts see it on port 1,
+  together with the bus (clock). Only the plug-in that owns the bridge
+  writes; event times within a block are dropped (at most one block late).
+  The daemon skips messages written while it was not running.
 - **Tempo in NORNS mode:** TEMPO, the master encoder (while TEMPO is
   selected) and SHIFT + NOTE REPEAT (tap) reach Machinista; the tempo shows
   in the free top slot of the left display while TEMPO is selected. The

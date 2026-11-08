@@ -2,6 +2,8 @@
 // Built with its own NB_DIR, so it is safe to run while real norns are playing.
 #include "bridge_shm.h"
 #include <cstdio>
+#include <cstring>
+#include <initializer_list>
 #include <dlfcn.h>
 #include <string>
 
@@ -104,6 +106,27 @@ int main() {
     check("switching number releases the old norns", one->owner.load() == 0);
     b.run();
     check("the other instrument can claim norns 1 now", one->owner.load() != 0);
+
+    // The owning instrument passes its MIDI to its norns: a note-on and a
+    // program change pass, system messages (here SysEx) do not.
+    alignas(8) uint8_t seq[128] = {};
+    const auto event = [&](int at, std::initializer_list<uint8_t> bytes) {
+        const uint32_t size = uint32_t(bytes.size());
+        std::memcpy(seq + at + 8, &size, 4);
+        std::copy(bytes.begin(), bytes.end(), seq + at + 16);
+    };
+    event(16, {0x90, 60, 100}); event(40, {0xf0}); event(64, {0xc0, 5});
+    const uint32_t seq_size = 8 + 3 * 24; std::memcpy(seq, &seq_size, 4);
+    b.d->connect_port(b.h, 4, seq);
+    a.d->connect_port(a.h, 4, seq);
+    const uint64_t before = one->midi.write.load();
+    b.run();
+    a.run();  // on norns 3: nothing reaches norns 1
+    uint32_t w1 = 0, w2 = 0, extra = 0;
+    const bool got = one->midi.pop(w1) && one->midi.pop(w2) && !one->midi.pop(extra);
+    check("instrument passes its notes to its norns", got && one->midi.write.load() - before == 2);
+    check("note-on packed whole", w1 == (3u << 24 | 0x90u << 16 | 60u << 8 | 100u));
+    check("two-byte message keeps its length", w2 == (2u << 24 | 0xc0u << 16 | 5u << 8));
 
     instrument->cleanup(a.h); instrument->cleanup(b.h); effect->cleanup(fx.h);
     check("removing the plug-ins frees their norns", one->owner.load() == 0 && two->owner.load() == 0);

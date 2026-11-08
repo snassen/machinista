@@ -2,6 +2,7 @@
 -- * Exports the native framebuffer for the MK3 displays. Uses reserved system
 --   metro 34 (unused by norns core at 42df844) because script loads call
 --   metro.free_all(), which frees script metros 1-30.
+-- * Notes from the Norns Instrument arrive as OSC and play as MIDI (below).
 -- * MIDI: puts norns' virtual MIDI device (the Machinista patchbay's port for
 --   this instance) on MIDI port 1, where scripts look by default, and makes
 --   MIDI the clock source so every instance follows Machinista's tempo and
@@ -63,6 +64,29 @@ _norns.midi.event = function(id, data)
     end
   end
   return dispatch(id, data)
+end
+
+-- Notes from the Norns Instrument (the Sound's pads and patterns) arrive from
+-- the bridge daemon as OSC /machinista/midi status data1 data2 (data2 = -1 for
+-- a two-byte message). They are played as MIDI from the virtual device, so
+-- scripts see them on port 1 like any MIDI input.
+local function virtual_id()
+  for id, d in pairs(midi.devices) do
+    if d.name == "virtual" then return id end
+  end
+end
+local osc_dispatch = _norns.osc.event
+_norns.osc.event = function(path, args, from)
+  if path == "/machinista/midi" then
+    local id = virtual_id()
+    if id ~= nil and args[1] ~= nil then
+      local data = {args[1], args[2]}
+      if args[3] ~= nil and args[3] >= 0 then data[3] = args[3] end
+      _norns.midi.event(id, data)
+    end
+    return
+  end
+  return osc_dispatch(path, args, from)
 end
 
 local function machinista_playing()

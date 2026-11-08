@@ -54,6 +54,37 @@ struct DirectionStats {
     std::atomic<float> ppm{0};
 };
 
+// MIDI from the Norns Instrument to its norns: messages of up to three bytes,
+// each packed into one word (length in the top byte). One writer (the plug-in
+// that owns the bridge), one reader (the daemon). A full ring drops the newest
+// message and counts it.
+constexpr uint32_t kMidiCapacity = 1024;  // power of two
+struct MidiRing {
+    std::atomic<uint64_t> write{0}, read{0}, dropped{0};
+    uint32_t data[kMidiCapacity];
+    static uint32_t pack(const uint8_t* b, uint32_t n) {
+        return n << 24 | uint32_t(b[0]) << 16 | (n > 1 ? uint32_t(b[1]) << 8 : 0) | (n > 2 ? b[2] : 0);
+    }
+    bool push(const uint8_t* bytes, uint32_t n) {
+        if (n < 1 || n > 3) return false;
+        const uint64_t w = write.load(std::memory_order_relaxed);
+        if (w - read.load(std::memory_order_acquire) >= kMidiCapacity) {
+            dropped.fetch_add(1, std::memory_order_relaxed);
+            return false;
+        }
+        data[w & (kMidiCapacity - 1)] = pack(bytes, n);
+        write.store(w + 1, std::memory_order_release);
+        return true;
+    }
+    bool pop(uint32_t& word) {
+        const uint64_t r = read.load(std::memory_order_relaxed);
+        if (r == write.load(std::memory_order_acquire)) return false;
+        word = data[r & (kMidiCapacity - 1)];
+        read.store(r + 1, std::memory_order_release);
+        return true;
+    }
+};
+
 struct Shared {
     Ring to_machinista, to_norns;
     DirectionStats out_stats, in_stats;  // out = norns to Machinista
@@ -63,6 +94,7 @@ struct Shared {
     std::atomic<uint64_t> owner{0};            // the one plug-in instance using the bridge
     std::atomic<int64_t> owner_ns{0};          // when that instance last ran
     std::atomic<uint64_t> refused_blocks{0};   // blocks a second instance stayed silent for
+    MidiRing midi;                             // notes and controls for this norns
 };
 
 constexpr int64_t kOwnerTimeoutNs = 200000000;  // an instance silent this long gives up the bridge

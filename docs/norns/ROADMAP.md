@@ -84,6 +84,13 @@ sequencer script and external gear.
   pack.
 - The grid (Maschine Jam) comes later.
 
+**Agreed 2026-11-08:** the Norns Instrument passes all the Sound's notes
+(pads and patterns, in and out of NORNS mode); KNOB 4/8 = reverb amount,
+output level with SHIFT; MIDI layer keys are toggles (CC 127/0, lit while
+on). Order: notes, KNOB 4/8, layers.
+- **Notes: built 2026-11-08** (DESIGN.md, MIDI). Tested from the bridge
+  ring to a script; still to play from the MK3.
+
 **Notes:**
 - Pads as MIDI: the Instrument's MIDI port can carry them, the same path as
   the clock.
