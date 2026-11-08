@@ -28,14 +28,39 @@ end
 -- ticks only while it plays.
 local transport = nil
 local last_tick = -1
+-- PLAY after STOP is a CONTINUE (with a song position) from Machinista.
+-- norns' MIDI clock ignores CONTINUE: its beat ran on while stopped, the
+-- first tick after the pause is dropped, and the second puts the beat back
+-- where the ticks left off. Every clock.sync() scheduled meanwhile then waits
+-- for a beat that is far ahead. At that second tick, reschedule the waiting
+-- syncs from the true beat (switching the clock source away and back is the
+-- only way to reach norns' scheduler from Lua) and send the transport start
+-- that norns only sends after a START.
+local resync = 0
+local function resume()
+  if not (midi_clock and params.lookup["clock_source"] and params:string("clock_source") == "midi") then return end
+  clock.set_source("internal")
+  clock.set_source("midi")
+  _norns.clock.start()
+end
 local dispatch = _norns.midi.event
 _norns.midi.event = function(id, data)
   local d = midi.devices[id]
   if d ~= nil and d.name == "virtual" then
     local status = data[1]
-    if status == 0xfa or status == 0xfb then transport = true
-    elseif status == 0xfc then transport = false
-    elseif status == 0xf8 then last_tick = util.time() end
+    if status == 0xfa then transport = true; resync = 0
+    elseif status == 0xfb then transport = true; resync = 2
+    elseif status == 0xfc then transport = false; resync = 0
+    elseif status == 0xf8 then
+      last_tick = util.time()
+      if resync > 0 then
+        resync = resync - 1
+        if resync == 0 then
+          dispatch(id, data)
+          return resume()
+        end
+      end
+    end
   end
   return dispatch(id, data)
 end

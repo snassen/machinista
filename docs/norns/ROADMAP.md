@@ -19,8 +19,9 @@ position) without setting each one by hand.
 **Built 2026-11-08 (agreed: MIDI clock through a Linux MIDI patchbay; every
 norns switches to MIDI clock at start):** see DESIGN.md, MIDI. Machinista's
 MIDI SYNC is OUT on the NORNS MIDI BUS, so every norns follows its tempo and
-start/stop. Tested with an outside clock (norns locked to 89.95 BPM from 90);
-still to hear on the MK3 with Machinista's own transport.
+start/stop. Tested with an outside clock (norns locked to 89.95 BPM from 90)
+and on the MK3: STOP stops at once; PLAY after STOP (a MIDI CONTINUE) needed
+a fix in the mod and now starts on the next step.
 - Later, possibly: Ableton Link as well, to sync with other gear and
   laptops over the network.
 

@@ -195,6 +195,14 @@ Agreed: a Linux MIDI patchbay; every norns follows Machinista's MIDI clock.
   virtual device (START/CONTINUE, STOP, clock ticks) and stops a script
   that loads while Machinista is stopped (`clock.transport.stop()`), so it
   waits for PLAY.
+- **PLAY after STOP (CONTINUE):** Machinista resumes with a song position
+  and CONTINUE, which norns' MIDI clock ignores. Its beat ran on while
+  stopped and drops back to where the ticks left off, so every
+  `clock.sync()` waited for a beat far ahead: about 10 beats of silence
+  after PLAY. At the second tick after CONTINUE the mod reschedules the
+  waiting syncs from the real beat (switching the clock source to internal
+  and back) and calls the script's transport start. Measured: first Awake
+  step about 150 ms after CONTINUE (the next quarter beat), was about 6 s.
 - **Tempo in NORNS mode:** TEMPO, the master encoder (while TEMPO is
   selected) and SHIFT + NOTE REPEAT (tap) reach Machinista; the tempo shows
   in the free top slot of the left display while TEMPO is selected. The
