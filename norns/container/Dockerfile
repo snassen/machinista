@@ -26,5 +26,11 @@ RUN git clone -q https://github.com/carlosedp/norns-mi-UGens.git /tmp/mi \
     && cp -r /tmp/mi/work/out/mi-UGens /home/we/.local/share/SuperCollider/Extensions/ \
     && rm -rf /tmp/mi
 
+# norns reads its update number from ~/version.txt; without it the version
+# is "000000" and scripts that require a recent norns refuse to load
+# (dreamsequence, mlre, cheat_codes_2). The pinned norns is newer than
+# release v3.0.2 (260819).
+RUN echo 260819 > /home/we/version.txt
+
 # The base image's entrypoint starts as root and drops to we.
 USER root

@@ -47,10 +47,12 @@ image):**
 - `norns/container/Dockerfile` builds the `norns-station` image:
   norns-lab's runtime plus sc3-plugins and mi-UGens (arm64).
 - Scripts are loaded from norns' own menu for now (K1 → SELECT).
-- Still to do: check that every script in the pack loads and makes sound in
-  a container, and measure CPU per script, including light ones such as
-  MIDI sequencers (which may need no audio engine at all). Then see how
-  many instances fit; 4 is not a limit (the code allows 8).
+- Tested (SCRIPTS.md): 44 of 45 load; cheat_codes_2 needs a MIDI device
+  (comes with 2b). CPU per instance ranges from about 6% (idle) to 24% of
+  one core, so eight heavy instances would use about half the Pi 5. 4 is
+  not a limit (the code allows 8).
+- Still to do: check by ear that effect scripts process the Sound's audio;
+  measure while scripts are being played.
 
 **Notes from planning:**
 - The Pi 4 pack is in `snassen/machinista-norns` (`library/pack.txt`):

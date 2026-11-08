@@ -25,6 +25,8 @@ Status: **prototype, working on the MK3** (2026-11-08, Pi 5).
 ## Documents
 - [ROADMAP.md](ROADMAP.md): what is still to do, with notes and open
   decisions.
+- [SCRIPTS.md](SCRIPTS.md): which scripts in the pack work in the
+  containers, and their CPU use.
 - [DESIGN.md](DESIGN.md): decisions, the MK3 control map, the bridges and
   open questions.
 - [INSTALL-NOTES.md](INSTALL-NOTES.md): the reference installation on a Pi 5,
@@ -44,7 +46,7 @@ Status: **prototype, working on the MK3** (2026-11-08, Pi 5).
 | `norns/run-norns.sh` | Starts numbered norns instance `<n>` in Docker (`stop <n>` removes it); scripts in `~/norns/code` are shared, `~/norns/data/<n>` and `~/norns/tape/<n>` are per instance |
 | `norns/bridge/` | Audio bridge: Norns Instrument / Norns Effect LV2 plug-ins, the JACK daemon, tests |
 | `norns/container/Dockerfile` | The `norns-station` image: norns-lab runtime plus sc3-plugins and mi-UGens |
-| `norns/library/` | The script pack (`pack.txt`) and its installer |
+| `norns/library/` | The script pack (`pack.txt`), its installer and `test-scripts.py` (load errors and CPU per script) |
 | `norns/container/post-ready.sh` | Runs in each container once norns is ready: builds and starts the bridge daemon |
 | `norns/tools/osc_send.py` | Sends a test OSC message to a norns instance |
 | `tests/test_norns_mode.py` | Unit tests |

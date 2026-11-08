@@ -31,7 +31,7 @@ for two instances or Docker. **Decide** = the dual setup reopens a choice.
 | Script pack (`pack.txt`, 44 scripts) + mi-UGens | Pinned community scripts, tested on a Pi 4 | **Adapt**: the Docker image lacks `sc3-plugins` (A5) |
 | Menu trimming + RESTART restarts only norns | Hosted-norns menus | **Adapt**: RESTART becomes a container restart |
 | Sample sharing (`dust/audio/machinista`, `tape`) | norns sees Machinista samples; tape lands in Machinista | **Adapt**: Docker volume mounts instead of symlinks |
-| `/home/we` link, `version.txt` | Script compatibility | **Not needed**: the norns-lab image already runs as `we` |
+| `/home/we` link, `version.txt` | Script compatibility | `/home/we`: not needed, the image runs as `we`. `version.txt`: **needed** (scripts check the norns version); added to the norns-station image |
 | `patches/norns-pi-debian13.patch` | Native build fixes on Debian 13 | **Not needed in Docker** (Ubuntu 22.04 image has its own ARM64 patch); kept for a native fallback |
 | Grid support | USB grid worked natively in mlr | **Decide** (D5) |
 | `install.sh` | Idempotent native installer that patches stock Machinista | **Adapt**: the reusable parts are plug-in upload via the WebUI API, mod enabling and the script pack. The patching part is replaced by the fork |
