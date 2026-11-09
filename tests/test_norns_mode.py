@@ -203,6 +203,34 @@ class NornsModeTest(unittest.TestCase):
         self.assertEqual((right['name'], right['role']), ('2', 'EFFECT'))
         self.assertTrue(right['frame'].endswith('/2/screen.png'))
 
+    def test_knob_4_and_8_set_reverb_and_level(self):
+        self.toggle()
+        self.turn(4, KNOB_TRAVEL)
+        self.turn(8, -KNOB_TRAVEL)
+        self.assertEqual(self.sent, [(10111, osc_message('/machinista/param', 'rev_return_level', 1)),
+                                     (10112, osc_message('/machinista/param', 'rev_return_level', -1))])
+        self.sent.clear()
+        self.mode.handle_event(button('SHIFT', 1))
+        self.turn(4, KNOB_TRAVEL, after=PACE_S)
+        self.assertEqual(self.sent, [(10111, osc_message('/machinista/param', 'output_level', 1))])
+
+    def test_shift_mid_turn_drops_reverb_steps(self):
+        self.toggle()
+        self.turn(4, KNOB_TRAVEL)
+        self.turn(4, KNOB_TRAVEL * 3, after=0.005)  # paced: waits
+        self.mode.handle_event(button('SHIFT', 1))
+        self.turn(4, KNOB_TRAVEL, after=0.005)
+        self.now += PACE_S
+        self.mode.flush()
+        self.assertEqual(self.sent[1:], [(10111, osc_message('/machinista/param', 'output_level', 1))])
+
+    def test_osc_string_argument(self):
+        data = osc_message('/machinista/param', 'output_level', -2)
+        self.assertEqual(len(data) % 4, 0)
+        self.assertIn(b',si\0', data)
+        self.assertIn(b'output_level\0', data)
+        self.assertEqual(data[-4:], struct.pack('>i', -2))
+
     def test_osc_encoding(self):
         data = osc_message('/remote/enc', 1, -3)
         self.assertEqual(len(data) % 4, 0)

@@ -11,6 +11,8 @@ Layout follows the selected Sound (docs/norns/DESIGN.md, "norns as instrument
 and effect"):
   left display  = its Norns Instrument: K1-K3 = DISPLAY 1-3, E1-E3 = KNOB 1-3
   right display = its Norns Effect:     K1-K3 = DISPLAY 5-7, E1-E3 = KNOB 5-7
+KNOB 4 / KNOB 8 set that side's reverb amount, or its output level while
+SHIFT is held (norns system parameters, whatever script is loaded).
 Each plug-in's "Norns" control picks the instance. A side without such a
 plug-in shows that and ignores its controls.
 SHIFT + PLUG-IN enters and leaves the mode. Transport and pads stay with
@@ -59,14 +61,22 @@ KEY_BUTTONS = {f'DISPLAY {i + 1}': (0, i + 1) for i in range(3)}
 KEY_BUTTONS.update({f'DISPLAY {i + 5}': (1, i + 1) for i in range(3)})
 KNOBS = {i + 1: (0, i + 1) for i in range(3)}
 KNOBS.update({i + 5: (1, i + 1) for i in range(3)})
+# KNOB 4 / KNOB 8 change a norns system parameter on their side: the reverb
+# return (how much reverb is heard, from every source), or the output level
+# while SHIFT is held. Sent as /machinista/param <id> <steps>; the mod applies
+# params:delta, one step = 1% of the parameter's range.
+SYSTEM_KNOBS = {4: 0, 8: 1}
+REVERB_PARAM = 'rev_return_level'
+LEVEL_PARAM = 'output_level'
 
 
 def osc_message(address, *values):
-    """Encode a minimal OSC message with int32 arguments."""
+    """Encode a minimal OSC message with int32 and string arguments."""
     def pad(data):
         return data + b'\0' * (4 - len(data) % 4)
-    tags = ',' + 'i' * len(values)
-    return pad(address.encode()) + pad(tags.encode()) + b''.join(struct.pack('>i', int(v)) for v in values)
+    tags = ',' + ''.join('s' if isinstance(v, str) else 'i' for v in values)
+    args = b''.join(pad(v.encode()) if isinstance(v, str) else struct.pack('>i', int(v)) for v in values)
+    return pad(address.encode()) + pad(tags.encode()) + args
 
 
 def config_path(root):
@@ -148,6 +158,7 @@ class NornsMode:
         self.remainders = {}
         self.last_turn = {}
         self.pending = {}
+        self.system_param = {}  # KNOB 4/8: parameter the pending steps belong to
         self.last_sent = {}
         self.clock = clock
         self.next_config_check = clock() + CONFIG_CHECK_S
@@ -215,9 +226,13 @@ class NornsMode:
             index = event['raw_control']
             if index == MASTER_ENCODER and self.tempo() is not None:
                 return False
-            if index in KNOBS:
-                side, enc = KNOBS[index]
+            if index in KNOBS or index in SYSTEM_KNOBS:
                 value = event['value']
+                if index in SYSTEM_KNOBS:
+                    param = LEVEL_PARAM if self.shift else REVERB_PARAM
+                    if self.system_param.get(index) != param:
+                        self.pending.pop(index, None)  # SHIFT changed mid-turn
+                        self.system_param[index] = param
                 now = self.clock()
                 idle = now - self.last_turn.get(index, float('-inf')) > KNOB_IDLE_S
                 self.last_turn[index] = now
@@ -252,7 +267,10 @@ class NornsMode:
             if now - self.last_sent.get(index, float('-inf')) < PACE_S:
                 continue
             del self.pending[index]
-            if steps:
+            if steps and index in SYSTEM_KNOBS:
+                self.send(SYSTEM_KNOBS[index], '/machinista/param', self.system_param[index], steps)
+                self.last_sent[index] = now
+            elif steps:
                 side, enc = KNOBS[index]
                 self.send(side, '/remote/enc', enc, steps)
                 self.last_sent[index] = now

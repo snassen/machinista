@@ -18,6 +18,13 @@ decision.
   pads stay with Machinista while NORNS mode is active, and so do KEYBOARD
   and FIXED VEL (agreed 2026-11-09), so the pads can switch to keyboard mode
   while they play a norns. Root and octave still need leaving the mode.
+- **KNOB 4 / KNOB 8** (built 2026-11-09) change a norns system parameter on
+  their side, whatever script is loaded: the reverb return
+  (`rev_return_level`, how much reverb is heard from every source), or the
+  output level (`output_level`) while SHIFT is held. Machinista sends OSC
+  `/machinista/param <id> <steps>`; the mod applies `params:delta`, so one
+  step is 1% of the range. Reverb return does nothing while a script has
+  the reverb OFF or sends nothing into it.
 - **norns runs in Docker** (norns-lab runtime image), one container per
   instance.
 - **Bridges** use the simplest working transport first (files and OSC).

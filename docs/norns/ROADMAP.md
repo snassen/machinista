@@ -88,8 +88,13 @@ sequencer script and external gear.
 (pads and patterns, in and out of NORNS mode); KNOB 4/8 = reverb amount,
 output level with SHIFT; MIDI layer keys are toggles (CC 127/0, lit while
 on). Order: notes, KNOB 4/8, layers.
-- **Notes: built 2026-11-08** (DESIGN.md, MIDI). Tested from the bridge
-  ring to a script; still to play from the MK3.
+- **Notes: built 2026-11-08** (DESIGN.md, MIDI). Played from the MK3 into
+  orgn, in and out of NORNS mode (2026-11-09). KEYBOARD and FIXED VEL work
+  in NORNS mode.
+- **KNOB 4/8: built 2026-11-09.** KNOB 4 (left, Instrument) and KNOB 8
+  (right, Effect) set norns' reverb return; with SHIFT, its output level.
+  One step = 1% of the parameter's range. Tested over OSC; still to try on
+  the MK3. Nothing shows the value yet (norns' screen belongs to the script).
 
 **Notes:**
 - Pads as MIDI: the Instrument's MIDI port can carry them, the same path as

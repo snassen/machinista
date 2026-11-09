@@ -2,7 +2,8 @@
 -- * Exports the native framebuffer for the MK3 displays. Uses reserved system
 --   metro 34 (unused by norns core at 42df844) because script loads call
 --   metro.free_all(), which frees script metros 1-30.
--- * Notes from the Norns Instrument arrive as OSC and play as MIDI (below).
+-- * Notes from the Norns Instrument arrive as OSC and play as MIDI (below);
+--   KNOB 4/8 nudge reverb and output level through /machinista/param.
 -- * MIDI: puts norns' virtual MIDI device (the Machinista patchbay's port for
 --   this instance) on MIDI port 1, where scripts look by default, and makes
 --   MIDI the clock source so every instance follows Machinista's tempo and
@@ -83,6 +84,15 @@ _norns.osc.event = function(path, args, from)
       local data = {args[1], args[2]}
       if args[3] ~= nil and args[3] >= 0 then data[3] = args[3] end
       _norns.midi.event(id, data)
+    end
+    return
+  end
+  -- KNOB 4/8: /machinista/param <id> <steps> nudges a parameter (reverb
+  -- return, or output level with SHIFT) by steps of 1% of its range.
+  if path == "/machinista/param" then
+    local id, steps = args[1], tonumber(args[2])
+    if type(id) == "string" and steps ~= nil and params.lookup[id] ~= nil then
+      params:delta(id, steps)
     end
     return
   end
