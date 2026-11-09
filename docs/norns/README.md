@@ -55,6 +55,19 @@ Status: **prototype, working on the MK3** (2026-11-08, Pi 5).
 The norns runtime image comes from norns-lab (a separate, currently private
 repository): upstream norns built for ARM64 Linux in Docker.
 
+## Putting the fork on a Pi
+Both Pis run the official Machinista release the fork is built on (beta 19
+as of 2026-11-09; update with Machinista's own updater), with the fork on
+top. From a checkout of this branch:
+```bash
+tools/deploy-fork.sh machinista@<pi>   # refuses if the Pi runs another version
+```
+Run it again after every Machinista update (an update overwrites the files
+the fork changes). A new Pi also needs Docker (`apt install docker.io`, user
+in the docker group), the `norns-station` image (built here, or
+`docker save | docker load` from another Pi), `~/norns` (the script library
+and data), linger, and the Norns plug-ins uploaded once.
+
 ## Quick start (on the Pi)
 ```bash
 loginctl enable-linger machinista   # once: keeps /dev/shm/norns alive (below)

@@ -1,0 +1,569 @@
+{
+ "32-harmony": {
+  "cpu": 24.2,
+  "description": "a 32-voice harmony generator",
+  "engine": "32Harmony",
+  "rev": "7f088b4797e4075adcd414c25b371740e5c65a31",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "synth",
+   "generative",
+   "noise"
+  ],
+  "test": "ok"
+ },
+ "3d": {
+  "cpu": 11.0,
+  "description": "pure Lua 3d lib for norns",
+  "engine": "",
+  "rev": "b8b9dc8a10b48d15ada9a9926b04e1bdf4ef516f",
+  "status": "installed",
+  "tags": [
+   "art"
+  ],
+  "test": "ok"
+ },
+ "4-big-knobs": {
+  "cpu": 7.8,
+  "description": "send control voltages out of crow",
+  "engine": "",
+  "rev": "e6b41f7248bff4d16bde8a9ef64e1f2bac8a8164",
+  "status": "installed",
+  "tags": [
+   "utility",
+   "arc",
+   "crow",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "abacus": {
+  "cpu": 8.9,
+  "description": "sequence rows of beats with samples",
+  "engine": "",
+  "rev": "f4e5eb93886b45c7de30bee61ad086c1c121ec6e",
+  "status": "installed",
+  "tags": [
+   "sequencer"
+  ],
+  "test": "ok"
+ },
+ "acid-test": {
+  "cpu": 6.7,
+  "description": "generative acid basslines.",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>",
+   "/home/we/dust/code/acid-test/acid-test.lua:28: in main chunk"
+  ],
+  "rev": "ad3e2f9ef5202c52cb262d11620c240bb7a89a92",
+  "status": "failed",
+  "tags": [
+   "generative",
+   "midi",
+   "crow"
+  ],
+  "test": "lua error"
+ },
+ "ack": {
+  "reason": "not a script (a library for other scripts)",
+  "rev": "db44d479f00e897a6687654b75f3a8f6d3952141",
+  "status": "skipped",
+  "tags": []
+ },
+ "acrostic": {
+  "cpu": 10.4,
+  "description": "chord sequencer and sampler",
+  "engine": "Acrostic",
+  "errors": [
+   "### SCRIPT ERROR: init",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>",
+   "/home/we/dust/code/acrostic/lib/acrostic.lua:6: in main chunk"
+  ],
+  "rev": "d3aee8c0937e566df41146835ccb58d0f0cea721",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "sampler",
+   "crow",
+   "grid"
+  ],
+  "test": "lua error"
+ },
+ "amenbreak": {
+  "reason": "runs system commands: amenbreak.lua: sudo",
+  "status": "rejected",
+  "tags": [
+   "drum",
+   "sampler"
+  ]
+ },
+ "animator": {
+  "cpu": 7.2,
+  "description": "2D Polyphonic step sequencer for grids",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/animator/lib/parameters.lua:5: module 'molly_the_poly/lib/molly_the_poly_engine' not found:",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "2a33fa8eabe010f73ed36f3b86c9d00b6a5917dd",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "crow",
+   "grid",
+   "midi"
+  ],
+  "test": "lua error"
+ },
+ "arcify": {
+  "cpu": 7.8,
+  "description": "map arc encoders to up to four parameters (eight with a shift key)",
+  "engine": "TestSine",
+  "rev": "d6b6c98f358735bd048bfc88dcc7064e1c80ea7a",
+  "status": "installed",
+  "tags": [
+   "lib"
+  ],
+  "test": "ok"
+ },
+ "arcologies": {
+  "cpu": 10.9,
+  "description": "an interactive environment for designing 2d sound arcologies with norns and grid",
+  "engine": "PolyPerc",
+  "rev": "06960f3c415bd845f18c38488ee3617fe9058c83",
+  "status": "installed",
+  "tags": [
+   "generative",
+   "sampler",
+   "sequencer",
+   "jf",
+   "grid",
+   "midi",
+   "arc",
+   "crow"
+  ],
+  "test": "ok"
+ },
+ "arp_index": {
+  "cpu": 6.9,
+  "description": "check stocks and make music",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/arp_index/arp_index.lua:23: module 'molly_the_poly/lib/molly_the_poly_engine' not found:",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "5bd7bddc4067769bae16504954c06ecc86b42855",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "grid"
+  ],
+  "test": "lua error"
+ },
+ "ash": {
+  "cpu": 7.1,
+  "description": "a small collection",
+  "engine": "Glut",
+  "errors": [
+   "### SCRIPT ERROR: missing Glut"
+  ],
+  "rev": "89493c7719cf7e3abadc979e52cf0d3e11150690",
+  "status": "failed",
+  "tags": [
+   "arc",
+   "grid",
+   "looper",
+   "drum",
+   "synth"
+  ],
+  "test": "lua error"
+ },
+ "asterion": {
+  "cpu": 15.5,
+  "description": "adventure game as drone sequencer",
+  "engine": "Asterion",
+  "rev": "e9fb465469aa17e4254009a43585d0e9f0cd66b0",
+  "status": "installed",
+  "tags": [
+   "drone",
+   "engine",
+   "hid",
+   "sequencer",
+   "synth"
+  ],
+  "test": "ok"
+ },
+ "automs70": {
+  "cpu": 7.8,
+  "description": "automate MS-70 CDR parameters",
+  "engine": "",
+  "errors": [
+   "! please contact the script maintainer - this will cause a load failure in future updates",
+   "! please contact the script maintainer - this will cause a load failure in future updates"
+  ],
+  "rev": "8fecaed28a75346ce7049b8f2c77c696eca26e51",
+  "status": "failed",
+  "tags": [
+   "utility",
+   "midi"
+  ],
+  "test": "lua error"
+ },
+ "avonlea": {
+  "cpu": 12.0,
+  "description": "the Lake of Shining Waters at night",
+  "engine": "Avonlea",
+  "rev": "41a726bf829d8d62faa584d6c4c6d63577d457c9",
+  "status": "installed",
+  "tags": [
+   "norns",
+   "generative",
+   "art",
+   "drone"
+  ],
+  "test": "ok"
+ },
+ "awake-passersby": {
+  "cpu": 6.8,
+  "description": "time drifting",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/awake-passersby/awake-passersby.lua:34: MISSING INCLUDE: passersby/lib/passersby_engine",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "ea721d8fd3683b3dd6d082389b713bf92b22c58e",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "grid"
+  ],
+  "test": "lua error"
+ },
+ "awake-rings": {
+  "cpu": 9.0,
+  "description": "chimes past",
+  "engine": "KarplusRings",
+  "rev": "d5df0b6a92d215da28e5b94df2f8cc2193c8cfa9",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "b-b-b-b-beat": {
+  "cpu": 13.0,
+  "description": "Beat repeater with some glitch",
+  "engine": "",
+  "rev": "1684c80c4c6068bcb475644965137f1a7fbda38a",
+  "status": "installed",
+  "tags": [
+   "audio_fx"
+  ],
+  "test": "ok"
+ },
+ "bakeneko": {
+  "cpu": 8.1,
+  "description": "a haunted drummer companion",
+  "engine": "Goldeneye_ef20e1",
+  "rev": "c06b368a0aaf6abffbbe52a290f45c86d195774f",
+  "status": "installed",
+  "tags": [
+   "drum",
+   "sequencer",
+   "eduscript"
+  ],
+  "test": "ok"
+ },
+ "barycenter": {
+  "cpu": 7.3,
+  "description": "orbital motion sequencing",
+  "engine": "PolyPerc",
+  "rev": "6b0a126a58a4d077689f3b24c308f1a7b148f6d6",
+  "status": "installed",
+  "tags": [
+   "sequencer"
+  ],
+  "test": "ok"
+ },
+ "beets": {
+  "cpu": 8.7,
+  "description": "drum loop re-sequencer",
+  "engine": "",
+  "rev": "226c2b892658bf7418555677a6a5aeab6fb3cfc6",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "drum",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "benjolis": {
+  "cpu": 9.9,
+  "description": "chaotic synth",
+  "engine": "Benjolis",
+  "rev": "9e1e0d24b7303104bec8b98fcbfa7e60addd64e2",
+  "status": "installed",
+  "tags": [
+   "synth"
+  ],
+  "test": "ok"
+ },
+ "bistro": {
+  "cpu": 8.2,
+  "description": "a presscafe remake for Norns",
+  "engine": "KarplusRings",
+  "rev": "6a7cd9058f2856521737e158c57820620b3705de",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "bitters": {
+  "cpu": 7.4,
+  "description": "lo-fi FM capable mono/poly",
+  "engine": "",
+  "rev": "e94dca0217429177fff3b9959f0f304578df26a2",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "blippoo": {
+  "cpu": 10.6,
+  "description": "blippoo box clone",
+  "engine": "Blippoo",
+  "rev": "c6e5cab61d79401e4a988d1614d5a4c1d748c180",
+  "status": "installed",
+  "tags": [
+   "synth"
+  ],
+  "test": "ok"
+ },
+ "blndr": {
+  "cpu": 11.6,
+  "description": "a quantized delay with time bending effects",
+  "engine": "",
+  "rev": "4fc7c01fe78e0face3a314225a14e76831e26c9f",
+  "status": "installed",
+  "tags": [
+   "audio_fx"
+  ],
+  "test": "ok"
+ },
+ "blue": {
+  "cpu": 10.1,
+  "description": "endless waves",
+  "engine": "",
+  "rev": "0fd246bbe0281ead5f38b06d878225c62f27c218",
+  "status": "installed",
+  "tags": [
+   "art"
+  ],
+  "test": "ok"
+ },
+ "boingg": {
+  "cpu": 8.6,
+  "description": "a bouncing ball sequencer",
+  "engine": "PolySub",
+  "rev": "4ca58fc0469e25b5fc9ac323e505fb5b523ece0f",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "midi",
+   "jf",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "bounds": {
+  "cpu": 10.5,
+  "description": "stereo delay/looper",
+  "engine": "",
+  "rev": "51b79505cffa657c8880bee139971866321ccec3",
+  "status": "installed",
+  "tags": [
+   "looper",
+   "delay"
+  ],
+  "test": "ok"
+ },
+ "breakthrough": {
+  "reason": "engine breaks the compile: ERROR: duplicate Class found: 'Engine_CartersDelay'",
+  "status": "rejected",
+  "tags": [
+   "sequencer",
+   "generative",
+   "midi"
+  ]
+ },
+ "buoys": {
+  "reason": "engine breaks the compile: ERROR: duplicate Class found: 'Engine_CartersDelay'",
+  "status": "rejected",
+  "tags": [
+   "generative",
+   "sampler",
+   "sequencer",
+   "art",
+   "arc",
+   "midi",
+   "grid",
+   "crow"
+  ]
+ },
+ "caliper": {
+  "reason": "engine breaks the compile: ERROR: duplicate Class found: 'Engine_CartersDelay'",
+  "status": "rejected",
+  "tags": [
+   "utility",
+   "crow"
+  ]
+ },
+ "carters-delay-norns": {
+  "reason": "engine breaks the compile: ERROR: duplicate Class found: 'Engine_CartersDelay'",
+  "status": "rejected",
+  "tags": [
+   "delay",
+   "art"
+  ]
+ },
+ "cc-canvas": {
+  "cpu": 7.3,
+  "description": "fifteen midi cc sliders with slewing and recall",
+  "engine": "",
+  "rev": "b49cd7500cd3139833111989749367d7229aff53",
+  "status": "installed",
+  "tags": [
+   "midi",
+   "utility",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "cccccccc": {
+  "cpu": 8.9,
+  "description": "ccs for arc dials",
+  "engine": "",
+  "rev": "c0f88e9c615fb40eb5e2057972299a2f30a39ef1",
+  "status": "installed",
+  "tags": [
+   "utility",
+   "arc"
+  ],
+  "test": "ok"
+ },
+ "changes": {
+  "cpu": 7.8,
+  "description": "generate eight connected sine wave lfos and output them over midi",
+  "engine": "",
+  "rev": "3b6fe7611904dc9e7629187d2fefaee409676279",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "utility",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "choukanzu": {
+  "reason": "not a script (a library for other scripts)",
+  "rev": "7da0e9a0de8f3be3567c22c03557a04eeeeec2ce",
+  "status": "skipped",
+  "tags": [
+   "mod"
+  ]
+ },
+ "circles": {
+  "cpu": 7.4,
+  "description": "move cursor. place circles. make music",
+  "engine": "PolyPerc",
+  "rev": "a711dcd1c19df844fed145f7a0d03b6867d12082",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "crow"
+  ],
+  "test": "ok"
+ },
+ "clarck": {
+  "cpu": 8.7,
+  "description": "a clock for arc4 on norns",
+  "engine": "",
+  "rev": "efaab38c244ed14434e8c0012538a3548cc6b952",
+  "status": "installed",
+  "tags": [
+   "utility",
+   "arc",
+   "clock"
+  ],
+  "test": "ok"
+ },
+ "clcks": {
+  "cpu": 9.2,
+  "description": "punch-in tempo-locked repeating",
+  "engine": "",
+  "rev": "a8081414b2500cc1c47693a5b760cf6e08f927f5",
+  "status": "installed",
+  "tags": [
+   "audio_fx"
+  ],
+  "test": "ok"
+ },
+ "clipper": {
+  "cpu": 9.5,
+  "description": "slice and save samples",
+  "engine": "",
+  "rev": "b5c5a8a17b06d64b967f421ef776c1d360ecb9a8",
+  "status": "installed",
+  "tags": [
+   "sampler"
+  ],
+  "test": "ok"
+ },
+ "icarus": {
+  "cpu": 38.2,
+  "description": "supersaw synth with feedback",
+  "engine": "Icarus",
+  "rev": "c60ed10bb8f5ae68eeac038e6608cf44c942da51",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "taweeet": {
+  "cpu": 6.9,
+  "description": "Bird song, and lots of it. And pics, too.",
+  "engine": "",
+  "errors": [
+   "hook: Pre init hook for audioClip to initialize values failed, error: /home/we/dust/code/nornsLib/audioClip.lua:613: attempt to call a nil value (global 'reset')",
+   "### SCRIPT ERROR: init",
+   "/home/we/dust/code/nornsLib/jsonExt.lua:227: unexpected character '<' at line 1 col 1",
+   "stack traceback:"
+  ],
+  "rev": "2d6a81eb997dc00a2ae0db51b996cef6fa921d0e",
+  "status": "failed",
+  "tags": [
+   "art",
+   "birds"
+  ],
+  "test": "lua error"
+ }
+}
