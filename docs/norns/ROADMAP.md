@@ -41,6 +41,15 @@ image):**
 - Tested (SCRIPTS.md): all 45 load (cheat_codes_2 once MIDI was in). CPU per instance ranges from about 6% (idle) to 24% of
   one core, so eight heavy instances would use about half the Pi 5. 4 is
   not a limit (the code allows 8).
+- `~/norns/audio` (norns' `dust/audio`) is shared by every instance, with
+  `tape/<n>` mounted over its tape folder. Before 2026-11-09 it lived inside
+  each container and was lost when one was recreated.
+- Copied from the Pi 4 (2026-11-09): its samples (the amen break, three
+  dronecaster recordings) into `~/norns/audio`, and its 10 presets (orgn,
+  sines, wrms, oooooo, orca, terrarium) into each of norns 1–4. The Pi 4 has
+  the same 45 scripts as the pack, nothing more.
+- Pi 4 vs Pi 5, one norns with Awake stopped: about 16% of a core on the
+  Pi 4 (native) against about 6% per instance on the Pi 5 (Docker).
 - Still to do: check by ear that effect scripts process the Sound's audio;
   measure while scripts are being played.
 

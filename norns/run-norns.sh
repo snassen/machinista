@@ -9,6 +9,8 @@
 # Persistent files live in $NORNS_HOME (default ~/norns):
 #   code/      the script library, shared by every instance
 #              (norns/library/install-pack.sh fills it)
+#   audio/     samples scripts load and record (dust/audio), shared; tape/<n>
+#              is mounted over its tape folder
 #   data/<n>/  this instance's settings, presets and script data
 #   tape/<n>/  this instance's tape recordings
 # Needs the norns-station image (norns/container/Dockerfile), built on the
@@ -27,7 +29,7 @@ root="${NORNS_SHM_ROOT:-/dev/shm/norns}"
 frames="$root/$n"
 image="${NORNS_IMAGE:-norns-station}"
 home="${NORNS_HOME:-$HOME/norns}"
-mkdir -p "$frames" "$home/code" "$home/data/$n" "$home/tape/$n"
+mkdir -p "$frames" "$home/code" "$home/audio" "$home/data/$n" "$home/tape/$n"
 docker rm -f "norns-$n" >/dev/null 2>&1 || true
 # docker rm -f is not a clean norns shutdown, and after one norns starts with
 # no script (its guard against crash loops). This is a deliberate start, so
@@ -54,6 +56,7 @@ docker run -d -i --name "norns-$n" --restart unless-stopped \
   -v "$frames:/frames" \
   -v "$home/code:/home/we/dust/code" \
   -v "$home/data/$n:/home/we/dust/data" \
+  -v "$home/audio:/home/we/dust/audio" \
   -v "$home/tape/$n:/home/we/dust/audio/tape" \
   -v "$here/bridge:/opt/machinista/bridge:ro" \
   -v "$here/container:/opt/machinista/container:ro" \
