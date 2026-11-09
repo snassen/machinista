@@ -66,7 +66,10 @@ Run it again after every Machinista update (an update overwrites the files
 the fork changes). A new Pi also needs Docker (`apt install docker.io`, user
 in the docker group), the `norns-station` image (built here, or
 `docker save | docker load` from another Pi), `~/norns` (the script library
-and data), linger, and the Norns plug-ins uploaded once.
+and data), linger, the Norns plug-ins uploaded once, and the boot service
+`norns/systemd/norns-instances.service` (instances listed in
+`~/norns/instances`). Without it, Docker restarts the containers at boot
+without norns' clean-start step and every norns comes up with no script.
 
 ## Quick start (on the Pi)
 ```bash

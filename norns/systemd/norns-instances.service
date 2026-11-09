@@ -1,0 +1,21 @@
+# Starts this Pi's norns instances at boot through run-norns.sh, which marks
+# the last session as a clean shutdown so each norns reloads its script.
+# Docker's own restart-at-boot skips that, and norns then starts with no
+# script (its guard against crash loops). Instances: ~/norns/instances,
+# e.g. "1 2 3 4". Install:
+#   sudo cp norns/systemd/norns-instances.service /etc/systemd/system/
+#   sudo systemctl enable norns-instances
+[Unit]
+Description=norns instances for Machinista
+After=docker.service network-online.target
+Requires=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+User=machinista
+Group=docker
+ExecStart=/bin/bash -c 'for n in $(cat /home/machinista/norns/instances 2>/dev/null || echo 1 2 3 4); do /home/machinista/Machinista/norns/run-norns.sh "$n"; done'
+
+[Install]
+WantedBy=multi-user.target
