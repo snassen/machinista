@@ -1,0 +1,20 @@
+-- MIDI layers 2 and 3 for flora: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [2] = {
+    { id = "wdel_freeze", label = "FREEZE", off = 1, on = 2, off_label = "FREEZE ACTIV", on_label = "FREEZE FROZE" },
+    { id = "wtape_record", label = "RECORD", off = 1, on = 2, off_label = "RECORD OFF", on_label = "RECORD ON" },
+    { id = "wtape_play", label = "PLAY", off = 1, on = 2, off_label = "PLAY OFF", on_label = "PLAY ON" },
+    { id = "wdel_filter", label = "FDBK FILTER" },
+    { id = "wdel_frequency", label = "DEL FREQUENC" },
+    { id = "wtape_freq", label = "FREQ  V8" },
+  },
+  [3] = {
+    { id = "wtape_loop_active", label = "LOOP ACTIVE", off = 1, on = 2, off_label = "LOOP ACTIVE ", on_label = "LOOP ACTIVE " },
+    { id = "wtape_loop_next", label = "LOOP NEXT", off = 1, on = 2, off_label = "LOOP NEXT BA", on_label = "LOOP NEXT FO" },
+    { id = "tin_enabled", label = "TINTA ENABLE", off = 1, on = 2, off_label = "TINTA ENABLE", on_label = "TINTA ENABLE" },
+    { id = "1lfo_freq", label = "1 FREQ" },
+    { id = "2lfo_freq", label = "2 FREQ" },
+    { id = "flutter_fixedfreq", label = "FLUTTER FIXE" },
+  },
+}

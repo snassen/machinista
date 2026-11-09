@@ -1,0 +1,20 @@
+-- MIDI layers 2 and 3 for wrms: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [2] = {
+    { id = "rec 1", label = "REC 1" },
+    { id = "rec 2", label = "REC 2" },
+    { id = "clear 1", label = "CLEAR 1" },
+    { id = "q 1", label = "Q 1" },
+    { id = "q 2", label = "Q 2" },
+    { id = "vol 1", label = "VOL 1" },
+  },
+  [3] = {
+    { id = "clear 2", label = "CLEAR 2" },
+    { id = "reset", label = "RESET" },
+    {},
+    { id = "vol 2", label = "VOL 2" },
+    {},
+    {},
+  },
+}

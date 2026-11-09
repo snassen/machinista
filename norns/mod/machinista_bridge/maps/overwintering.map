@@ -1,0 +1,20 @@
+-- MIDI layers 2 and 3 for overwintering: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [2] = {
+    { id = "play", label = "PLAY" },
+    {},
+    {},
+    { id = "chord_freq_mod_env", label = "FREQ MOD  EN" },
+    { id = "chord_freq_mod_lfo", label = "FREQ MOD  LF" },
+    { id = "chord_lp_filter_cutoff", label = "LP FILTER CU" },
+  },
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "chord_lp_filter_resonance", label = "LP FILTER RE" },
+    { id = "chord_lfo_freq", label = "LFO FREQ" },
+    { id = "chord_ring_mod_freq", label = "RING MOD FRE" },
+  },
+}

@@ -1,0 +1,20 @@
+-- MIDI layers 2 and 3 for colorwheel: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [2] = {
+    {},
+    {},
+    {},
+    { id = "length div 1", label = "LENGTH DIV 1" },
+    { id = "length sequence start 1", label = "LENGTH SEQUE" },
+    { id = "current length step 1", label = "CURRENT LENG" },
+  },
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "length div 2", label = "LENGTH DIV 2" },
+    { id = "length div 3", label = "LENGTH DIV 3" },
+    { id = "length div 4", label = "LENGTH DIV 4" },
+  },
+}

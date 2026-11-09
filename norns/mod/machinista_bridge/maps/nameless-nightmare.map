@@ -1,0 +1,12 @@
+-- MIDI layers 2 and 3 for nameless-nightmare: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [2] = {
+    {},
+    {},
+    {},
+    { id = "sun", label = "TIMEFLOW" },
+    {},
+    {},
+  },
+}

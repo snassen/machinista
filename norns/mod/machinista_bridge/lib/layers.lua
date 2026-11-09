@@ -6,8 +6,8 @@
 --   keys  CC 102 + 6(L-1) + 0..2  (127 on, 0 off)
 --   knobs CC 102 + 6(L-1) + 3..5  (0-127)
 -- Layer 1 is the same on every norns and every script (SYSTEM below: norns'
--- reverb and compressor). Layers 2 and 3 come from maps/<script>.map, a Lua
--- table chosen per script:
+-- reverb and compressor). Layers 2 and 3 come from maps/<folder>.map (the
+-- script's folder in dust/code), a Lua table chosen per script:
 --   return { [2] = { {id=..., label=...}, ... six controls ... }, [3] = {...} }
 -- A control is {id = "param", label = "NAME"}; keys may add on=/off= values,
 -- and on_label=/off_label=. The CC is also passed on to the script as MIDI,
@@ -124,7 +124,9 @@ end
 
 -- A new script is running: its map (if any) and labels.
 function M.script_loaded()
-  load_map(norns.state.shortname)
+  -- Maps are named after the script's folder in dust/code (3d's script is circle.lua).
+  local folder = (norns.state.script or ""):match("/code/([^/]+)/")
+  load_map(folder or norns.state.shortname)
   M.write_labels()
 end
 

@@ -1,0 +1,20 @@
+-- MIDI layers 2 and 3 for glaciers: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [2] = {
+    {},
+    {},
+    {},
+    { id = "1_filter_width", label = "1 FILTER WID" },
+    { id = "1_filter_freq", label = "1 FILTER FRE" },
+    { id = "2_filter_width", label = "2 FILTER WID" },
+  },
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "2_filter_freq", label = "2 FILTER FRE" },
+    { id = "3_filter_width", label = "3 FILTER WID" },
+    { id = "3_filter_freq", label = "3 FILTER FRE" },
+  },
+}

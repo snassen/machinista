@@ -1,0 +1,20 @@
+-- MIDI layers 2 and 3 for orgn: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [2] = {
+    { id = "reset", label = "RESET" },
+    {},
+    {},
+    { id = "pitch", label = "PITCH" },
+    { id = "rate", label = "RATE" },
+    { id = "time", label = "TIME" },
+  },
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "depth", label = "DEPTH" },
+    { id = "dry/wet", label = "DRY/WET" },
+    { id = "bits", label = "BITS" },
+  },
+}

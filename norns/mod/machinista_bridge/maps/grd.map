@@ -1,0 +1,20 @@
+-- MIDI layers 2 and 3 for grd: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [2] = {
+    {},
+    {},
+    {},
+    { id = "lfo_free_r_lfo", label = "LFO RATE" },
+    { id = "lfo_depth_r_lfo", label = "LFO DEPTH" },
+    { id = "lfo_phase_r_lfo", label = "LFO PHASE" },
+  },
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "lfo_offset_r_lfo", label = "LFO OFFSET" },
+    { id = "lfo_min_r_lfo", label = "LFO MIN" },
+    { id = "lfo_max_r_lfo", label = "LFO MAX" },
+  },
+}

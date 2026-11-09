@@ -1,0 +1,20 @@
+-- MIDI layers 2 and 3 for reels: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [2] = {
+    {},
+    {},
+    {},
+    { id = "1pan", label = "1 PAN" },
+    { id = "2pan", label = "2 PAN" },
+    { id = "3pan", label = "3 PAN" },
+  },
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "4pan", label = "4 PAN" },
+    { id = "1vol", label = "1 VOLUME" },
+    { id = "2vol", label = "2 VOLUME" },
+  },
+}

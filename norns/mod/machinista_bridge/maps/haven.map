@@ -1,0 +1,20 @@
+-- MIDI layers 2 and 3 for haven: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [2] = {
+    {},
+    {},
+    {},
+    { id = "freq1", label = "FREQ1" },
+    { id = "freq2", label = "FREQ2" },
+    { id = "amp1", label = "AMP1" },
+  },
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "amp2", label = "AMP2" },
+    { id = "in_amp", label = "IN AMP" },
+    { id = "rev_level", label = "REV LEVEL" },
+  },
+}

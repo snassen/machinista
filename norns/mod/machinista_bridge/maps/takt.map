@@ -1,0 +1,20 @@
+-- MIDI layers 2 and 3 for takt: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [2] = {
+    {},
+    {},
+    {},
+    { id = "lfo_1_freq", label = "LFO1 FREQ" },
+    { id = "lfo_2_freq", label = "LFO2 FREQ" },
+    { id = "reverb_mod_freq", label = "REVERB  MOD " },
+  },
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "freq_mod_lfo_1_1", label = "FREQ MOD  LF" },
+    { id = "freq_mod_env_1", label = "FREQ MOD  EN" },
+    { id = "filter_freq_1", label = "FILTER CUTOF" },
+  },
+}
