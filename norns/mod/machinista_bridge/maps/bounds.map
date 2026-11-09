@@ -1,0 +1,12 @@
+-- MIDI layer 3 for bounds: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "1filter_cutoff", label = "FILTER CUTOF" },
+    { id = "1filter_q", label = "FILTER Q" },
+    { id = "1lfo_freq", label = "LFO FREQ" },
+  },
+}

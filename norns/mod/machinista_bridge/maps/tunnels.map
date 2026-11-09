@@ -1,0 +1,12 @@
+-- MIDI layer 3 for tunnels: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "filter_fc1", label = "FILTER CUTOF" },
+    { id = "delay_feedback1", label = "DELAY FEEDBA" },
+    { id = "delay_rate1", label = "DELAY RATE1" },
+  },
+}

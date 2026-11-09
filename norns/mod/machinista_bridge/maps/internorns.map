@@ -1,0 +1,12 @@
+-- MIDI layer 3 for internorns: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "mxsamples_lpf_mxsamples", label = "LOW-PASS FIL" },
+    { id = "mxsamples_hpf_mxsamples", label = "HIGH-PASS FI" },
+    { id = "mxsamples_decay", label = "DECAY" },
+  },
+}

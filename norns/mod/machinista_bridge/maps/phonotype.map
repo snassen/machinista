@@ -1,0 +1,12 @@
+-- MIDI layer 3 for phonotype: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "retrigger", label = "RETRIGGER" },
+    {},
+    {},
+    { id = "bufsize0", label = "SIZE 0" },
+    { id = "bufsize1", label = "SIZE 1" },
+    { id = "bufsize2", label = "SIZE 2" },
+  },
+}

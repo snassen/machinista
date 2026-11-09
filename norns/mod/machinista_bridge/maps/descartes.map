@@ -1,0 +1,12 @@
+-- MIDI layer 3 for descartes: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "xResetOnStart", label = "RESET ON STA", off = 1, on = 2, off_label = "RESET ON STA", on_label = "RESET ON STA" },
+    { id = "yResetOnStart", label = "RESET ON STA", off = 1, on = 2, off_label = "RESET ON STA", on_label = "RESET ON STA" },
+    {},
+    {},
+    {},
+    {},
+  },
+}

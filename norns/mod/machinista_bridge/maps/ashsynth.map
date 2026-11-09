@@ -1,0 +1,12 @@
+-- MIDI layer 3 for ashsynth: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "lp_cutoff", label = "LP CUTOFF" },
+    { id = "lp_env_amount", label = "FILTER ENV A" },
+    { id = "filter_attack", label = "ATTACK" },
+  },
+}

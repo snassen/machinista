@@ -1,0 +1,12 @@
+-- MIDI layer 3 for blippoo: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "freqPeak1", label = "FREQ. PEAK A" },
+    { id = "freqPeak2", label = "FREQ. PEAK B" },
+    { id = "delay_feedback", label = "DELAY FEEDBA" },
+  },
+}

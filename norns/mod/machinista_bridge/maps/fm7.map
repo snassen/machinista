@@ -1,0 +1,12 @@
+-- MIDI layer 3 for fm7: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "carrier1", label = "CARRIER 1 AM" },
+    { id = "carrier2", label = "CARRIER 2 AM" },
+    { id = "carrier3", label = "CARRIER 3 AM" },
+  },
+}

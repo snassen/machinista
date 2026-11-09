@@ -1,0 +1,12 @@
+-- MIDI layer 3 for 4-big-knobs: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "1_volt", label = "DIAL 1  VOLT" },
+    { id = "2_volt", label = "DIAL 2  VOLT" },
+    { id = "3_volt", label = "DIAL 3  VOLT" },
+  },
+}

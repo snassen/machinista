@@ -1,0 +1,12 @@
+-- MIDI layer 3 for pit-orchisstra: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "lfoFreq1", label = "LFO 1 FREQ" },
+    { id = "lfoFreq2", label = "LFO 2 FREQ" },
+    { id = "lfoFreq3", label = "LFO 3 FREQ" },
+  },
+}

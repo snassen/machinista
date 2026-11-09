@@ -1,0 +1,12 @@
+-- MIDI layer 3 for d: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "sample_rate", label = "SAMPLE RATE" },
+    { id = "bit_depth", label = "BIT DEPTH" },
+    {},
+  },
+}

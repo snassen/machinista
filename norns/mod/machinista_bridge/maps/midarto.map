@@ -1,0 +1,12 @@
+-- MIDI layer 3 for midarto: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "midarto_quantize", label = "QUANTIZE JUM", off = 1, on = 2, off_label = "QUANTIZE JUM", on_label = "QUANTIZE JUM" },
+    {},
+    {},
+    {},
+    {},
+    {},
+  },
+}

@@ -1,0 +1,12 @@
+-- MIDI layer 3 for mx.synths: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "arp_hold", label = "HOLD" },
+    {},
+    {},
+    { id = "mxsynths_lpf", label = "CUTOFF" },
+    { id = "mxsynths_mod1", label = "MOD 1" },
+    { id = "mxsynths_release", label = "RELEASE" },
+  },
+}

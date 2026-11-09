@@ -1,0 +1,12 @@
+-- MIDI layer 3 for piwip: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "only play during rec", label = "ONLY PLAY DU", off = 1, on = 2, off_label = "ONLY PLAY DU", on_label = "ONLY PLAY DU" },
+    {},
+    {},
+    { id = "min length", label = "MIN LENGTH" },
+    { id = "max length", label = "MAX LENGTH" },
+    { id = "time spread", label = "TIME SPREAD" },
+  },
+}

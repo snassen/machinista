@@ -1,0 +1,12 @@
+-- MIDI layer 3 for supertonic: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "global lpf freq", label = "GLOBAL LPF F" },
+    { id = "global lpf rq", label = "GLOBAL LPF R" },
+    { id = "11eQFreq", label = "EQ FREQ" },
+  },
+}

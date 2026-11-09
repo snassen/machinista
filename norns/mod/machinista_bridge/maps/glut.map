@@ -1,0 +1,12 @@
+-- MIDI layer 3 for glut: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "1speed", label = "1 SPEED" },
+    { id = "1pitch", label = "1 PITCH" },
+    { id = "1size", label = "1 SIZE" },
+  },
+}

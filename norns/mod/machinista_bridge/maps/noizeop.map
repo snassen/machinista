@@ -1,0 +1,12 @@
+-- MIDI layer 3 for noizeop: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "ffreq01", label = "FILTER01 FRE" },
+    { id = "q01", label = "FILTER01 Q" },
+    { id = "ffreq02", label = "FILTER02 FRE" },
+  },
+}

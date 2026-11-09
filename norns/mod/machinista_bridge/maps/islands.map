@@ -1,0 +1,12 @@
+-- MIDI layer 3 for islands: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "layer1dest", label = "LAYER 1 DEST", off = 1, on = 2, off_label = "LAYER 1 DEST", on_label = "LAYER 1 DEST" },
+    { id = "layer2dest", label = "LAYER 2 DEST", off = 1, on = 2, off_label = "LAYER 2 DEST", on_label = "LAYER 2 DEST" },
+    { id = "layer3dest", label = "LAYER 3 DEST", off = 1, on = 2, off_label = "LAYER 3 DEST", on_label = "LAYER 3 DEST" },
+    { id = "loop_length_1", label = "LOOP LENGTH " },
+    { id = "loop_decay_1", label = "LOOP DECAY 1" },
+    { id = "loop_decay_2", label = "LOOP DECAY 2" },
+  },
+}

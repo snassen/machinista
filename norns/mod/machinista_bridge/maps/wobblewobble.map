@@ -1,0 +1,12 @@
+-- MIDI layer 3 for wobblewobble: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "1freq", label = "FREQ" },
+    { id = "1slewrate", label = "SLEW RATE" },
+    { id = "1decay", label = "DECAY" },
+  },
+}

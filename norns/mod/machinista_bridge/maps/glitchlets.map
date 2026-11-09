@@ -1,0 +1,12 @@
+-- MIDI layer 3 for glitchlets: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "2randomize", label = "2 RANDOMIZE", off = 1, on = 2, off_label = "2 RANDOMIZE ", on_label = "2 RANDOMIZE " },
+    { id = "3randomize", label = "3 RANDOMIZE", off = 1, on = 2, off_label = "3 RANDOMIZE ", on_label = "3 RANDOMIZE " },
+    { id = "4randomize", label = "4 RANDOMIZE", off = 1, on = 2, off_label = "4 RANDOMIZE ", on_label = "4 RANDOMIZE " },
+    { id = "loop length", label = "LOOP LENGTH" },
+    { id = "2sample length", label = "SAMPLE LENGT" },
+    { id = "2glitch probability", label = "GLITCH PROBA" },
+  },
+}

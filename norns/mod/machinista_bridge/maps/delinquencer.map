@@ -1,0 +1,12 @@
+-- MIDI layer 3 for delinquencer: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "probreset", label = "PROBABILITY ", off = 1, on = 2, off_label = "PROBABILITY ", on_label = "PROBABILITY " },
+    {},
+    {},
+    { id = "modxfreq", label = "X MODULATION" },
+    { id = "modyfreq", label = "Y MODULATION" },
+    { id = "fcutoff", label = "FILTER CUTOF" },
+  },
+}

@@ -1,0 +1,12 @@
+-- MIDI layer 3 for noergaard: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "noergaard_len", label = "LENGTH" },
+    {},
+    {},
+  },
+}

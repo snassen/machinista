@@ -5,8 +5,8 @@ return {
     { id = "1play", label = "1 PLAY", off = 1, on = 2, off_label = "1 PLAY OFF", on_label = "1 PLAY ON" },
     { id = "2play", label = "2 PLAY", off = 1, on = 2, off_label = "2 PLAY OFF", on_label = "2 PLAY ON" },
     { id = "3play", label = "3 PLAY", off = 1, on = 2, off_label = "3 PLAY OFF", on_label = "3 PLAY ON" },
-    { id = "1cutoff", label = "FILTER CUTOF" },
-    { id = "1q", label = "FILTER Q" },
-    { id = "delay_mod_freq", label = "DELAY MOD FR" },
+    { id = "1speed", label = "1 SPEED" },
+    { id = "1pitch", label = "1 PITCH" },
+    { id = "1size", label = "1 SIZE" },
   },
 }

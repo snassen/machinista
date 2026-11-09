@@ -1,0 +1,12 @@
+-- MIDI layer 3 for jiffy: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "record", label = "RECORD", off = 1, on = 2, off_label = "RECORD O", on_label = "RECORD -" },
+    { id = "reset_loop", label = "RESET LOOP", off = 1, on = 2, off_label = "RESET LOOP ", on_label = "RESET LOOP X" },
+    {},
+    { id = "rate", label = "SPEED" },
+    {},
+    {},
+  },
+}

@@ -269,7 +269,7 @@
   "test": "ok"
  },
  "acid-test": {
-  "cpu": 6.7,
+  "cpu": 7.5,
   "description": "generative acid basslines.",
   "engine": "",
   "errors": [
@@ -288,13 +288,13 @@
   "test": "lua error"
  },
  "ack": {
-  "reason": "not a script (a library for other scripts)",
+  "reason": "a library for other scripts, installed",
   "rev": "db44d479f00e897a6687654b75f3a8f6d3952141",
-  "status": "skipped",
+  "status": "library",
   "tags": []
  },
  "acrostic": {
-  "cpu": 10.4,
+  "cpu": 10.3,
   "description": "chord sequencer and sampler",
   "engine": "Acrostic",
   "errors": [
@@ -322,24 +322,18 @@
   ]
  },
  "animator": {
-  "cpu": 7.2,
+  "cpu": 8.8,
   "description": "2D Polyphonic step sequencer for grids",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/animator/lib/parameters.lua:5: module 'molly_the_poly/lib/molly_the_poly_engine' not found:",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "MollyThePoly",
   "rev": "2a33fa8eabe010f73ed36f3b86c9d00b6a5917dd",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "sequencer",
    "crow",
    "grid",
    "midi"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "arcify": {
   "cpu": 7.8,
@@ -371,32 +365,23 @@
   "test": "ok"
  },
  "arp_index": {
-  "cpu": 6.9,
+  "cpu": 6.7,
   "description": "check stocks and make music",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/arp_index/arp_index.lua:23: module 'molly_the_poly/lib/molly_the_poly_engine' not found:",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "MollyThePoly",
   "rev": "5bd7bddc4067769bae16504954c06ecc86b42855",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "sequencer",
    "grid"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "ash": {
-  "cpu": 7.1,
+  "cpu": 11.2,
   "description": "a small collection",
   "engine": "Glut",
-  "errors": [
-   "### SCRIPT ERROR: missing Glut"
-  ],
   "rev": "89493c7719cf7e3abadc979e52cf0d3e11150690",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "arc",
    "grid",
@@ -404,7 +389,7 @@
    "drum",
    "synth"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "ashsynth": {
   "cpu": 10.8,
@@ -480,22 +465,16 @@
   "test": "ok"
  },
  "awake-passersby": {
-  "cpu": 6.8,
+  "cpu": 20.6,
   "description": "time drifting",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/awake-passersby/awake-passersby.lua:34: MISSING INCLUDE: passersby/lib/passersby_engine",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "Passersby",
   "rev": "ea721d8fd3683b3dd6d082389b713bf92b22c58e",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "sequencer",
    "grid"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "awake-rings": {
   "cpu": 9.0,
@@ -781,9 +760,9 @@
   "test": "ok"
  },
  "choukanzu": {
-  "reason": "not a script (a library for other scripts)",
+  "reason": "a library for other scripts, installed",
   "rev": "7da0e9a0de8f3be3567c22c03557a04eeeeec2ce",
-  "status": "skipped",
+  "status": "library",
   "tags": [
    "mod"
   ]
@@ -850,9 +829,9 @@
   "test": "ok"
  },
  "combiner": {
-  "reason": "not a script (a library for other scripts)",
+  "reason": "a library for other scripts, installed",
   "rev": "3cbfb8aee132d80de42ff895683a91f3d1384af6",
-  "status": "skipped",
+  "status": "library",
   "tags": [
    "mod",
    "utility",
@@ -884,24 +863,18 @@
   ]
  },
  "corners": {
-  "cpu": 6.8,
+  "cpu": 31.2,
   "description": "a grid controlled physics instrument. ported from tehn's m4l script",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/corners/corners.lua:8: module 'molly_the_poly/lib/molly_the_poly_engine' not found:",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "MollyThePoly",
   "rev": "3cdef327e83bc8dfd4413b54b3367f2e18c22885",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "synth",
    "generative",
    "grid",
    "midi"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "crow_talk": {
   "cpu": 8.1,
@@ -928,9 +901,9 @@
   "test": "ok"
  },
  "cybermidi": {
-  "reason": "not a script (a library for other scripts)",
+  "reason": "a library for other scripts, installed",
   "rev": "5d8bc681e65d0849bc5e69e2894c5435eece7892",
-  "status": "skipped",
+  "status": "library",
   "tags": [
    "mod",
    "utility",
@@ -938,17 +911,11 @@
   ]
  },
  "cyrene": {
-  "cpu": 6.7,
+  "cpu": 8.5,
   "description": "a drum sequencer based on Mutable Instruments Grids",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/cyrene/cyrene.lua:86: module 'ack/lib/ack' not found:",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "Ack",
   "rev": "cc99a6d5f0a7f678375e1b0ec30d2cf1c1121f81",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "sequencer",
    "drum",
@@ -957,7 +924,7 @@
    "grid",
    "crow"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "d": {
   "cpu": 11.2,
@@ -1069,22 +1036,16 @@
   "test": "ok"
  },
  "dunes": {
-  "cpu": 7.2,
+  "cpu": 10.1,
   "description": "a function sequencer",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/dunes/dunes.lua:38: MISSING INCLUDE: passersby/lib/passersby_engine",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "Passersby",
   "rev": "400e23eaac9df21fbccea88e97c6bb3ec572ee2e",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "sequencer",
    "midi"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "easygrain": {
   "cpu": 10.7,
@@ -1133,21 +1094,15 @@
   "test": "ok"
  },
  "esper": {
-  "cpu": 6.6,
+  "cpu": 7.8,
   "description": "an image sonifier",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/esper/lib/colorizer.lua:2: MISSING INCLUDE: mx.synths/lib/mx.synths",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "MxSynths",
   "rev": "44cf0530a4d2f86ad514ca6ad8e86d060b3f7b69",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "sequencer"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "euclidigons": {
   "cpu": 19.4,
@@ -1192,24 +1147,18 @@
   "test": "ok"
  },
  "fibonacci": {
-  "cpu": 6.7,
+  "cpu": 9.8,
   "description": "a sequencer that travels through numbers and time",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/fibonacci/fibonacci.lua:22: module 'molly_the_poly/lib/molly_the_poly_engine' not found:",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "MollyThePoly",
   "rev": "a454e4d5baa911f6a2f7a088cd39ee9b37f417ed",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "sequencer",
    "generative",
    "crow",
    "midi"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "fixed-filter-banking-crisis": {
   "reason": "engine breaks the compile: ERROR: Superclass 'FxBase' of class 'FxFixedFilterBankingCrisis' is not defined in any file.",
@@ -1275,24 +1224,18 @@
   "test": "ok"
  },
  "foulplay": {
-  "cpu": 7.1,
+  "cpu": 8.1,
   "description": "euclidean rhythms with logic and probability",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/foulplay/foulplay.lua:103: module 'ack/lib/ack' not found:",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "Ack",
   "rev": "952ba47cc798c40239724d84ecac8d051429eaa8",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "drum",
    "sequencer",
    "midi",
    "grid"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "foundry": {
   "cpu": 7.1,
@@ -1319,22 +1262,16 @@
   "test": "ok"
  },
  "fugu": {
-  "cpu": 6.9,
+  "cpu": 8.7,
   "description": "multi playhead sequencer",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/fugu/fugu.lua:29: module 'molly_the_poly/lib/molly_the_poly_engine' not found:",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "MollyThePoly",
   "rev": "c31a6db11b67239560427a70f04cd0045e5bbaf7",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "sequencer",
    "grid"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "gematria": {
   "cpu": 9.4,
@@ -1372,19 +1309,16 @@
   "test": "ok"
  },
  "giro": {
-  "cpu": 13.7,
+  "cpu": 14.4,
   "description": "performance oriented (a)sync looper",
   "engine": "",
-  "errors": [
-   "hook: machinista_bridge transport failed, error: /home/we/norns/lua/core/clock.lua:36: bad argument #1 to 'clock_cancel' (number expected, got nil)"
-  ],
   "rev": "22c20a6d79a286b4a4f6bd474a46a2951a08d7c9",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "looper",
    "midi"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "glitchlets": {
   "cpu": 18.3,
@@ -1441,7 +1375,7 @@
   ]
  },
  "graintopia": {
-  "cpu": 6.7,
+  "cpu": 7.3,
   "description": "three lands with six grains",
   "engine": "",
   "errors": [
@@ -1536,24 +1470,18 @@
   "test": "ok"
  },
  "groovecats": {
-  "cpu": 6.7,
+  "cpu": 9.3,
   "description": "physics based sequencer for people who like cats",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/groovecats/groovecats.lua:32: MISSING INCLUDE: thebangs/lib/thebangs_engine",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "Thebangs",
   "rev": "af50ca7414acbc2ab85a6d30433a8b0202d306d8",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "sequencer",
    "generative",
    "grid",
    "midi"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "grurder": {
   "cpu": 7.1,
@@ -1719,21 +1647,15 @@
   "test": "lua error"
  },
  "internorns": {
-  "cpu": 5.6,
+  "cpu": 14.0,
   "description": "a live-coding environment",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/internorns/internorns.lua:32: MISSING INCLUDE: mx.samples/lib/mx.samples",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "MxInternorns",
   "rev": "e1eaa29589d7b104286fe6b79e0e24a0e9432462",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "utility"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "interpret": {
   "cpu": 6.6,
@@ -1756,42 +1678,30 @@
   ]
  },
  "islands": {
-  "cpu": 6.0,
+  "cpu": 9.1,
   "description": "fm7, earthsea, kria, looper",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/islands/lib/kria.lua:12: module 'kria_midi/lib/scales' not found:",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "MT7",
   "rev": "5c84d6736656175afbe77efe839e4ee580f1229a",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "sequencer",
    "synth",
    "looper",
    "grid"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "isoseq": {
-  "cpu": 5.9,
+  "cpu": 9.4,
   "description": "isomorphic sequencer for norns and grid",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/isoseq/isoseq.lua:16: module 'passersby/lib/passersby_engine' not found:",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "Passersby",
   "rev": "4bdff2549fc2c4e8b2b1f9ab91b686cf27e10a25",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "sequencer",
    "grid"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "jala": {
   "cpu": 8.5,
@@ -1845,7 +1755,7 @@
   "test": "ok"
  },
  "kolor": {
-  "cpu": 5.9,
+  "cpu": 6.7,
   "description": "grid-based sample sequencer",
   "engine": "",
   "errors": [
@@ -1958,17 +1868,11 @@
   "test": "ok"
  },
  "less_concepts": {
-  "cpu": 6.6,
+  "cpu": 13.1,
   "description": "1d cellular automata sequencer",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/less_concepts/less-concepts.lua:46: MISSING INCLUDE: passersby/lib/passersby_engine",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "Passersby",
   "rev": "d98bfd9d1cce8a958b0aaaabaeea3700c1b45112",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "sequencer",
    "grid",
@@ -1978,7 +1882,7 @@
    "midi",
    "generative"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "lissadron": {
   "cpu": 10.9,
@@ -1994,17 +1898,11 @@
   "test": "ok"
  },
  "loom": {
-  "cpu": 6.5,
+  "cpu": 8.8,
   "description": "pattern weaving sequencer for grids",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/loom/loom.lua:32: module 'molly_the_poly/lib/molly_the_poly_engine' not found:",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "MollyThePoly",
   "rev": "25a6459995c3f180cfd12fa75353033a97952115",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "sequencer",
    "generative",
@@ -2013,7 +1911,7 @@
    "crow",
    "grid"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "lorenz": {
   "cpu": 13.2,
@@ -2031,7 +1929,7 @@
   "test": "ok"
  },
  "lorenzos-drums": {
-  "cpu": 6.0,
+  "cpu": 7.8,
   "description": "an electroacoustic drumset and sequencer",
   "engine": "",
   "errors": [
@@ -2146,20 +2044,17 @@
   "test": "ok"
  },
  "marcovaldo": {
-  "cpu": 6.9,
+  "cpu": 7.8,
   "description": "spatial sequencer with cats",
   "engine": "MxSynths",
-  "errors": [
-   "### SCRIPT ERROR: missing MxSynths"
-  ],
   "rev": "56ab94c462907035bae089e0ad431d5522813db6",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "sequencer",
    "arc",
    "grid"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "massif": {
   "cpu": 8.0,
@@ -2173,17 +2068,11 @@
   "test": "ok"
  },
  "meadowphysics": {
-  "cpu": 5.8,
+  "cpu": 8.8,
   "description": "grid-enabled rhizomatic cascading counter",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/meadowphysics/ack.lua:21: MISSING INCLUDE: ack/lib/ack",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "Ack",
   "rev": "8b738351954e32435a2860efe9fa31d485218f0a",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "sequencer",
    "synth",
@@ -2192,27 +2081,21 @@
    "crow",
    "jf"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "metrix": {
-  "cpu": 6.4,
+  "cpu": 8.4,
   "description": "it's like metropolix for norns",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/metrix/metrix.lua:35: module 'molly_the_poly/lib/molly_the_poly_engine' not found:",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "MollyThePoly",
   "rev": "6f4914723d2fe81b01cdcd177e20caaf611cca86",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "sequencer",
    "midi",
    "grid",
    "crow"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "metronome": {
   "cpu": 6.5,
@@ -2295,21 +2178,15 @@
   ]
  },
  "midiplayer": {
-  "cpu": 5.9,
+  "cpu": 7.4,
   "description": "midi file playback for norns",
   "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/midiplayer/midiplayer.lua:19: MISSING INCLUDE: nb/lib/nb",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
   "rev": "608f4e0f29d99a22910045ceba1f1768dcf3d059",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "midi"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "molly_the_poly": {
   "cpu": 8.0,
@@ -2325,21 +2202,15 @@
   "test": "ok"
  },
  "moln": {
-  "cpu": 6.5,
+  "cpu": 18.6,
   "description": "polyphonic subtractive synthesizer",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/moln/moln.lua:4: module 'r/lib/r' not found:",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "R",
   "rev": "c58466610732e1859915f2b4ef5b1f960ac4d03a",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "synth"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "monitor": {
   "cpu": 6.1,
@@ -2354,16 +2225,16 @@
   "test": "ok"
  },
  "monomaniac": {
-  "reason": "not a script (a library for other scripts)",
+  "reason": "a library for other scripts, installed",
   "rev": "9157479aa35406ea130f2ec144f776dd06f9c644",
-  "status": "skipped",
+  "status": "library",
   "tags": [
    "mod",
    "utility"
   ]
  },
  "moonraker": {
-  "cpu": 6.4,
+  "cpu": 6.7,
   "description": "explore a galaxy of rhythm",
   "engine": "",
   "errors": [
@@ -2394,14 +2265,11 @@
   ]
  },
  "mouse": {
-  "cpu": 6.4,
+  "cpu": 8.4,
   "description": "sound maker and sequencer heavily inspired by Laurie Spiegel's Music Mouse",
-  "engine": "",
+  "engine": "Thebangs",
   "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/mouse/mouse.lua:26: MISSING INCLUDE: thebangs/lib/thebangs_engine",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+   "! please contact the script maintainer - this will cause a load failure in future updates"
   ],
   "rev": "581d575dcfb23293e7e4044b2be31d08b2e23e9e",
   "status": "failed",
@@ -2438,21 +2306,18 @@
   "test": "ok"
  },
  "n.kria": {
-  "cpu": 10.8,
+  "cpu": 11.5,
   "description": "native norns Kria",
   "engine": "",
-  "errors": [
-   "hook: machinista_bridge transport failed, error: /home/we/dust/code/n.kria/n.kria.lua:146: attempt to call a nil value (method 'global_set_val')"
-  ],
   "rev": "36c95094ac223a7da7db1eed4546bd10a2b7a389",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "sequencer",
    "grid",
    "midi",
    "nb"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "n16o": {
   "cpu": 6.5,
@@ -2465,10 +2330,21 @@
   ],
   "test": "ok"
  },
+ "nb": {
+  "cpu": 7.7,
+  "description": "voice library other scripts include (nb/lib/nb)",
+  "engine": "",
+  "rev": "400e0b3889d44b0f4f989e27e9a34f1ae732e376",
+  "status": "installed",
+  "tags": [
+   "library"
+  ],
+  "test": "ok"
+ },
  "nb_drumcrow": {
-  "reason": "not a script (a library for other scripts)",
+  "reason": "a library for other scripts, installed",
   "rev": "892ee538d88a3af20dc77fb3a5fdd070df0dc56f",
-  "status": "skipped",
+  "status": "library",
   "tags": [
    "mod",
    "synth",
@@ -2478,9 +2354,9 @@
   ]
  },
  "nb_mxsynths": {
-  "reason": "not a script (a library for other scripts)",
+  "reason": "a library for other scripts, installed",
   "rev": "89d45cb87e3f6361b0e827cd276b129fddd7d233",
-  "status": "skipped",
+  "status": "library",
   "tags": [
    "mod",
    "synth",
@@ -2488,9 +2364,9 @@
   ]
  },
  "nb_plyprc": {
-  "reason": "not a script (a library for other scripts)",
+  "reason": "a library for other scripts, installed",
   "rev": "eb9ea9219ae3a8002434ca8934d0455bbfd73968",
-  "status": "skipped",
+  "status": "library",
   "tags": [
    "mod",
    "synth",
@@ -2498,9 +2374,9 @@
   ]
  },
  "nb_smpKit": {
-  "reason": "not a script (a library for other scripts)",
+  "reason": "a library for other scripts, installed",
   "rev": "22cd2375b01366834b8160551f935cc3481463c1",
-  "status": "skipped",
+  "status": "library",
   "tags": [
    "mod",
    "sampler",
@@ -2536,9 +2412,9 @@
   "test": "lua error"
  },
  "nice-tapes": {
-  "reason": "not a script (a library for other scripts)",
+  "reason": "a library for other scripts, installed",
   "rev": "ee8eff72bea95e8c1188a6596d9264cb81a91053",
-  "status": "skipped",
+  "status": "library",
   "tags": [
    "mod"
   ]
@@ -2670,7 +2546,7 @@
   "test": "ok"
  },
  "o-o-o": {
-  "cpu": 5.4,
+  "cpu": 6.6,
   "description": "connect-the-dots sequencer w/ fm synthesizer",
   "engine": "",
   "errors": [
@@ -2699,9 +2575,9 @@
   "test": "ok"
  },
  "oilcan": {
-  "reason": "not a script (a library for other scripts)",
+  "reason": "a library for other scripts, installed",
   "rev": "257915f433c7d2c32b2b09c4fe5eed5434a16de5",
-  "status": "skipped",
+  "status": "library",
   "tags": [
    "mod",
    "drum",
@@ -2947,7 +2823,7 @@
   "test": "ok"
  },
  "pitter-patter": {
-  "cpu": 5.4,
+  "cpu": 7.5,
   "description": "sequencer and sampler player based around the OP-1 'pattern' sequencer",
   "engine": "",
   "errors": [
@@ -2992,7 +2868,7 @@
   "test": "ok"
  },
  "plonky": {
-  "cpu": 5.9,
+  "cpu": 7.5,
   "description": "string-like keyboard and sequencer",
   "engine": "",
   "errors": [
@@ -3060,9 +2936,9 @@
   "test": "ok"
  },
  "r": {
-  "reason": "not a script (a library for other scripts)",
+  "reason": "a library for other scripts, installed",
   "rev": "585ed81e125bab10d31048ad748bfda0f45dcefa",
-  "status": "skipped",
+  "status": "library",
   "tags": [
    "lib"
   ]
@@ -3417,9 +3293,9 @@
   "test": "ok"
  },
  "sidvagn": {
-  "reason": "not a script (a library for other scripts)",
+  "reason": "a library for other scripts, installed",
   "rev": "d896b47b0ae5ee03e9745ffa132d6e43b434f603",
-  "status": "skipped",
+  "status": "library",
   "tags": [
    "keyboard",
    "sequencer",
@@ -3512,22 +3388,16 @@
   "test": "ok"
  },
  "step": {
-  "cpu": 7.0,
+  "cpu": 8.2,
   "description": "a simple step sequencer",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/step/step.lua:6: module 'ack/lib/ack' not found:",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "Ack",
   "rev": "42f767313dabd7c056f599cafc39d6e3aaf915d1",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "sampler",
    "sequencer"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "stjoernuithrott": {
   "cpu": 8.5,
@@ -3543,7 +3413,7 @@
   "test": "ok"
  },
  "streams": {
-  "cpu": 7.2,
+  "cpu": 7.1,
   "description": "a multi play head sequencer",
   "engine": "Moonshine",
   "errors": [
@@ -3560,24 +3430,18 @@
   "test": "lua error"
  },
  "strides": {
-  "cpu": 6.5,
+  "cpu": 7.8,
   "description": "a collection of pattern recorders",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/strides/strides.lua:102: module 'ack/lib/ack' not found:",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "Ack",
   "rev": "5f22b5a1a90ecfc46bc404459cf01afc045d1d4f",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "sampler",
    "sequencer",
    "grid",
    "midi"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "strum": {
   "cpu": 7.6,
@@ -3709,17 +3573,11 @@
   ]
  },
  "thorns": {
-  "cpu": 7.1,
+  "cpu": 6.7,
   "description": "fractal sequencer for norns + grid",
   "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/thorns/thorns.lua:16: module 'nb/lib/nb' not found:",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
   "rev": "4cd1b45d38d3ce79033d1722a783822d6c9410f6",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "norns",
    "grid",
@@ -3727,17 +3585,14 @@
    "sequencer",
    "generative"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "tidbit": {
-  "cpu": 6.9,
+  "cpu": 7.6,
   "description": "Use Just Friends or a MIDI device as a 'melodic' granular synth.",
   "engine": "",
-  "errors": [
-   "hook: machinista_bridge transport failed, error: /home/we/norns/lua/core/clock.lua:36: bad argument #1 to 'clock_cancel' (number expected, got nil)"
-  ],
   "rev": "3647720a8f46a7e5c353fabaa4020766ab737c9f",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "jf",
    "midi",
@@ -3746,7 +3601,7 @@
    "granulator",
    "w"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "time-rhythm": {
   "cpu": 7.2,
@@ -3775,32 +3630,23 @@
   "test": "ok"
  },
  "tmi": {
-  "cpu": 6.9,
+  "cpu": 6.8,
   "description": "library for sequencing midi with text",
-  "engine": "",
-  "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/tmi/lib/tmi.lua:4: MISSING INCLUDE: kolor/lib/lattice",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
-  ],
+  "engine": "PolyPerc",
   "rev": "c8e5587b1d4725fe8d6a1ced063e073e74d73fd7",
-  "status": "failed",
+  "status": "installed",
   "tags": [
    "utility",
    "midi"
   ],
-  "test": "lua error"
+  "test": "ok"
  },
  "torii": {
-  "cpu": 7.2,
+  "cpu": 11.4,
   "description": "gated audio sequencer",
-  "engine": "",
+  "engine": "R",
   "errors": [
-   "### SCRIPT ERROR: load fail",
-   "/home/we/dust/code/torii/torii.lua:41: module 'r/lib/r' not found:",
-   "stack traceback:",
-   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+   "! please contact the script maintainer - this will cause a load failure in future updates"
   ],
   "rev": "3d2c5c9088dd6a13aa4d4d87784025d2cc9c9298",
   "status": "failed",
@@ -3959,9 +3805,9 @@
   ]
  },
  "warmreload": {
-  "reason": "not a script (a library for other scripts)",
+  "reason": "a library for other scripts, installed",
   "rev": "2623fb313dfd3e276d878d25ab0589c2594db65b",
-  "status": "skipped",
+  "status": "library",
   "tags": [
    "mod"
   ]

@@ -1,0 +1,12 @@
+-- MIDI layer 3 for turntable: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "loop", label = "LOOP" },
+    {},
+    {},
+    { id = "riaa", label = "TURNTABLE RI" },
+    { id = "filter", label = "TURNTABLE LO" },
+    { id = "pitchSpeed", label = "PITCH" },
+  },
+}

@@ -1,0 +1,12 @@
+-- MIDI layer 3 for ong: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "foghornsEnabled", label = "ENABLE FOGHO", off = 1, on = 2, off_label = "ENABLE FOGHO", on_label = "ENABLE FOGHO" },
+    {},
+    {},
+    { id = "nearWavesFilterCutoff", label = "FILTER FREQ" },
+    { id = "nearWavesSpeed", label = "SPEED" },
+    { id = "foghornProbability", label = "FOGHORN PROB" },
+  },
+}

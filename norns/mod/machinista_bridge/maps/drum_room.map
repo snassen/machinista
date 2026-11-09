@@ -1,0 +1,12 @@
+-- MIDI layer 3 for drum_room: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "filter_cutoff", label = "FILTER CUTOF" },
+    { id = "bend_range", label = "PITCH BEND R" },
+    { id = "length", label = "LENGTH" },
+  },
+}

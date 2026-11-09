@@ -45,6 +45,27 @@ KEY_WORDS = [
 ]
 
 
+# Engines many scripts share, with knobs chosen by hand: a script whose
+# parameters include all of a family's ids gets these knobs (its keys are
+# still proposed as usual).
+FAMILIES = [
+    ('Molly the Poly', [('lp_filter_cutoff', 'CUTOFF'), ('lp_filter_resonance', 'RESONANCE'),
+                        ('env_2_release', 'RELEASE')]),
+    ('mx.synths', [('mxsynths_lpf', 'CUTOFF'), ('mxsynths_mod1', 'MOD 1'), ('mxsynths_release', 'RELEASE')]),
+    ('Passersby', [('wave_folds', 'FOLDS'), ('fm_low_amount', 'FM'), ('decay', 'DECAY')]),
+    ('Greyhole', [('time', 'TIME'), ('size', 'SIZE'), ('feedback', 'FEEDBACK')]),
+    ('Glut', [('1speed', '1 SPEED'), ('1pitch', '1 PITCH'), ('1size', '1 SIZE')]),
+]
+
+
+def family_knobs(params):
+    by_id = {p['id']: p for p in params}
+    for _, knobs in FAMILIES:
+        if all(i in by_id for i, _ in knobs):
+            return [dict(by_id[i], name=label) for i, label in knobs]
+    return None
+
+
 def score(param, words):
     text = f"{param['id']} {param['name']}"
     best = 0
@@ -175,6 +196,7 @@ def main():
             continue
         params = dumps[name]
         keys, knobs = suggest(params, system)
+        knobs = family_knobs(params) or knobs
         if not keys and not knobs:
             print(f'{name:22} nothing playable found')
             continue

@@ -1,0 +1,12 @@
+-- MIDI layer 3 for synthy: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "synthy_chord_selection", label = "CHORD RANDOM", off = 1, on = 2, off_label = "CHORD RANDOM", on_label = "CHORD RANDOM" },
+    {},
+    {},
+    { id = "synthy_lpf", label = "LPF" },
+    { id = "synthy_hold_control", label = "LPF HOLD CON" },
+    { id = "synthy_reverb", label = "REVERB SEND" },
+  },
+}

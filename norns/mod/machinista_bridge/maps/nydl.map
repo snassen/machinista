@@ -1,0 +1,12 @@
+-- MIDI layer 3 for nydl: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "mute_1", label = "1 MUTE" },
+    { id = "fx1_on_1", label = "1 ON" },
+    { id = "fx2_on_1", label = "2 ON" },
+    { id = "fx2_cutoff_1", label = "CUTOFF" },
+    { id = "fx1_rate_1", label = "RATE" },
+    { id = "fx1_level_1", label = "WET" },
+  },
+}

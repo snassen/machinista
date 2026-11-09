@@ -1,0 +1,12 @@
+-- MIDI layer 3 for n.kria: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "global_playing", label = "PLAYING" },
+    { id = "mute_t1", label = "1 MUTE" },
+    { id = "mute_t2", label = "2 MUTE" },
+    { id = "delay_cutoff", label = "BAND CENTER" },
+    { id = "delay_feedback", label = "DELAY FEEDBA" },
+    { id = "global_stretch", label = "STRETCH" },
+  },
+}

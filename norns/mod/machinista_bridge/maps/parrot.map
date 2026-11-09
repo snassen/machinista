@@ -1,0 +1,12 @@
+-- MIDI layer 3 for parrot: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "cv_recorder_state1", label = "RECORD 1", off = 1, on = 2, off_label = "RECORD 1 OFF", on_label = "RECORD 1 ON" },
+    { id = "cv_recorder_state2", label = "RECORD 2", off = 1, on = 2, off_label = "RECORD 2 OFF", on_label = "RECORD 2 ON" },
+    {},
+    { id = "cv_loop_length1", label = "LOOP LENGTH1" },
+    { id = "cv_loop_length2", label = "LOOP LENGTH2" },
+    {},
+  },
+}

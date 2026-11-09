@@ -1,0 +1,12 @@
+-- MIDI layer 3 for vcr: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "1volts1", label = "VOLTAGE 1" },
+    { id = "1volts2", label = "VOLTAGE 2" },
+    { id = "1volts3", label = "VOLTAGE 3" },
+  },
+}

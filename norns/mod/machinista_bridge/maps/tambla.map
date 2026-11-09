@@ -1,0 +1,12 @@
+-- MIDI layer 3 for tambla: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "random_enable", label = "RANDOMIZE PI", off = 1, on = 2, off_label = "RANDOMIZE PI", on_label = "RANDOMIZE PI" },
+    {},
+    {},
+    { id = "cutoff", label = "CUTOFF" },
+    { id = "delay_feedback", label = "DELAY FEEDBA" },
+    { id = "delay_rate", label = "DELAY RATE" },
+  },
+}

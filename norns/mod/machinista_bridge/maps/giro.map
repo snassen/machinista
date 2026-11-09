@@ -1,0 +1,12 @@
+-- MIDI layer 3 for giro: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "rec", label = "RECORD/OVR/P" },
+    { id = "play", label = "PLAY" },
+    { id = "next", label = "NEXT LOOP" },
+    { id = "time_numerator", label = "TIME NUMERAT" },
+    { id = "1pan", label = "PAN" },
+    { id = "1level", label = "LEVEL" },
+  },
+}

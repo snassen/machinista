@@ -1,0 +1,12 @@
+-- MIDI layer 3 for less_concepts: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "olafur_enabled", label = "ENABLE OLAFU" },
+    { id = "olafur_hold", label = "--  HOLD" },
+    { id = "1reset_softcut_voice_", label = "1 CLEAR SAMP" },
+    { id = "wave_folds", label = "FOLDS" },
+    { id = "fm_low_amount", label = "FM" },
+    { id = "decay", label = "DECAY" },
+  },
+}

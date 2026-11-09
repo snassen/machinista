@@ -1,0 +1,12 @@
+-- MIDI layer 3 for zellen: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "euclid_reset", label = "RESET SEQ AT", off = 1, on = 2, off_label = "RESET SEQ AT", on_label = "RESET SEQ AT" },
+    {},
+    {},
+    { id = "cutoff", label = "INTERNAL CUT" },
+    { id = "euclid_seq_len", label = "EUCLID SEQ L" },
+    { id = "release", label = "INTERNAL REL" },
+  },
+}

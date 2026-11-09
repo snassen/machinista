@@ -1,0 +1,12 @@
+-- MIDI layer 3 for scryingstone: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "lfo_free_white_noise_amp_lfo", label = "LFO RATE" },
+    { id = "white_noise_level", label = "WHITE NOISE " },
+    { id = "pink_noise_level", label = "PINK NOISE L" },
+  },
+}

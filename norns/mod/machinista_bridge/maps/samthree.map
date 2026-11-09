@@ -1,0 +1,12 @@
+-- MIDI layer 3 for samthree: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "record_mode", label = "RECORDING MO", off = 1, on = 2, off_label = "RECORDING MO", on_label = "RECORDING MO" },
+    { id = "click_track_enabled", label = "CLICK TRACK", off = 1, on = 2, off_label = "CLICK TRACK ", on_label = "CLICK TRACK " },
+    {},
+    { id = "pre_level", label = "FEEDBACK" },
+    { id = "low_loop_level", label = "LOW LOOP LEV" },
+    { id = "high_loop_level", label = "HIGH LOOP LE" },
+  },
+}

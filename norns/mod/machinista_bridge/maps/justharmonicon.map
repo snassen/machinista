@@ -1,0 +1,12 @@
+-- MIDI layer 3 for justharmonicon: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "freq_sub11", label = "SUB1 DIVISIO" },
+    { id = "freq_sub21", label = "SUB2 DIVISIO" },
+    { id = "warble_freq", label = "SPEED" },
+  },
+}

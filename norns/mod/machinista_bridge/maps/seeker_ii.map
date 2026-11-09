@@ -1,0 +1,12 @@
+-- MIDI layer 3 for seeker_ii: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "lane_1_record_sample", label = "1 RECORD SAM" },
+    { id = "lane_2_record_sample", label = "2 RECORD SAM" },
+    { id = "lane_3_record_sample", label = "3 RECORD SAM" },
+    { id = "mxsamples_lpf_mxsamples", label = "LOW-PASS FIL" },
+    { id = "mxsamples_hpf_mxsamples", label = "HIGH-PASS FI" },
+    { id = "lane_1_lpf", label = "LPF CUTOFF" },
+  },
+}

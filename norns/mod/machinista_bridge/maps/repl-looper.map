@@ -1,0 +1,12 @@
+-- MIDI layer 3 for repl-looper: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    {},
+    {},
+    {},
+    { id = "lfo_1_freq", label = "LFO1 FREQ" },
+    { id = "lfo_2_freq", label = "LFO2 FREQ" },
+    { id = "freq_mod_lfo_1_0", label = "FREQ MOD  LF" },
+  },
+}

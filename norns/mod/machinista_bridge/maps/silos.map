@@ -5,8 +5,8 @@ return {
     {},
     {},
     {},
-    { id = "1cutoff", label = "1 CUTOFF" },
-    { id = "1cutoff_slew", label = "1 CUTOFF SLE" },
-    { id = "2cutoff", label = "2 CUTOFF" },
+    { id = "1speed", label = "1 SPEED" },
+    { id = "1pitch", label = "1 PITCH" },
+    { id = "1size", label = "1 SIZE" },
   },
 }

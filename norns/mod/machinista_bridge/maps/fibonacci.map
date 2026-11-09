@@ -1,0 +1,12 @@
+-- MIDI layer 3 for fibonacci: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "play_duplicates", label = "PLAY DUPLICA", off = 1, on = 2, off_label = "PLAY DUPLICA", on_label = "PLAY DUPLICA" },
+    { id = "loop_end", label = "LOOP END", off = 1, on = 2, off_label = "LOOP END REP", on_label = "LOOP END REV" },
+    {},
+    { id = "lp_filter_cutoff", label = "CUTOFF" },
+    { id = "lp_filter_resonance", label = "RESONANCE" },
+    { id = "env_2_release", label = "RELEASE" },
+  },
+}

@@ -1,0 +1,12 @@
+-- MIDI layer 3 for Duatone: keys 1-3 then knobs 1-3 per layer.
+-- Proposed by norns/library/suggest-maps.py, reviewed by hand.
+return {
+  [3] = {
+    { id = "l_mod_enabled", label = "L MOD STATE", off = 1, on = 2, off_label = "L MOD STATE ", on_label = "L MOD STATE " },
+    { id = "r_mod_enabled", label = "R MOD STATE", off = 1, on = 2, off_label = "R MOD STATE ", on_label = "R MOD STATE " },
+    {},
+    { id = "l_mod_rate", label = "L MOD RATE" },
+    { id = "r_mod_rate", label = "R MOD RATE" },
+    { id = "l_mod_span_min", label = "L MOD SPAN M" },
+  },
+}
