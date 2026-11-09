@@ -1,20 +1,12 @@
--- MIDI layers 2 and 3 for ufo: keys 1-3 then knobs 1-3 per layer.
+-- MIDI layer 3 for ufo: keys 1-3 then knobs 1-3 per layer.
 -- Proposed by norns/library/suggest-maps.py, reviewed by hand.
 return {
-  [2] = {
+  [3] = {
     {},
     {},
     {},
     { id = "eng_cutoff_min", label = "FILTER CUTOF" },
     { id = "eng_modRate", label = "MODRATE" },
     { id = "eng_mix", label = "MIX" },
-  },
-  [3] = {
-    {},
-    {},
-    {},
-    { id = "eng_decay", label = "DECAY" },
-    { id = "eng_modulation", label = "MODULATION" },
-    { id = "eng_detune", label = "DETUNE" },
   },
 }

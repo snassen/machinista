@@ -1,20 +1,12 @@
--- MIDI layers 2 and 3 for dreamsequence: keys 1-3 then knobs 1-3 per layer.
+-- MIDI layer 3 for dreamsequence: keys 1-3 then knobs 1-3 per layer.
 -- Proposed by norns/library/suggest-maps.py, reviewed by hand.
 return {
-  [2] = {
+  [3] = {
     { id = "playback", label = "PLAYBACK", off = 1, on = 2, off_label = "PLAYBACK 1-S", on_label = "PLAYBACK LOO" },
     { id = "chord_mute", label = "PLAY/MUTE", off = 1, on = 2, off_label = "PLAY/MUTE PL", on_label = "PLAY/MUTE MU" },
     { id = "seq_mute_1", label = "1 PLAY/MUTE", off = 1, on = 2, off_label = "1 PLAY/MUTE ", on_label = "1 PLAY/MUTE " },
     { id = "chord_strum_length", label = "STRUM LENGTH" },
     { id = "chord_div_index", label = "STEP LENGTH" },
     { id = "chord_pattern_length", label = "PATTERN LENG" },
-  },
-  [3] = {
-    { id = "seq_mute_2", label = "2 PLAY/MUTE", off = 1, on = 2, off_label = "2 PLAY/MUTE ", on_label = "2 PLAY/MUTE " },
-    { id = "seq_mute_3", label = "3 PLAY/MUTE", off = 1, on = 2, off_label = "3 PLAY/MUTE ", on_label = "3 PLAY/MUTE " },
-    { id = "seq_start_1", label = "TRIGGER STAR" },
-    { id = "seq_probability_1", label = "PROBABILITY" },
-    { id = "chord_dynamics_ramp", label = "RAMP" },
-    {},
   },
 }

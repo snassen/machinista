@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Proposes MIDI layer 2/3 maps for scripts from their dumped parameters
+"""Proposes MIDI layer 3 maps for scripts from their dumped parameters
 (dump-params.py), as norns/mod/machinista_bridge/maps/<script>.map.
 
     norns/library/suggest-maps.py ~/norns-params            # every dumped script without a map
@@ -128,10 +128,10 @@ def distinct_labels(params):
 def render(name, keys, knobs):
     key_labels = dict(zip(map(id, keys), distinct_labels(keys)))
     knob_labels = dict(zip(map(id, knobs), distinct_labels(knobs)))
-    lines = [f'-- MIDI layers 2 and 3 for {name}: keys 1-3 then knobs 1-3 per layer.',
+    lines = [f'-- MIDI layer 3 for {name}: keys 1-3 then knobs 1-3 per layer.',
              '-- Proposed by norns/library/suggest-maps.py, reviewed by hand.', 'return {']
-    for layer in (2, 3):
-        start = (layer - 2) * 3
+    for layer in (3,):  # layers 1 and 2 are the same for every script (lib/layers.lua)
+        start = 0
         controls = keys[start:start + 3] + [None] * (3 - len(keys[start:start + 3]))
         controls += knobs[start:start + 3] + [None] * (3 - len(knobs[start:start + 3]))
         if not any(controls):

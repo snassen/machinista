@@ -1,20 +1,12 @@
--- MIDI layers 2 and 3 for bloom: keys 1-3 then knobs 1-3 per layer.
+-- MIDI layer 3 for bloom: keys 1-3 then knobs 1-3 per layer.
 -- Proposed by norns/library/suggest-maps.py, reviewed by hand.
 return {
-  [2] = {
+  [3] = {
     { id = "randomize", label = "RANDOMIZE", off = 1, on = 2, off_label = "RANDOMIZE OF", on_label = "RANDOMIZE ON" },
     {},
     {},
     { id = "filter_level", label = "FILTER LEVEL" },
     { id = "delay_feedback", label = "DELAY FEEDBA" },
     { id = "delay_rate", label = "DELAY RATE" },
-  },
-  [3] = {
-    {},
-    {},
-    {},
-    { id = "noise_level", label = "NOISE LEVEL" },
-    { id = "noise_attack", label = "NOISE ATTACK" },
-    { id = "noise_release", label = "NOISE RELEAS" },
   },
 }

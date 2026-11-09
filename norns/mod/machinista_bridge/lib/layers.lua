@@ -5,10 +5,11 @@
 -- Machinista sends layer L's controls as CC on channel 1:
 --   keys  CC 102 + 6(L-1) + 0..2  (127 on, 0 off)
 --   knobs CC 102 + 6(L-1) + 3..5  (0-127)
--- Layer 1 is the same on every norns and every script (SYSTEM below: norns'
--- reverb and compressor). Layers 2 and 3 come from maps/<folder>.map (the
--- script's folder in dust/code), a Lua table chosen per script:
---   return { [2] = { {id=..., label=...}, ... six controls ... }, [3] = {...} }
+-- Layers 1 and 2 are the same on every norns and every script (SYSTEM and
+-- GLOBAL below: norns' reverb, compressor and routing). Layer 3 comes from
+-- maps/<folder>.map (the script's folder in dust/code), a Lua table chosen
+-- per script:
+--   return { [3] = { {id=..., label=...}, ... six controls ... } }
 -- A control is {id = "param", label = "NAME"}; keys may add on=/off= values,
 -- and on_label=/off_label=. The CC is also passed on to the script as MIDI,
 -- so learned PMAP mappings keep working.
@@ -74,6 +75,16 @@ local SYSTEM = {
     apply = function(v) set_value("comp_release", 80 + 220 * v / 127) end },
 }
 
+-- Layer 2, the same everywhere (2026-11-09; more to come). Knob 1: how much
+-- of the raw input goes into norns' reverb. 0 (off) by default, set at every
+-- start by run-norns.sh: otherwise an Effect norns reverbs the dry signal
+-- beside the script's own output, and 100% wet isn't.
+local GLOBAL = {
+  {}, {}, {},
+  { label = "REV INPUT", apply = function(v) set_fraction("rev_monitor_input", v / 127) end },
+  {}, {},
+}
+
 local script_map = {}
 
 local function load_map(name)
@@ -98,7 +109,7 @@ end
 function M.write_labels()
   local lines = {}
   for layer = 1, 3 do
-    local controls = layer == 1 and SYSTEM or (script_map[layer] or {})
+    local controls = layer == 1 and SYSTEM or layer == 2 and GLOBAL or (script_map[layer] or {})
     for control = 1, 6 do
       local entry = controls[control]
       table.insert(lines, table.concat({layer, control, label_of(entry, false), label_of(entry, true)}, "\t"))
@@ -127,9 +138,12 @@ function M.cc(number, value)
   local index = number - FIRST_CC
   if index < 0 or index >= 18 then return false end
   local layer, control = index // 6 + 1, index % 6 + 1
-  if layer == 1 then
-    local ok, err = pcall(SYSTEM[control].apply, value)
-    if not ok then print("MACHINISTA_BRIDGE_LAYER " .. tostring(err)) end
+  if layer <= 2 then
+    local entry = (layer == 1 and SYSTEM or GLOBAL)[control]
+    if entry.apply then
+      local ok, err = pcall(entry.apply, value)
+      if not ok then print("MACHINISTA_BRIDGE_LAYER " .. tostring(err)) end
+    end
     return true
   end
   local entry = (script_map[layer] or {})[control]

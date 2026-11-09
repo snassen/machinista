@@ -1,20 +1,12 @@
--- MIDI layers 2 and 3 for fall: keys 1-3 then knobs 1-3 per layer.
+-- MIDI layer 3 for fall: keys 1-3 then knobs 1-3 per layer.
 -- Proposed by norns/library/suggest-maps.py, reviewed by hand.
 return {
-  [2] = {
+  [3] = {
     {},
     {},
     {},
     { id = "short_delay_feedback", label = "SHORT DELAY " },
     { id = "long_delay_feedback", label = "LONG DELAY F" },
     { id = "lfo_1_rate", label = "LFO 1 RATE" },
-  },
-  [3] = {
-    {},
-    {},
-    {},
-    { id = "lfo_2_rate", label = "LFO 2 RATE" },
-    { id = "lfo_3_rate", label = "LFO 3 RATE" },
-    { id = "short_delay_time", label = "SHORT DELAY" },
   },
 }

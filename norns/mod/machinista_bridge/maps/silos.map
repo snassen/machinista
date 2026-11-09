@@ -1,20 +1,12 @@
--- MIDI layers 2 and 3 for silos: keys 1-3 then knobs 1-3 per layer.
+-- MIDI layer 3 for silos: keys 1-3 then knobs 1-3 per layer.
 -- Proposed by norns/library/suggest-maps.py, reviewed by hand.
 return {
-  [2] = {
+  [3] = {
     {},
     {},
     {},
     { id = "1cutoff", label = "1 CUTOFF" },
     { id = "1cutoff_slew", label = "1 CUTOFF SLE" },
     { id = "2cutoff", label = "2 CUTOFF" },
-  },
-  [3] = {
-    {},
-    {},
-    {},
-    { id = "2cutoff_slew", label = "2 CUTOFF SLE" },
-    { id = "3cutoff", label = "3 CUTOFF" },
-    { id = "3cutoff_slew", label = "3 CUTOFF SLE" },
   },
 }

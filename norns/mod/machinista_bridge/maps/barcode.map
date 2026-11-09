@@ -1,20 +1,12 @@
--- MIDI layers 2 and 3 for barcode: keys 1-3 then knobs 1-3 per layer.
+-- MIDI layer 3 for barcode: keys 1-3 then knobs 1-3 per layer.
 -- Proposed by norns/library/suggest-maps.py, reviewed by hand.
 return {
-  [2] = {
+  [3] = {
     { id = "reverse", label = "REVERSE", off = 1, on = 2, off_label = "REVERSE OFF", on_label = "REVERSE ON" },
     { id = "recording", label = "RECORDING" },
     { id = "clear", label = "CLEAR BUFFER" },
     { id = "filter_frequency", label = "FILTER CUTOF" },
     { id = "filter_reso", label = "FILTER RESON" },
     { id = "rate slew time", label = "RATE SLEW TI" },
-  },
-  [3] = {
-    {},
-    {},
-    {},
-    { id = "pan slew time", label = "PAN SLEW TIM" },
-    { id = "level slew time", label = "LEVEL SLEW T" },
-    { id = "pre level", label = "PRE LEVEL" },
   },
 }

@@ -1,20 +1,12 @@
--- MIDI layers 2 and 3 for mlr: keys 1-3 then knobs 1-3 per layer.
+-- MIDI layer 3 for mlr: keys 1-3 then knobs 1-3 per layer.
 -- Proposed by norns/library/suggest-maps.py, reviewed by hand.
 return {
-  [2] = {
+  [3] = {
     {},
     {},
     {},
     { id = "1speed_mod", label = "1SPEED MOD" },
     { id = "1rate_slew", label = "1RATE SLEW" },
     { id = "2speed_mod", label = "2SPEED MOD" },
-  },
-  [3] = {
-    {},
-    {},
-    {},
-    { id = "2rate_slew", label = "2RATE SLEW" },
-    { id = "3speed_mod", label = "3SPEED MOD" },
-    { id = "3rate_slew", label = "3RATE SLEW" },
   },
 }

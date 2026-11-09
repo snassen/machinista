@@ -1,20 +1,12 @@
--- MIDI layers 2 and 3 for concrete: keys 1-3 then knobs 1-3 per layer.
+-- MIDI layer 3 for concrete: keys 1-3 then knobs 1-3 per layer.
 -- Proposed by norns/library/suggest-maps.py, reviewed by hand.
 return {
-  [2] = {
+  [3] = {
     { id = "toggle_rec", label = "TOGGLE REC" },
     { id = "rec_mode", label = "MODE", off = 1, on = 2, off_label = "MODE INPUT O", on_label = "MODE S.O.S" },
     { id = "ghost_rec", label = "RECORD GHOST", off = 1, on = 2, off_label = "RECORD GHOST", on_label = "RECORD GHOST" },
     { id = "global_cutoff_abs", label = "CUTOFF" },
     { id = "global_filter_q_abs", label = "FILTER Q" },
     { id = "cutoff1", label = "FILTER CUTOF" },
-  },
-  [3] = {
-    { id = "flip_splice_param", label = "REVERSE ACTI" },
-    { id = "toggle_play", label = "TOGGLE PLAY" },
-    { id = "reset_pos", label = "RESET POSITI" },
-    { id = "lfo_depth_cutoff_lfo1", label = "LFO DEPTH" },
-    { id = "lfo_phase_cutoff_lfo1", label = "LFO PHASE" },
-    { id = "lfo_offset_cutoff_lfo1", label = "LFO OFFSET" },
   },
 }

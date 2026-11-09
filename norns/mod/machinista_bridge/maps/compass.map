@@ -1,20 +1,12 @@
--- MIDI layers 2 and 3 for compass: keys 1-3 then knobs 1-3 per layer.
+-- MIDI layer 3 for compass: keys 1-3 then knobs 1-3 per layer.
 -- Proposed by norns/library/suggest-maps.py, reviewed by hand.
 return {
-  [2] = {
+  [3] = {
     {},
     {},
     {},
     { id = "Rate (coarse)", label = "RATE  COARSE" },
     { id = "Rate (slew)", label = "RATE  SLEW" },
     { id = "Pan (R)", label = "PAN  R" },
-  },
-  [3] = {
-    {},
-    {},
-    {},
-    { id = "Pan (L)", label = "PAN  L" },
-    { id = "Pan slew", label = "PAN  SLEW" },
-    { id = "Record Level", label = "RECORD LEVEL" },
   },
 }

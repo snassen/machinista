@@ -123,7 +123,13 @@ on). Order: notes, KNOB 4/8, layers.
   time, one-knob compressor (off at the left, then mix 0→1, ratio 1→20,
   threshold 0→−40 dB, post gain 0→30 dB), compressor release 80→300 ms
   (changed the same day from a reverb send: KNOB 4/8 set the reverb's
-  return level). Layers 2/3 come from `maps/<script>.map` per script. The
+  return level).
+- **MIDI 2 is also the same everywhere (2026-11-09):** knob 1 = REV INPUT,
+  how much of the raw input goes into norns' reverb; −inf at every start
+  (`run-norns.sh`), so an Effect norns at 100% wet is 100% wet. More global
+  controls will go here as they come up. **MIDI 3 is per script**
+  (`maps/<folder>.map`): 3 keys + 3 knobs, proposed by `suggest-maps.py`
+  from the script's parameters; not yet reviewed by hand. Layers 2/3 come from `maps/<script>.map` per script. The
   mod writes the names to `layers.txt` next to the screen frame and the
   MK3 shows them instead of CC numbers. The CCs still reach the script, so
   PMAP keeps working.

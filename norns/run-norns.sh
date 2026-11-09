@@ -46,6 +46,9 @@ if [[ -f "$state" ]]; then
   # The machinista_bridge mod does the same for a new instance with no state.
   sed -i "s/^midi.vports\[1\].name = 'none'/midi.vports[1].name = 'virtual'/" "$state"
   [[ "${NORNS_MIDI_CLOCK:-1}" == 0 ]] || sed -i 's/^norns.state.clock.source = [0-9]*/norns.state.clock.source = 2/' "$state"
+  # The raw input stays out of norns' reverb (MIDI 2, knob 1 brings it in):
+  # an Effect norns would otherwise mix a reverbed dry signal into its output.
+  sed -i 's/^norns.state.mix.rev_monitor_input = .*/norns.state.mix.rev_monitor_input = -inf/' "$state"
 fi
 # MIDI through the host's sequencer, unless NORNS_NO_MIDI is set (the old
 # ${NORNS_NO_MIDI:-...} form passed a stray "1" to docker run, which took it

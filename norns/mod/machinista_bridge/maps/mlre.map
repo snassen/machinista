@@ -1,20 +1,12 @@
--- MIDI layers 2 and 3 for mlre: keys 1-3 then knobs 1-3 per layer.
+-- MIDI layer 3 for mlre: keys 1-3 then knobs 1-3 per layer.
 -- Proposed by norns/library/suggest-maps.py, reviewed by hand.
 return {
-  [2] = {
+  [3] = {
     { id = "rec_default", label = "REC KEY DEFA", off = 1, on = 2, off_label = "REC KEY DEFA", on_label = "REC KEY DEFA" },
     { id = "rec_filter", label = "REC PRE FILT", off = 1, on = 2, off_label = "REC PRE FILT", on_label = "REC PRE FILT" },
     { id = "rec_backup", label = "AUTO-BACKUP", off = 1, on = 2, off_label = "AUTO-BACKUP ", on_label = "AUTO-BACKUP " },
     { id = "rnd_ucut", label = "UPPER FREQ" },
     { id = "rnd_lcut", label = "LOWER FREQ" },
     { id = "1cutoff", label = "CUTOFF" },
-  },
-  [3] = {
-    { id = "snap_playback_state", label = "PLAYBACK", off = 1, on = 2, off_label = "PLAYBACK IGN", on_label = "PLAYBACK REC" },
-    { id = "snap_loop_state", label = "LOOPS", off = 1, on = 2, off_label = "LOOPS IGNORE", on_label = "LOOPS RECALL" },
-    { id = "snap_rec_state", label = "REC STATE", off = 1, on = 2, off_label = "REC STATE IG", on_label = "REC STATE RE" },
-    { id = "1filter_q", label = "FILTER Q" },
-    { id = "1rate_slew", label = "RATE SLEW" },
-    { id = "lfo_free_lfo_1", label = "LFO RATE" },
   },
 }
