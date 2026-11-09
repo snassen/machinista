@@ -125,7 +125,13 @@ on). Order: notes, KNOB 4/8, layers.
   maps could ship with the library.
 - KNOB 4/8: norns system parameters (reverb, compressor, levels) are
   reachable over OSC, independent of the script.
-- Still open: where script PARAMS and LOAD fit (D3).
+- **PARAMS and LOAD from the MK3: on hold (2026-11-09).** The Pi 4 add-on
+  drew the running script's PARAMS on the MK3 (one knob per parameter,
+  page buttons between pages) and had a LOAD page (script + PSET, one
+  button). The user isn't sure it fits next to two norns screens and the
+  MIDI layers; norns' own menus (K1 → PARAMS, SELECT) work from the MK3
+  meanwhile. Reuse `machinista-norns` (norns-mod/machinista) when it comes
+  back.
 - **Decision needed:** what each layer shows on the display, and which
   system parameters KNOB 4/8 control.
 
