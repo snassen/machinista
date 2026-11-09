@@ -20,6 +20,9 @@ Each plug-in's "Norns" control picks the instance. A side without such a
 plug-in shows that and ignores its controls.
 SHIFT + PLUG-IN enters and leaves the mode. Transport and pads stay with
 Machinista so the groovebox keeps running underneath.
+SHIFT + REC records the selected Sound as a loop onto the first empty pad;
+the master encoder picks the bars and its push the tail mode
+(app/norns_loop.py).
 """
 import json
 import os
@@ -83,6 +86,11 @@ LAYER_BUTTONS = {'DISPLAY 4': 0, 'DISPLAY 8': 1}
 LAYERS = 3
 FIRST_CC = 102
 LAYER_SAVE_S = 1.0
+# One-button loop recording (app/norns_loop.py): SHIFT + LOOP_BUTTON arms or
+# cancels it, the master encoder picks the bars (when TEMPO isn't selected),
+# TAIL_BUTTON switches FOLD/CUT.
+LOOP_BUTTON = 'REC'
+TAIL_BUTTON = 'MASTER PUSH'
 
 
 def osc_message(address, *values):
@@ -217,7 +225,7 @@ def sound_norns(app):
 
 
 class NornsMode:
-    def __init__(self, root, sides=None, sender=None, clock=time.monotonic, tempo=None):
+    def __init__(self, root, sides=None, sender=None, clock=time.monotonic, tempo=None, loop=None):
         """sides() returns (left, right) norns numbers or None; see sound_norns().
 
         tempo() returns Machinista's tempo text while its TEMPO mode is
@@ -246,6 +254,8 @@ class NornsMode:
         self.next_config_check = clock() + CONFIG_CHECK_S
         self.sock = None
         self.sender = sender or self._send
+        self.loop = loop  # NornsLoop, or None
+        self.swallowed = set()  # buttons whose press NORNS mode used: so is their release
 
     def _send(self, port, data):
         if self.sock is None:
@@ -279,6 +289,9 @@ class NornsMode:
             if not pressed and name in self.passed:
                 self.passed.discard(name)
                 return False
+            if not pressed and name in self.swallowed:
+                self.swallowed.discard(name)
+                return True
             if not pressed and name in self.held:
                 # A norns key is always released where it was pressed, even
                 # after leaving the mode or selecting another Sound meanwhile.
@@ -298,6 +311,10 @@ class NornsMode:
             if pressed and (name == TEMPO_BUTTON or (name == TAP_BUTTON and self.shift)):
                 self.passed.add(name)
                 return False
+            if self.loop and pressed and ((name == LOOP_BUTTON and self.shift) or name == TAIL_BUTTON):
+                self.swallowed.add(name)
+                self.loop.toggle() if name == LOOP_BUTTON else self.loop.toggle_tail()
+                return True
             if name in LAYER_BUTTONS:
                 number = self.sides()[LAYER_BUTTONS[name]]
                 if pressed and number:
@@ -326,6 +343,9 @@ class NornsMode:
             index = event['raw_control']
             if index == MASTER_ENCODER and self.tempo() is not None:
                 return False
+            if index == MASTER_ENCODER and self.loop:
+                self.loop.change_bars(event['value'])
+                return True
             if index in KNOBS or index in SYSTEM_KNOBS:
                 value = event['value']
                 if index in SYSTEM_KNOBS:
@@ -390,6 +410,8 @@ class NornsMode:
             for i in range(3):
                 values[f'DISPLAY {first + i}'] = 85 if keys[i] else 8
             values[f'DISPLAY {first + 3}'] = 85 if layer else 8
+        if self.loop and self.loop.state() in ('WAITING', 'RECORDING'):
+            values['REC'] = 127 if self.loop.state() == 'RECORDING' or int(self.clock() * 4) % 2 else 8
         return values
 
     def release_all_notes(self):
@@ -461,7 +483,8 @@ class NornsMode:
                               first_cc=layer_cc(layer, 0) if layer else None,
                               labels=tuple(layer_labels(number).get((layer, c), ('', '')) for c in range(6))
                               if layer else ()))
-        return {'norns_mode': True, 'norns': tuple(sides), 'shift': self.shift, 'tempo': self.tempo()}
+        return {'norns_mode': True, 'norns': tuple(sides), 'shift': self.shift, 'tempo': self.tempo(),
+                'loop': self.loop.status() if self.loop else None}
 
     def close(self):
         if self.sock is not None:

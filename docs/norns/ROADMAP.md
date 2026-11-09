@@ -71,6 +71,13 @@ norns 5:
 - Both Pis carry the same library; norns 1–4 restarted on both.
 - A script's own folder can be missing until its first save (oooooo's load
   shows an `ls` error until then); harmless, or create the folder.
+- Open (2026-11-09, parked by the user): the MK3's line inputs arrive quiet.
+  A physical norns into IN L/R, Sound INPUT = EXT STEREO at 100%, Norns
+  Effect at unity: norns 2 measured peaks of about −27 dB, some 15–20 dB
+  below line level. Machinista's chain passes it at unity, so the loss is in
+  the MK3 input as Linux sees it (no ALSA controls exposed) or in
+  Machinista's capture. Next step: stop Machinista for a moment and record
+  straight from the MK3 with arecord to tell which.
 
 **Notes from planning:**
 - The Pi 4 pack is in `snassen/machinista-norns` (`library/pack.txt`):
@@ -193,8 +200,18 @@ the MK3 (2026-11-09): recorded on norns 1, loaded onto a pad.
   loop on, playing. Tails (a drone with lots of reverb): either accept the
   cut at the loop end, or record past the end and fold the tail back onto
   the loop start (as an extra layer), so the reverb carries across the loop
-  point. Still open: which Sound when the norns is an Effect, and how to
-  choose bars and tail mode.
+  point.
+- **Built 2026-11-09 (agreed: SHIFT + REC, next bar, bars on a knob, tail
+  selectable):** `app/norns_loop.py` uses Machinista's own bounce capture
+  (`app/audio_loop.py`), recording the selected Sound's whole chain, so a
+  norns Effect is recorded with what feeds it. Master encoder = bars
+  (1/2/4/8/16, default 4), its push = FOLD/CUT, remembered in
+  `config/norns-loop.json`. FOLD records one bar more and mixes it onto the
+  start (`fold_tail`, through a hook in `finish_sample_recording`). The
+  loop lands on the first empty pad of the group as an AUDIO pad in a
+  pattern. Bars are picked before arming, not while armed: with "next
+  bar" the wait is under a bar, and a stopped transport starts recording
+  at once. Tests: `tests/test_norns_loop.py`. Not yet tried on the MK3.
 
 **Notes:**
 - The Pi 4 add-on already shared folders: norns saw Machinista's samples,

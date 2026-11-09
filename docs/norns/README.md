@@ -40,6 +40,7 @@ Status: **prototype, working on the MK3** (2026-11-08, Pi 5).
 |---|---|
 | `app/norns_mode.py` | Takeover mode: SHIFT + PLUG-IN, routes MK3 input to norns over OSC |
 | `app/norns_display.py` | Draws the norns frames on the MK3 displays (renderer process) |
+| `app/norns_loop.py` | One-button loop recording (SHIFT + REC): bars, tail fold, onto the first empty pad |
 | `app/mk3_session.py`, `app/mk3_display.py` | Hooks, marked `norns-mode fork hook` |
 | `norns/mod/machinista_bridge/` | norns mod that exports the framebuffer as PNG |
 | `norns/data/system.mods` | Enables the mod inside the container |
@@ -89,6 +90,17 @@ On the MK3, load **Norns Instrument** in a Sound's instrument slot (browser:
 F1 for INSTRUMENT) and **Norns Effect** in an effect slot. Their **Norns**
 control picks the instance (Instrument defaults to 1, Effect to 2). Press
 **SHIFT + PLUG-IN** to enter or leave NORNS mode.
+
+**Loop recording in NORNS mode:** SHIFT + REC records the selected Sound
+(with its norns) onto the first empty pad as a looping audio pad. It starts
+on the next bar (and starts the transport if it is stopped) and stops by
+itself. The master encoder picks the bars (1/2/4/8/16, default 4); its push
+switches the tail mode: FOLD records one bar more and mixes it onto the
+loop's start, so reverb rings across the loop point (for drones and fading
+sounds); CUT stops exactly at the end (for sequences). The display's
+bottom-right slot shows it: outlined while waiting for the bar, filled
+while recording. SHIFT + REC again cancels. REC alone is still Machinista's
+pattern record.
 
 Check a bridge: `norns/bridge/bridge_stat <n>`.
 

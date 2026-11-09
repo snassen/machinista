@@ -40,11 +40,28 @@ def _tempo(c, tempo):
     return c.image
 
 
-def _side(side, tempo=None):
+def _loop(c, loop):
+    # One-button loop recording (app/norns_loop.py) in the bottom-right slot:
+    # outlined while waiting for the bar, filled while recording, plain for a
+    # moment after the bars or tail changed.
+    if not loop or not loop.get('show'):
+        return False
+    state = loop.get('state')
+    if state == 'RECORDING':
+        c.rect(3 * 120 + 3, 238, 114, 22, ACCENT, radius=3)
+    elif state == 'WAITING':
+        c.rect(3 * 120 + 3, 238, 114, 22, None, ACCENT, 3)
+    c.text(3 * 120 + 60, 244, loop.get('text', ''), 12, True, PANEL if state == 'RECORDING' else ACCENT,
+           width=106, center=True)
+    return True
+
+
+def _side(side, tempo=None, loop=None):
     c = Canvas()
     if side.get('name') is None:
         # The selected Sound has no Norns Instrument (left) or Norns Effect (right).
         c.text(240, 120, 'NO NORNS ' + side.get('role', ''), 16, True, MUTED, width=440, center=True)
+        _loop(c, loop)
         return _tempo(c, tempo)
     layer = side.get('layer') or 0
     values = side.get('values') or ()
@@ -87,8 +104,9 @@ def _side(side, tempo=None):
     else:
         for i, label in enumerate(('E1', 'E2', 'E3')):
             c.text(i * 120 + 60, 244, label, 12, True, MUTED, width=106, center=True)
-    role = {'INSTRUMENT': 'INSTR', 'EFFECT': 'EFFECT'}.get(side.get('role'), 'NORNS')
-    c.text(3 * 120 + 60, 244, role + ' ' + side['name'], 12, True, ACCENT, width=106, center=True)
+    if not _loop(c, loop):
+        role = {'INSTRUMENT': 'INSTR', 'EFFECT': 'EFFECT'}.get(side.get('role'), 'NORNS')
+        c.text(3 * 120 + 60, 244, role + ' ' + side['name'], 12, True, ACCENT, width=106, center=True)
     return _tempo(c, tempo)
 
 
@@ -96,4 +114,5 @@ def images(state):
     sides = tuple(state.get('norns', ()))
     while len(sides) < 2:
         sides += ({'name': None, 'role': ('INSTRUMENT', 'EFFECT')[len(sides)], 'frame': '', 'mtime': None},)
-    return _side(sides[0], state.get('tempo')), _side(sides[1])
+    loop = state.get('loop')
+    return _side(sides[0], state.get('tempo'), loop), _side(sides[1], None, loop)
