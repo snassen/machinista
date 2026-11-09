@@ -102,7 +102,7 @@ class Mk3Session(Mk2Session):
         for name in ('PITCH','MOD','NOTES'):values[name]=85 if self.surface.strip_mode==name else 8
         for name in ('FILE','SETTINGS','MACRO','VARIATION','TAP','STOP'):values[name]=85 if name in self.surface.held else 8
         if a.shift:values['TAP']=85 if a.timing()['metro'] else 8
-        if self.norns and self.norns.active:values['PLUG-IN']=85  # norns-mode fork hook
+        if self.norns and self.norns.active:values['PLUG-IN']=85;values.update(self.norns.leds())  # norns-mode fork hook
         report=[]
         for i,name in enumerate(LED_NAMES):
             value=127 if name in self.surface.held else values.get(name,8)

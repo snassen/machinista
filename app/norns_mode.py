@@ -13,6 +13,9 @@ and effect"):
   right display = its Norns Effect:     K1-K3 = DISPLAY 5-7, E1-E3 = KNOB 5-7
 KNOB 4 / KNOB 8 set that side's reverb amount, or its output level while
 SHIFT is held (norns system parameters, whatever script is loaded).
+DISPLAY 4 / DISPLAY 8 step that side through its layers: native (K1-K3,
+E1-E3) and three MIDI layers, where the keys are toggles and the knobs send
+MIDI CC values to that norns (map them in norns' PARAMS > MAP).
 Each plug-in's "Norns" control picks the instance. A side without such a
 plug-in shows that and ignores its controls.
 SHIFT + PLUG-IN enters and leaves the mode. Transport and pads stay with
@@ -72,6 +75,14 @@ KNOBS.update({i + 5: (1, i + 1) for i in range(3)})
 SYSTEM_KNOBS = {4: 0, 8: 1}
 REVERB_PARAM = 'rev_return_level'
 LEVEL_PARAM = 'output_level'
+# MIDI layers (agreed 2026-11-09). DISPLAY 4 / 8 cycle native -> 1 -> 2 -> 3.
+# Layer L sends on MIDI channel 1: keys CC FIRST_CC + 6(L-1) + 0..2 (127 on,
+# 0 off), knobs the next three CCs (0-127, one value per knob step). Values
+# belong to the norns instance and are kept in config/norns-layers.json.
+LAYER_BUTTONS = {'DISPLAY 4': 0, 'DISPLAY 8': 1}
+LAYERS = 3
+FIRST_CC = 102
+LAYER_SAVE_S = 1.0
 
 
 def osc_message(address, *values):
@@ -85,6 +96,39 @@ def osc_message(address, *values):
 
 def config_path(root):
     return Path(root) / 'config' / 'norns.json'
+
+
+def layers_path(root):
+    return Path(root) / 'config' / 'norns-layers.json'
+
+
+def layer_cc(layer, control):
+    """CC number of a layer's control: 0-2 are its keys, 3-5 its knobs."""
+    return FIRST_CC + 6 * (layer - 1) + control
+
+
+def load_layers(root):
+    """{norns number: {'layer': 0-3, 'values': [[6 values] per layer]}}."""
+    try:
+        data = json.loads(layers_path(root).read_text())
+    except (OSError, ValueError):
+        return {}
+    result = {}
+    if not isinstance(data, dict):
+        return result
+    for key, entry in data.items():
+        try:
+            number = int(key)
+            layer = int(entry.get('layer', 0))
+            values = [[max(0, min(127, int(v))) for v in row][:6] for row in entry.get('values', [])][:LAYERS]
+        except (AttributeError, TypeError, ValueError):
+            continue
+        while len(values) < LAYERS:
+            values.append([])
+        for row in values:
+            row.extend([0] * (6 - len(row)))
+        result[number] = {'layer': layer if 0 <= layer <= LAYERS else 0, 'values': values}
+    return result
 
 
 def config_mtime(root):
@@ -163,6 +207,10 @@ class NornsMode:
         self.last_turn = {}
         self.pending = {}
         self.system_param = {}  # KNOB 4/8: parameter the pending steps belong to
+        self.knob_target = {}  # KNOB 1-3/5-7: (norns, layer) the pending steps belong to
+        self.layers = load_layers(root)
+        self.layers_dirty = False
+        self.next_layer_save = 0.0
         self.last_sent = {}
         self.clock = clock
         self.next_config_check = clock() + CONFIG_CHECK_S
@@ -220,8 +268,24 @@ class NornsMode:
             if pressed and (name == TEMPO_BUTTON or (name == TAP_BUTTON and self.shift)):
                 self.passed.add(name)
                 return False
+            if name in LAYER_BUTTONS:
+                number = self.sides()[LAYER_BUTTONS[name]]
+                if pressed and number:
+                    entry = self.layer_entry(number)
+                    entry['layer'] = (entry['layer'] + 1) % (LAYERS + 1)
+                    self.layers_dirty = True
+                return True
             if name in KEY_BUTTONS:
                 side, key = KEY_BUTTONS[name]
+                number = self.sides()[side]
+                layer = self.layer_entry(number)['layer'] if number else 0
+                if layer:
+                    if pressed:
+                        values = self.layers[number]['values'][layer - 1]
+                        values[key - 1] = 0 if values[key - 1] else 127
+                        self.send_cc(number, layer_cc(layer, key - 1), values[key - 1])
+                        self.layers_dirty = True
+                    return True
                 port = self.port(side)
                 if pressed and port:
                     self.held[name] = (port, key)
@@ -239,6 +303,12 @@ class NornsMode:
                     if self.system_param.get(index) != param:
                         self.pending.pop(index, None)  # SHIFT changed mid-turn
                         self.system_param[index] = param
+                else:
+                    number = self.sides()[KNOBS[index][0]]
+                    target = (number, self.layer_entry(number)['layer'] if number else 0)
+                    if self.knob_target.get(index) != target:
+                        self.pending.pop(index, None)  # layer or Sound changed mid-turn
+                        self.knob_target[index] = target
                 now = self.clock()
                 idle = now - self.last_turn.get(index, float('-inf')) > KNOB_IDLE_S
                 self.last_turn[index] = now
@@ -259,6 +329,39 @@ class NornsMode:
             return True
         return False
 
+    def layer_entry(self, number):
+        return self.layers.setdefault(number, {'layer': 0, 'values': [[0] * 6 for _ in range(LAYERS)]})
+
+    def send_cc(self, number, cc, value):
+        self.sender(instance_port(number), osc_message('/machinista/midi', 0xB0, cc, value))
+
+    def save_layers(self, now):
+        if not self.layers_dirty or now < self.next_layer_save:
+            return
+        self.layers_dirty = False
+        self.next_layer_save = now + LAYER_SAVE_S
+        path = layers_path(self.root)
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            tmp = path.with_suffix('.tmp')
+            tmp.write_text(json.dumps({str(n): e for n, e in sorted(self.layers.items())}, indent=1))
+            os.replace(tmp, path)
+        except OSError as error:
+            print('NORNS layers not saved: ' + str(error), flush=True)
+
+    def leds(self):
+        """DISPLAY button LEDs in NORNS mode: 4/8 lit on a MIDI layer, the
+        toggle keys lit while on."""
+        values = {}
+        for side, number in enumerate(self.sides()):
+            first = 1 + 4 * side
+            layer = self.layer_entry(number)['layer'] if number else 0
+            keys = self.layers[number]['values'][layer - 1][:3] if layer else (0, 0, 0)
+            for i in range(3):
+                values[f'DISPLAY {first + i}'] = 85 if keys[i] else 8
+            values[f'DISPLAY {first + 3}'] = 85 if layer else 8
+        return values
+
     def release_all_notes(self):
         """Ask every norns (1-MAX_INSTANCES; a port nobody listens on just
         drops the message) to release the notes Machinista played on it."""
@@ -272,6 +375,7 @@ class NornsMode:
         last steps of a turn go out once the pacing window has passed.
         """
         now = self.clock() if now is None else now
+        self.save_layers(now)
         if now >= self.next_config_check:
             self.next_config_check = now + CONFIG_CHECK_S
             self.reload_config()
@@ -279,8 +383,18 @@ class NornsMode:
             if now - self.last_sent.get(index, float('-inf')) < PACE_S:
                 continue
             del self.pending[index]
+            number, layer = self.knob_target.get(index, (None, 0))
             if steps and index in SYSTEM_KNOBS:
                 self.send(SYSTEM_KNOBS[index], '/machinista/param', self.system_param[index], steps)
+                self.last_sent[index] = now
+            elif steps and layer and number:
+                control = 3 + KNOBS[index][1] - 1
+                values = self.layer_entry(number)['values'][layer - 1]
+                value = max(0, min(127, values[control] + steps))
+                if value != values[control]:
+                    values[control] = value
+                    self.send_cc(number, layer_cc(layer, control), value)
+                    self.layers_dirty = True
                 self.last_sent[index] = now
             elif steps:
                 side, enc = KNOBS[index]
@@ -310,7 +424,11 @@ class NornsMode:
                 mtime = os.stat(frame).st_mtime_ns
             except OSError:
                 mtime = None
-            sides.append(dict(name=str(number), role=role, frame=frame, mtime=mtime))
+            entry = self.layer_entry(number)
+            layer = entry['layer']
+            sides.append(dict(name=str(number), role=role, frame=frame, mtime=mtime, layer=layer,
+                              values=tuple(entry['values'][layer - 1]) if layer else (),
+                              first_cc=layer_cc(layer, 0) if layer else None))
         return {'norns_mode': True, 'norns': tuple(sides), 'shift': self.shift, 'tempo': self.tempo()}
 
     def close(self):

@@ -5,7 +5,7 @@ import tempfile
 import unittest
 
 from app.norns_mode import (NornsMode, osc_message, sound_norns, KNOB_TRAVEL, KNOB_IDLE_S, PACE_S,
-                             CONFIG_CHECK_S, INSTRUMENT_URI, EFFECT_URI)
+                             CONFIG_CHECK_S, INSTRUMENT_URI, EFFECT_URI, LAYER_SAVE_S, layers_path)
 
 
 def button(name, value):
@@ -240,6 +240,83 @@ class NornsModeTest(unittest.TestCase):
         self.assertIn(b'output_level\0', data)
         self.assertEqual(data[-4:], struct.pack('>i', -2))
 
+    def cc(self, port, number, value):
+        return (port, osc_message('/machinista/midi', 0xB0, number, value))
+
+    def test_layer_key_cycles_layers(self):
+        self.toggle()
+        for expected in (1, 2, 3, 0):
+            self.assertTrue(self.mode.handle_event(button('DISPLAY 4', 1)))
+            self.assertTrue(self.mode.handle_event(button('DISPLAY 4', 0)))
+            self.assertEqual(self.mode.display_state()['norns'][0]['layer'], expected)
+        self.assertEqual(self.mode.display_state()['norns'][1]['layer'], 0)
+        self.assertEqual(self.sent, [])
+
+    def test_layer_keys_toggle_ccs_and_light(self):
+        self.toggle()
+        self.mode.handle_event(button('DISPLAY 8', 1))
+        self.mode.handle_event(button('DISPLAY 8', 1))  # right side on layer 2
+        self.mode.handle_event(button('DISPLAY 6', 1))
+        self.mode.handle_event(button('DISPLAY 6', 0))
+        self.assertEqual(self.mode.leds()['DISPLAY 6'], 85)
+        self.assertEqual(self.mode.leds()['DISPLAY 8'], 85)
+        self.assertEqual(self.mode.leds()['DISPLAY 4'], 8)
+        self.mode.handle_event(button('DISPLAY 6', 1))
+        self.assertEqual(self.sent, [self.cc(10112, 109, 127), self.cc(10112, 109, 0)])
+        self.assertEqual(self.mode.leds()['DISPLAY 6'], 8)
+
+    def test_layer_knobs_send_cc_values(self):
+        self.toggle()
+        self.mode.handle_event(button('DISPLAY 4', 1))  # left side on layer 1
+        self.turn(2, KNOB_TRAVEL * 2)
+        self.assertEqual(self.sent, [self.cc(10111, 106, 2)])
+        self.turn(2, -KNOB_TRAVEL * 10, after=PACE_S)
+        self.assertEqual(self.sent[1:], [self.cc(10111, 106, 0)])  # clamped at 0
+        self.sent.clear()
+        self.turn(2, -KNOB_TRAVEL, after=PACE_S)
+        self.assertEqual(self.sent, [])  # already at 0: nothing to send
+        side = self.mode.display_state()['norns'][0]
+        self.assertEqual((side['first_cc'], side['values']), (102, (0, 0, 0, 0, 0, 0)))
+
+    def test_native_layer_and_system_knobs_unchanged_on_a_layer(self):
+        self.toggle()
+        self.mode.handle_event(button('DISPLAY 4', 1))
+        self.turn(4, KNOB_TRAVEL)
+        self.assertEqual(self.sent, [(10111, osc_message('/machinista/param', 'rev_return_level', 1))])
+        self.sent.clear()
+        self.mode.handle_event(button('DISPLAY 4', 1))
+        self.mode.handle_event(button('DISPLAY 4', 1))
+        self.mode.handle_event(button('DISPLAY 4', 1))  # back to native
+        self.turn(1, KNOB_TRAVEL, after=PACE_S)
+        self.mode.handle_event(button('DISPLAY 1', 1))
+        self.assertEqual(self.sent, [(10111, osc_message('/remote/enc', 1, 1)), (10111, osc_message('/remote/key', 1, 1))])
+
+    def test_layers_belong_to_the_norns_and_are_kept(self):
+        root = tempfile.mkdtemp()
+        sides = [(3, None)]
+        mode = NornsMode(root, sides=lambda: sides[0], sender=lambda port, data: self.sent.append((port, data)),
+                         clock=lambda: self.now)
+        self.mode = mode
+        self.toggle()
+        mode.handle_event(button('DISPLAY 4', 1))
+        mode.handle_event(button('DISPLAY 1', 1))
+        sides[0] = (4, None)  # another Sound on norns 4: its own layer state
+        self.assertEqual(mode.display_state()['norns'][0]['layer'], 0)
+        self.now += LAYER_SAVE_S
+        mode.flush()
+        self.assertTrue(layers_path(root).exists())
+        again = NornsMode(root, sides=lambda: (3, None), sender=lambda *a: None)
+        side = again.display_state()['norns'][0]
+        self.assertEqual((side['layer'], side['values'][0]), (1, 127))
+
+    def test_corrupt_layer_file_is_ignored(self):
+        root = tempfile.mkdtemp()
+        os.makedirs(os.path.join(root, 'config'))
+        with open(layers_path(root), 'w') as f:
+            f.write('{"1": {"layer": 9, "values": [["x"]]}, "2": 5}')
+        mode = NornsMode(root, sides=lambda: (1, 2), sender=lambda *a: None)
+        self.assertEqual([s['layer'] for s in mode.display_state()['norns']], [0, 0])
+
     def test_osc_encoding(self):
         data = osc_message('/remote/enc', 1, -3)
         self.assertEqual(len(data) % 4, 0)
@@ -278,6 +355,13 @@ class NornsDisplayTest(unittest.TestCase):
                                         {'name': '2', 'role': 'EFFECT', 'frame': '/nonexistent', 'mtime': None})})
         self.assertEqual(left.size, (480, 272))
         self.assertEqual(right.size, (480, 272))
+
+    def test_draws_a_midi_layer(self):
+        from app.norns_display import images
+        layer = {'name': '1', 'role': 'INSTRUMENT', 'frame': '/nonexistent', 'mtime': None, 'layer': 2,
+                 'values': (127, 0, 0, 64, 0, 127), 'first_cc': 108}
+        left, _ = images({'norns': (layer, {'name': None, 'role': 'EFFECT', 'frame': '', 'mtime': None})})
+        self.assertEqual(left.size, (480, 272))
 
 
 if __name__ == '__main__':

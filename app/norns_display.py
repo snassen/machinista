@@ -2,7 +2,8 @@
 
 Each side shows one norns framebuffer scaled 3x (384x192) with the norns
 key labels above (under the display buttons) and encoder labels below
-(above the knobs). A frame that is missing or only partly written keeps
+(above the knobs). On a MIDI layer the labels show the layer instead: the
+toggle keys' CCs (lit while on) and the knobs' CCs with their values. A frame that is missing or only partly written keeps
 the last good image for that side.
 """
 from PIL import Image
@@ -45,18 +46,36 @@ def _side(side, tempo=None):
         # The selected Sound has no Norns Instrument (left) or Norns Effect (right).
         c.text(240, 120, 'NO NORNS ' + side.get('role', ''), 16, True, MUTED, width=440, center=True)
         return _tempo(c, tempo)
-    labels = ('K1', 'K2', 'K3', '')
-    for i, label in enumerate(labels):
-        c.rect(i * 120 + 3, 3, 114, 24, PANEL, radius=3)
-        c.text(i * 120 + 60, 6, label, 12, True, INK, width=106, center=True)
+    layer = side.get('layer') or 0
+    values = side.get('values') or ()
+    first = side.get('first_cc')
+    if layer and len(values) == 6 and first is not None:
+        for i in range(3):
+            on = values[i] > 0
+            c.rect(i * 120 + 3, 3, 114, 24, ACCENT if on else PANEL, radius=3)
+            c.text(i * 120 + 60, 6, f'CC{first + i} ' + ('ON' if on else 'OFF'), 12, True, PANEL if on else INK,
+                   width=106, center=True)
+        c.rect(3 * 120 + 3, 3, 114, 24, None, ACCENT, 3)
+        c.text(3 * 120 + 60, 6, f'MIDI {layer}', 12, True, ACCENT, width=106, center=True)
+    else:
+        for i, label in enumerate(('K1', 'K2', 'K3', 'NATIVE')):
+            c.rect(i * 120 + 3, 3, 114, 24, PANEL, radius=3)
+            c.text(i * 120 + 60, 6, label, 12, True, INK if i < 3 else MUTED, width=106, center=True)
     c.rect(FRAME_X - 4, FRAME_Y - 4, 128 * SCALE + 8, 64 * SCALE + 8, None, LINE, 3)
     image = _frame(side)
     if image is None:
         c.text(240, 120, 'NORNS ' + side['name'] + ' OFFLINE', 16, True, MUTED, width=380, center=True)
     else:
         c.image.paste(image, (FRAME_X, FRAME_Y))
-    for i, label in enumerate(('E1', 'E2', 'E3', '')):
-        if label:
+    if layer and len(values) == 6 and first is not None:
+        for i in range(3):
+            value = values[3 + i]
+            c.text(i * 120 + 60, 240, f'CC{first + 3 + i} {value}', 12, True, INK, width=106, center=True)
+            c.rect(i * 120 + 13, 260, 94, 6, PANEL, radius=2)
+            if value:
+                c.rect(i * 120 + 13, 260, max(2, round(94 * value / 127)), 6, ACCENT, radius=2)
+    else:
+        for i, label in enumerate(('E1', 'E2', 'E3')):
             c.text(i * 120 + 60, 244, label, 12, True, MUTED, width=106, center=True)
     role = {'INSTRUMENT': 'INSTR', 'EFFECT': 'EFFECT'}.get(side.get('role'), 'NORNS')
     c.text(3 * 120 + 60, 244, role + ' ' + side['name'], 12, True, ACCENT, width=106, center=True)

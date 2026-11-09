@@ -106,6 +106,16 @@ on). Order: notes, KNOB 4/8, layers.
   the reverb switches off. Nothing shows the value yet (norns' screen
   belongs to the script).
 - STOP releases every note Machinista played on every norns (stuck notes).
+- **MIDI layers: built 2026-11-09** (defaults agreed). DISPLAY 4 / 8 cycle
+  native → MIDI 1 → 2 → 3. On a MIDI layer, DISPLAY 1–3 / 5–7 are toggles
+  (CC 127/0, lit while on) and KNOB 1–3 / 5–7 send CC values 0–127, on MIDI
+  channel 1 to that side's norns: layer 1 = CC 102–107, layer 2 = 108–113,
+  layer 3 = 114–119 (keys, then knobs). The label rows above and below the
+  norns screen show the layer, the keys and the knob values. Layer and
+  values belong to the norns instance, kept in `config/norns-layers.json`.
+  KNOB 4/8 stay reverb/level on every layer. Map the CCs to script
+  parameters in norns' PARAMS > MAP. Tested in unit tests; still to try on
+  the MK3.
 
 **Notes:**
 - Pads as MIDI: the Instrument's MIDI port can carry them, the same path as
