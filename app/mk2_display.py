@@ -132,7 +132,8 @@ def snapshot(surface):
         state['plugin_browser']=(entries,a.plugin_browser_index+1,a.plugin_filter)
     if p=='BROWSE':
         state['browser_decoded']=dict(a.browser_decoded)
-        b=a.browser;state['browser']=(str(b.directory) if b.directory is not None else None,tuple((s.name,str(s.path)) for s in b.sources),b.index,b.prehear)
+        from app.browser import browser_snapshot
+        b=a.browser;state['browser']=browser_snapshot(b)
         state['headings']=('FOLDERS','FILES')
         if b.prehear:state['active_left']=(3,)
     if p=='VIEW NAV':
@@ -503,11 +504,11 @@ class Mk2Renderer:
                 if field:
                     parameter(q,i,*field)
         if 'browser' in state:
-            directory,sources,index,prehear=state['browser'];rect(p,2,29,252,33,0);rect(q,2,16,252,46,0)
-            text(p,4,32,Path(directory).name if directory else 'SOURCES',limit=245)
+            from app.browser import browser_from_snapshot
+            browser,index,prehear=browser_from_snapshot(state['browser'])
+            rect(p,2,29,252,33,0);rect(q,2,16,252,46,0)
+            text(p,4,32,browser.title(),limit=245)
             text(p,4,46,'PREHEAR '+('ON' if prehear else 'OFF'),limit=245)
-            from app.browser import Browser,Source
-            browser=Browser(sources[0][1]);browser.sources=[Source(n,Path(path)) for n,path in sources];browser.directory=Path(directory) if directory else None
             rows=browser.entries();first=max(0,min(index-2,len(rows)-5))
             for i,path in enumerate(rows[first:first+5]):
                 selected=first+i==index;y=18+i*9

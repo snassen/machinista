@@ -213,14 +213,15 @@ def main():
                 if imported:
                     kind,source,context,prepared,error,cancelled=imported
                     if not cancelled:
-                        if error:app.message='MP3 IMPORT FAILED';print(str(error),flush=True)
+                        if error:app.message='PREVIEW FAILED' if kind=='kit_preview' else 'MP3 IMPORT FAILED';print(str(error),flush=True)
                         elif kind=='load':
                             app.browser_decoded[str(source)]=prepared['sample']
                             while len(app.browser_decoded)>16:app.browser_decoded.pop(next(iter(app.browser_decoded)))
                             app.finish_mp3_import(context,prepared)
-                        elif app.page=='BROWSE' and app.browser.prehear and app.browser.selected()==source:
-                            app.browser_decoded[str(source)]=prepared['sample']
-                            while len(app.browser_decoded)>16:app.browser_decoded.pop(next(iter(app.browser_decoded)))
+                        elif app.page=='BROWSE' and app.browser.prehear and app.browser_preview_path()==source:
+                            if kind=='preview':
+                                app.browser_decoded[str(source)]=prepared['sample']
+                                while len(app.browser_decoded)>16:app.browser_decoded.pop(next(iter(app.browser_decoded)))
                             audio.load(-1,0,prepared);audio.command(f'hit {PREVIEW} 0.5')
                 sound_runtime.poll(now,bool(audio.recorder or audio.capture_pending or app.capture_armed or app.capture_started is not None or sample_jobs.pending or plugin_transfer_pending or preset_pending or collect_pending or export_pending or audio_imports.busy))
                 plugin_refresh.poll(app,audio,now)
@@ -386,6 +387,7 @@ def main():
                     next_health=now+1
                     loop_watch.publish(dict(page=app.page,group=app.group,pad=app.pad,
                         playing=app.playing,recording=app.recording,held=sorted(app.held_buttons),
+                        record_events=list(app.record_diagnostics),
                         mikro=surface_status(output,now),mk2=surface_status(mk2,now),mk1=surface_status(mk1,now),mk3=surface_status(mk3,now),plus=surface_status(plus,now)))
                 if stopped:
                     break
@@ -492,6 +494,7 @@ def main():
                 if not getattr(app,'autosampling',False):controller_inputs.timing.tick(now)
                 midi_performance.tick(now)
                 app.repeat_tick(now)
+                app.browser_preview_tick(now)
                 runtime_audio.update(app,audio,now,None if sync_mode=='IN' else next_step)
                 if audio.native_capture and audio.native_capture.get('stop_requested') is not None and (not app.playing or app.clock_phase!=audio.native_capture['stop_requested'] and app.clock_phase%384<4):
                     audio.native_capture.pop('stop_requested');audio.stop_capture();app.capture_started=None
@@ -652,6 +655,8 @@ def main():
                         elif action=='import_mp3':
                             source,context=value
                             if not audio_imports.request('load',source,context):app.message='IMPORT BUSY: RETRY'
+                        elif action == 'preview' and Path(value).name=='.preview.wav':
+                            audio_imports.request('kit_preview',value,None)
                         elif action == 'preview' and Path(value).suffix.lower()=='.mp3':
                             audio.command('preview_stop')
                             audio_imports.request('preview',value,None)

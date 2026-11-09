@@ -122,8 +122,8 @@ def build(device, language, chapters, catalog):
     text += '</section>'
     alternate = 'en' if de else 'de'
     filename = 'Mikro_MK1' if device == 'mikro' else device.upper()
-    pdf = f'https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.17/Machinista_{filename}_User_Manual_{language.upper()}.pdf'
-    body = f'<a class="skip" href="#content">{"Zum Inhalt" if de else "Skip to content"}</a><header id="top"><a href="index.html">Machinista · {"Alle Handbücher" if de else "All manuals"}</a><h1>{escape(title)}</h1><p><a href="{device}-{alternate}.html" lang="{alternate}">{"English" if de else "Deutsch"}</a> · <a href="{pdf}">PDF</a> · <a href="https://github.com/photogeen/machinista">GitHub</a></p><p>{"Englische Menü- und Tastennamen bleiben unverändert." if de else "Illustrated workflows, WebUI instructions and complete display reference."}</p></header><main class="layout">{nav}<article id="content">{text}</article></main><footer>Machinista · 6 November 2026 · <a href="index.html">{contents}</a></footer>'
+    pdf = f'https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.18/Machinista_{filename}_User_Manual_{language.upper()}.pdf'
+    body = f'<a class="skip" href="#content">{"Zum Inhalt" if de else "Skip to content"}</a><header id="top"><a href="index.html">Machinista · {"Alle Handbücher" if de else "All manuals"}</a><h1>{escape(title)}</h1><p><a href="{device}-{alternate}.html" lang="{alternate}">{"English" if de else "Deutsch"}</a> · <a href="{pdf}">PDF</a> · <a href="https://github.com/photogeen/machinista">GitHub</a></p><p>{"Englische Menü- und Tastennamen bleiben unverändert." if de else "Illustrated workflows, WebUI instructions and complete display reference."}</p></header><main class="layout">{nav}<article id="content">{text}</article></main><footer>Machinista · 7 November 2026 · <a href="index.html">{contents}</a></footer>'
     (DEST / f'{device}-{language}.html').write_text(document(title,language,body))
     return {'controller':device,'language':language,'chapters':len(chapters),'screens':count}
 

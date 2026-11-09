@@ -1,4 +1,4 @@
-"""Portable Group sample-set transfer. No live-engine access; sample-only expansion conversion."""
+"""Portable Group sample kit transfer. No live-engine access; sample-only expansion conversion."""
 from contextlib import contextmanager
 from pathlib import Path
 import copy,json,re,shutil,stat,tempfile,uuid,wave,zipfile
@@ -10,10 +10,48 @@ class SampleSets:
   self.library=library;self.folder=library.root/'presets/Groups';self.folder.mkdir(parents=True,exist_ok=True)
   from app.sample_set_editor import SetEditor
   self.editor=SetEditor(self)
- def bundle(self,name):
-  if not isinstance(name,str) or not re.fullmatch(r'(?:[A-Za-z0-9 _-]{1,32}|set-[a-f0-9]{32})',name):raise ValueError('Invalid sample-set name.')
-  p=self.folder/name
-  if p.is_symlink() or not p.is_dir():raise ValueError('Sample set unavailable.')
+ def root(self,storage='sd',*,write=False):
+  if storage=='sd':return self.folder
+  if not isinstance(storage,str) or not storage.startswith('usb-'):raise ValueError('Invalid kit storage.')
+  from app.browser import usb_kit_path
+  source=self.library.source(storage)
+  root=usb_kit_path(source)
+  if root.is_symlink():raise ValueError('Invalid USB sample kit folder.')
+  if write:
+   if source.read_only:raise PermissionError('USB storage is read-only.')
+   root.mkdir(exist_ok=True)
+  return root
+ def key(self,storage,name):
+  return name if storage=='sd' else storage+':'+name
+ def split(self,identity):
+  if not isinstance(identity,str):raise ValueError('Invalid sample kit ID.')
+  storage,separator,name=identity.partition(':')
+  return (storage,name) if separator else ('sd',storage)
+ def expansions(self,root=None):
+  root=root or self.folder
+  if not root.is_dir():return iter(())
+  return (p for p in root.iterdir() if not p.name.startswith('.') and not p.is_symlink()
+          and p.is_dir() and (p/'.expansion').is_file() and not (p/'.expansion').is_symlink())
+ def expansion(self,name,root=None):
+  from app.sample_set_import import title
+  root=root or self.folder
+  name=title(name,'Expansion').lstrip('.') or 'Expansion'
+  for p in self.expansions(root):
+   if p.name.casefold()==name.casefold():return p
+  target=root/name
+  if target.exists() or target.is_symlink():
+   raise ValueError('An existing sample kit already uses this expansion name.')
+  target.mkdir()
+  (target/'.expansion').touch()
+  return target
+ def bundle(self,identity):
+  storage,name=self.split(identity)
+  if not re.fullmatch(r'(?:[A-Za-z0-9 _-]{1,32}|set-[a-f0-9]{32})',name):raise ValueError('Invalid sample kit name.')
+  root=self.root(storage)
+  p=root/name
+  if not p.exists() and name.startswith('set-'):
+   p=next((folder/name for folder in self.expansions(root) if (folder/name).is_dir()),p)
+  if p.is_symlink() or not p.is_dir() or (p/'.expansion').exists():raise ValueError('Sample kit unavailable.')
   return p
  def document(self,base):
   p=base/'Preset.json'
@@ -26,12 +64,17 @@ class SampleSets:
    p=Path(ref)
    if not p.resolve().is_relative_to(base.resolve()) or not p.is_file() or any(q.is_symlink() for q in (p,*p.parents) if q.is_relative_to(base)):raise ValueError('Set contains an external or missing asset.')
   return data
- def listing(self):
+ def listing(self,storage='sd'):
+  root=self.root(storage)
+  if not root.is_dir():return []
   rows=[]
-  for p in sorted(self.folder.iterdir(),key=lambda p:p.name.casefold()):
+  folders=list(self.expansions(root))
+  paths=[p for p in root.iterdir() if p not in folders]
+  for folder in folders:paths.extend(folder.iterdir())
+  for p in sorted(paths,key=lambda p:p.name.casefold()):
    if p.name.startswith('.') or not p.is_dir():continue
    try:
-    rows.append(self.editor.listing(p.name))
+    rows.append(self.editor.listing(self.key(storage,p.name)))
    except (ValueError,OSError,KeyError,TypeError):continue
   return rows
  @contextmanager
@@ -86,7 +129,7 @@ class SampleSets:
        from app.wav_validation import validate_pcm
        with target.open('r+b') as wav:validate_pcm(wav,{})
     manifests=list(files.rglob('Preset.json'));prepared=[]
-    title=re.sub(r'[^A-Za-z0-9 _-]','',Path(name).stem).strip()[:24] or 'Sample Set'
+    title=re.sub(r'[^A-Za-z0-9 _-]','',Path(name).stem).strip()[:24] or 'Sample Kit'
     if manifests:
      if len(manifests)!=1:raise ValueError('Import one saved Group per ZIP.')
      base=manifests[0].parent;data=self.document(base);prepared=[(base,re.sub(r'[^A-Za-z0-9 _-]','',str(data.get('name',title))).strip()[:32] or title)]
@@ -103,7 +146,7 @@ class SampleSets:
        pad.update(name=p.stem,sample=str(p),start=0,end=frames,zones=[])
       collect_project(project,base);project=json.loads((base/'Project.json').read_text());(base/'Project.json').unlink();(base/'Preset.json').write_text(json.dumps(dict(format='Machinista-preset',version=1,kind='GROUP',name=label,project=project)));prepared.append((base,label))
     labels=[label for _,label in prepared];existing={p.name.casefold() for p in self.folder.iterdir()}
-    if len(set(x.casefold() for x in labels))!=len(labels) or any(x.casefold() in existing for x in labels):raise ValueError('A sample set with this name already exists. Rename the ZIP or set first.')
+    if len(set(x.casefold() for x in labels))!=len(labels) or any(x.casefold() in existing for x in labels):raise ValueError('A sample kit with this name already exists. Rename the ZIP or kit first.')
     published=[]
     try:
      for base,label in prepared:base.rename(self.folder/label);published.append(label)
@@ -111,5 +154,5 @@ class SampleSets:
      for label in published:shutil.rmtree(self.folder/label)
      raise
     return dict(ok=True,sets=published)
-  except zipfile.BadZipFile as error:raise ValueError('Invalid or damaged sample-set ZIP.') from error
+  except zipfile.BadZipFile as error:raise ValueError('Invalid or damaged sample kit ZIP.') from error
   finally:self.library.upload_lock.release()

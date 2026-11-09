@@ -38,12 +38,116 @@ class SetEditorTests(unittest.TestCase):
         upload=self.editor.start()['id'];audio=self.wav();ref=self.editor.upload_file(upload,'Kick.wav',io.BytesIO(audio),len(audio))['asset']
         pads=[None]*16;pads[0]=dict(name='My Kick',asset=ref)
         return dict(name='My Custom Kit',banks=[dict(name='Main',pads=pads)],notes=[])
+    def test_maschine_kit_draft_resolves_audio_and_compacts_synths(self):
+        ids = b'\x02\x34\x12'
+        record = bytes.fromhex('000000ff010000') + ids * 4
+
+        def sound(name, *paths):
+            wavs = b''.join(bytes([len(path)]) + path + b'\x01' for path in paths)
+            return record + bytes(6) + ids * 2 + b'\x00\x01' + bytes([len(name)]) + name + ids + wavs
+
+        kick = b'Samples/Drums/Kick.wav'
+        kit = (bytes(12) + b'hsinserialization::archive' + sound(b'Kick', kick, kick)
+               + sound(b'Synth') + sound(b'Kick Again', kick)
+               + sound(b'Snare', b'Samples/Drums/Snare.wav')
+               + ids + bytes.fromhex('01090101') + ids * 4
+               + record + bytes(6) + ids * 2 + b'\x00\x01\x03Kit')
+        path = self.root / 'samples' / 'Pack' / 'Samples' / 'Drums'
+        path.mkdir(parents=True)
+        (path / 'Kick.wav').write_bytes(self.wav())
+        draft = self.editor.inspect_maschine_kit('My Kit.mxgrp', io.BytesIO(kit), len(kit))
+        self.assertEqual(draft['name'], 'My Kit')
+        self.assertEqual([pad['name'] for pad in draft['pads']], ['Kick', 'Kick Again', 'Snare'])
+        self.assertIn('Skipped 1', draft['notes'][0])
+        self.assertNotIn('asset', draft['pads'][2])
+        self.assertEqual(draft['pads'][0]['asset'], draft['pads'][1]['asset'])
+        self.assertEqual(self.library.sets.listing(), [])
+
+        (path / 'Snare.wav').write_bytes(self.wav())
+        draft = self.editor.inspect_maschine_kit('My Kit.mxgrp', io.BytesIO(kit), len(kit))
+        pads = draft['pads'] + [None] * 13
+        result = self.editor.save(dict(name=draft['name'], banks=[dict(name='My Kit', pads=pads)]))
+        saved = self.editor.item(result['id'])
+        self.assertEqual(saved['banks'][0]['pads'][2]['name'], 'Snare')
+
+    def test_expansion_folder_contains_separately_editable_kits(self):
+        first = self.draft()
+        first['expansion'] = 'Velvet Bloom'
+        second = dict(first, name='Second Kit')
+        ids = [self.editor.save(value)['id'] for value in (first, second)]
+        folder = self.library.sets.folder / 'Velvet Bloom'
+        self.assertEqual([row['expansion'] for row in self.library.sets.listing()], ['Velvet Bloom'] * 2)
+        self.assertTrue(all((folder / identity / 'Set.json').is_file() for identity in ids))
+        browser = Browser(self.root / 'samples', (Source('SAMPLE KITS', self.library.sets.folder),))
+        browser.refresh([])
+        browser.directory = self.library.sets.folder
+        self.assertEqual(browser.entries(), [folder])
+        browser.directory = folder
+        self.assertEqual([browser.label(path) for path in browser.entries()], ['My Custom Kit', 'Second Kit'])
+        item = self.editor.item(ids[0])
+        self.editor.save(dict(item, name='Renamed Kit'))
+        self.assertEqual(self.editor.item(ids[0])['name'], 'Renamed Kit')
+        self.editor.delete(dict(id=ids[0], revision=self.editor.revision(ids[0]), confirmed=True))
+        self.assertEqual([row['id'] for row in self.library.sets.listing()], ids[1:])
+
+    def test_custom_kit_folder_create_and_permanent_delete(self):
+        editor=self.editor
+        with self.assertRaises(ValueError):
+            editor.manage_folder(dict(name='../Kits'))
+        editor.manage_folder(dict(name='Live Kits'))
+        self.assertEqual([p.name for p in self.library.sets.expansions()], ['Live Kits'])
+        with self.assertRaises(FileExistsError):
+            editor.manage_folder(dict(name='live kits'))
+        draft=dict(self.draft(),expansion='Live Kits')
+        identity=editor.save(draft)['id']
+        with self.assertRaisesRegex(ValueError,'Confirm'):
+            editor.manage_folder(dict(name='Live Kits'),delete=True)
+        self.assertEqual(editor.item(identity)['expansion'],'Live Kits')
+        editor.manage_folder(dict(name='Live Kits',confirmed=True),delete=True)
+        self.assertEqual(self.library.sets.listing(),[])
+        self.assertFalse(list(self.library.sets.expansions()))
+        self.assertFalse((editor.folder/'.trash').exists())
+
+    def test_usb_kit_storage_and_browser_hierarchy(self):
+        usb=self.root/'usb';usb.mkdir()
+        source=Source('USB TEST',usb)
+        self.library.scan=lambda:[source]
+        storage=next(key for key in self.library.sources() if key!='sd')
+        upload=self.editor.start(dict(storage=storage))['id']
+        data=self.wav()
+        asset=self.editor.upload_file(upload,'Kick.wav',io.BytesIO(data),len(data))['asset']
+        pads=[dict(name='Kick',asset=asset)]+[None]*15
+        result=self.editor.save(dict(storage=storage,name='USB Kit',expansion='Live',banks=[dict(name='Bank A',pads=pads)]))
+        identity=result['id']
+        self.assertTrue(identity.startswith(storage+':'))
+        self.assertEqual(self.library.sets.listing(),[])
+        self.assertEqual(self.library.sets.listing(storage)[0]['name'],'USB Kit')
+        item=self.editor.item(identity)
+        with self.editor.asset(item['banks'][0]['pads'][0]['asset']) as stream:
+            self.assertEqual(stream.read(),data)
+        editor_root=self.library.sets.folder
+        browser=Browser(self.root/'samples',kit_root=editor_root)
+        browser.internal_sources=(Source('SAMPLE KITS',browser.kit_menu),)
+        browser.refresh([source]);browser.directory=browser.kit_menu
+        self.assertEqual([browser.label(p) for p in browser.entries()],['SD CARD','USB TEST'])
+        browser.index=1;browser.open()
+        self.assertEqual([p.name for p in browser.entries()],['Live'])
+        browser.open()
+        group=read_preset(browser.open(),'GROUP',self.root)
+        self.assertTrue(Path(group['pads'][0]['sample']).is_relative_to(usb.resolve()))
+        self.editor.discard_stage(dict(upload=upload))
+        self.editor.delete(dict(id=identity,revision=item['revision'],confirmed=True))
+        self.assertFalse((usb/'Machinista Sample Kits'/'.trash').exists())
+        archive=self.zip([('Audio/Kick.wav',data)])
+        imported=self.editor.import_archive('Audio.zip',io.BytesIO(archive),len(archive),storage)
+        self.assertEqual(self.editor.item(imported['id'])['storage'],storage)
+
     def test_folder_name_and_all_samples_in_one_expansion(self):
         result=self.import_files([(f'Pack/Samples/{i:02}.wav',self.wav()) for i in range(19)],'Pack.zip')
         item=self.editor.item(result['id']);self.assertEqual(item['name'],'Pack');self.assertEqual(len(item['banks']),2)
         self.assertEqual(item['banks'][0]['pads'][0]['name'],'00');self.assertIsNone(item['banks'][1]['pads'][3])
         self.assertEqual(self.library.sets.listing()[0]['pads'],19)
-        browser=Browser(self.root/'samples',(Source('SAMPLE SETS',self.library.sets.folder),));browser.refresh([]);browser.directory=self.library.sets.folder
+        browser=Browser(self.root/'samples',(Source('SAMPLE KITS',self.library.sets.folder),));browser.refresh([]);browser.directory=self.library.sets.folder
         self.assertEqual(browser.label(browser.entries()[0]),'Pack');browser.directory=browser.entries()[0]
         entries=browser.entries();self.assertEqual(len(entries),2);self.assertEqual(browser.label(entries[0]),'Bank 1')
         group=read_preset(entries[0],'GROUP',self.root);self.assertTrue(Path(group['pads'][0]['sample']).is_file())
@@ -90,7 +194,7 @@ class SetEditorTests(unittest.TestCase):
         with self.assertRaises(ValueError):self.editor.delete(item)
         with self.assertRaises(ValueError):self.editor.delete(dict(id=item['id'],revision='wrong',confirmed=True))
         self.editor.delete(dict(id=item['id'],revision=item['revision'],confirmed=True));self.assertEqual(self.library.sets.listing(),[])
-        self.assertTrue(any((self.library.sets.folder/'.trash').iterdir()))
+        self.assertFalse((self.library.sets.folder/'.trash').exists())
     def test_hostile_archives_and_xml_cannot_publish(self):
         for files in [[('../x.wav',self.wav())],[('X.wav',self.wav()),('x.wav',self.wav())],[('evil.xpm',b'<!DOCTYPE a [<!ENTITY a SYSTEM "file:///etc/passwd">]><Program/>'),('x.wav',self.wav())],[('bad.wav',b'invalid')],[('Synth.nksf',b'synth only')]]:
             with self.subTest(names=[p for p,_ in files]):

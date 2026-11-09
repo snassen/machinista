@@ -13,7 +13,7 @@ import subprocess
 import sys
 import tarfile
 
-VERSION='0.1.0-beta.17'
+VERSION='0.1.0-beta.18'
 
 def main():
  root=Path(sys.argv[1]).resolve();payload=Path(sys.argv[2]).resolve();profile_id=sys.argv[3] if len(sys.argv)>3 else 'standard'

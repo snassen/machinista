@@ -343,16 +343,15 @@ def render(state,renderer):
             x=max(36,min(247,36+round((grid['playhead']-29)/96*212)))
             for y in range(GRID_TOP,GRID_TOP+25):q.p[y*256+x]^=1
     if 'browser' in state:
-        directory,sources,index,prehear=state['browser']
-        from app.browser import Browser,Source
-        b=Browser(sources[0][1]);b.sources=[Source(n,Path(path)) for n,path in sources];b.directory=Path(directory) if directory else None
+        from app.browser import browser_from_snapshot
+        b,index,prehear=browser_from_snapshot(state['browser'])
         entries=b.entries();first=max(0,min(index-1,len(entries)-3))
-        p.title('LIBRARY / '+(Path(directory).name if directory else 'SOURCES'),state.get('sample_target',''))
+        p.title('LIBRARY / '+b.title(),state.get('sample_target',''))
         for i,path in enumerate(entries[first:first+3]):
             yy=24+i*7;chosen=first+i==index
             if chosen:p.rect(3,yy,250,7)
             ink=p.bg if chosen else p.ink
-            if path.is_dir():folder(p,5,yy,chosen)
+            if b.is_folder(path):folder(p,5,yy,chosen)
             else:p.rect(6,yy+1,6,5,ink,False)
             p.fitted(20,yy+1,b.label(path),229,ink=ink,font='bold5')
         q.title('PREHEAR '+('ON' if prehear else 'OFF'))
@@ -361,7 +360,7 @@ def render(state,renderer):
         if selected and selected.is_file() and (selected.suffix.lower()=='.wav' or decoded):
             sample_wave(q,(decoded or str(selected),0,None),renderer.waveforms,y=25,height=20,playhead=state.get('wave_cursor'))
         else:
-            if selected and selected.is_dir():folder(q,8,30)
+            if selected and b.is_folder(selected):folder(q,8,30)
             q.fitted(24,31,b.label(selected) if selected else 'EMPTY FOLDER',225,font='bold7')
     if 'settings_menu' in state:
         settings_folder,entries,index=state['settings_menu'];index=max(0,min(index,len(entries)-1))

@@ -83,23 +83,19 @@ class WebHttpTests(unittest.TestCase):
         self.assertEqual(json.loads(self.request('GET','/api/list')[2])['entries'][1]['name'],'Native.MP3')
         status,headers,data=self.request('GET','/api/file?name=Native.MP3',headers={'Range':'bytes=0-9'})
         self.assertEqual((status,headers['Content-Type'],data),(206,'audio/mpeg',body[:10]))
-    def test_file_management_requires_csrf_and_restores_original(self):
+    def test_file_management_requires_csrf_and_permanent_delete_confirmation(self):
         body=wav();self.library.upload('sd','Library/Kicks','Move.wav',io.BytesIO(body),len(body))
         headers={'X-Machinista-Token':self.library.token}
         url='/api/files/move?source=sd&path=Library%2FKicks&name=Move.wav&target_source=sd&target_path=Library'
         self.assertEqual(self.request('POST',url)[0],403)
         self.assertEqual(self.request('GET',url)[0],404)
         self.assertEqual(self.request('POST',url,headers=headers)[0],200)
-        trash='/api/files/trash?source=sd&path=Library&name=Move.wav'
-        self.assertEqual(self.request('POST',trash)[0],403)
-        status,_,data=self.request('POST',trash,headers=headers)
-        self.assertEqual(status,200);identity=json.loads(data)['id']
-        entries=json.loads(self.request('GET','/api/trash?source=sd')[2])['entries']
-        self.assertEqual(entries[0]['name'],'Move.wav')
-        restore='/api/files/restore?source=sd&id='+identity
-        self.assertEqual(self.request('POST',restore)[0],403)
-        self.assertEqual(self.request('POST',restore,headers=headers)[0],200)
-        self.assertEqual((self.root/'samples/Library/Move.wav').read_bytes(),body)
+        delete='/api/files/delete?source=sd&path=Library&name=Move.wav'
+        self.assertEqual(self.request('POST',delete)[0],403)
+        self.assertEqual(self.request('POST',delete,headers=headers)[0],400)
+        self.assertEqual(self.request('POST',delete+'&confirmed=true',headers=headers)[0],200)
+        self.assertFalse((self.root/'samples/Library/Move.wav').exists())
+        self.assertFalse((self.root/'samples/.machinista-trash').exists())
     def test_ssh_status_and_csrf_guarded_fixed_actions(self):
         with patch('app.power_client.request',return_value={'active':True,'enabled':True,'user':'machinista'}) as request:
             self.assertEqual(self.request('GET','/api/ssh')[0],200)

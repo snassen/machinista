@@ -19,7 +19,7 @@ MAX_BANKS=128
 MAX_DECODED=1024**3
 
 
-def title(value,fallback='Sample Set'):
+def title(value,fallback='Sample Kit'):
     value=''.join(c for c in str(value) if ord(c)>=32 and c not in '/\\').strip()
     return value[:80] or fallback
 

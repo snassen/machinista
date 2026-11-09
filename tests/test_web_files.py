@@ -29,28 +29,20 @@ class FileTests(unittest.TestCase):
         self.files.move('sd','','From','sd','To')
         self.assertTrue((self.samples/'To/From/Sub').is_dir())
         self.assertEqual((self.samples/'To/From/kick.wav').read_bytes(),b'audio')
-    def test_folder_delete_and_restore_keeps_every_byte_and_is_hidden(self):
-        result=self.files.delete('sd','','From')
+    def test_folder_delete_is_permanent(self):
+        self.files.delete('sd','','From')
         self.assertFalse((self.samples/'From').exists())
-        self.assertNotIn('.machinista-trash',[x['name'] for x in self.library.list('sd','')['entries']])
-        rows=self.files.trash_list('sd')['entries'];self.assertEqual(rows[0]['id'],result['id'])
-        self.files.restore('sd',result['id'])
-        self.assertEqual((self.samples/'From/kick.wav').read_bytes(),b'audio')
-        self.assertEqual(self.files.trash_list('sd')['entries'],[])
-    def test_restore_conflict_keeps_recovery_copy(self):
-        result=self.files.delete('sd','From','kick.wav')
-        (self.samples/'From/kick.wav').write_bytes(b'new')
-        with self.assertRaises(FileExistsError):self.files.restore('sd',result['id'])
-        self.assertEqual(len(self.files.trash_list('sd')['entries']),1)
-        self.assertEqual((self.samples/'From/kick.wav').read_bytes(),b'new')
+        self.assertFalse((self.samples/'.machinista-trash').exists())
     def test_empty_destination_folder_is_not_replaced(self):
         (self.samples/'To/From').mkdir()
         with self.assertRaises(FileExistsError):self.files.move('sd','','From','sd','To')
         self.assertTrue((self.samples/'From/kick.wav').exists())
-    def test_trash_symlink_cannot_redirect_deletion(self):
-        (self.samples/'.machinista-trash').symlink_to(self.root,target_is_directory=True)
-        with self.assertRaises(OSError):self.files.delete('sd','From','kick.wav')
-        self.assertEqual((self.samples/'From/kick.wav').read_bytes(),b'audio')
+    def test_folder_delete_does_not_follow_nested_symlinks(self):
+        external=self.root/'external';external.mkdir()
+        (external/'keep.wav').write_bytes(b'keep')
+        (self.samples/'From/escape').symlink_to(external,target_is_directory=True)
+        self.files.delete('sd','','From')
+        self.assertEqual((external/'keep.wav').read_bytes(),b'keep')
     def test_cross_device_nested_symlink_never_reads_external_content(self):
         (self.samples/'From/secret').symlink_to(self.root,target_is_directory=True)
         first=True
@@ -73,7 +65,7 @@ class FileTests(unittest.TestCase):
         try:
             with self.assertRaises(BlockingIOError):self.files.delete('sd','From','kick.wav')
         finally:self.library.upload_lock.release()
-    def test_cross_device_move_and_recovery(self):
+    def test_cross_device_move_removes_original_after_publish(self):
         usb=self.root/'usb';usb.mkdir();self.library.scan=lambda:[Source('USB',usb)]
         identity=next(k for k in self.library.sources() if k!='sd')
         first=True
@@ -84,8 +76,7 @@ class FileTests(unittest.TestCase):
         with patch('app.web_files.rename_exclusive',side_effect=rename):self.files.move('sd','','From',identity,'')
         self.assertEqual((usb/'From/kick.wav').read_bytes(),b'audio')
         self.assertFalse((self.samples/'From').exists())
-        trash=self.files.trash_list('sd')['entries'];self.assertEqual(len(trash),1)
-        self.files.restore('sd',trash[0]['id']);self.assertEqual((self.samples/'From/kick.wav').read_bytes(),b'audio')
+        self.assertFalse((self.samples/'.machinista-trash').exists())
     def test_cross_device_copy_failure_never_removes_original(self):
         with patch('app.web_files.rename_exclusive',side_effect=OSError(errno.EXDEV,'Different device')),patch.object(self.files,'copy_entry',side_effect=OSError('Disk full')):
             with self.assertRaises(OSError):self.files.move('sd','From','kick.wav','sd','To')

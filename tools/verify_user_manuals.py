@@ -23,16 +23,16 @@ def verify():
             path=OUT/f'Machinista_{device}_User_Manual_{lang}.pdf';reader=PdfReader(path)
             texts=[p.extract_text() for p in reader.pages];text='\n'.join(texts)
             assert len(reader.pages)>80
-            assert all('0.1.0-beta.17' in t for t in texts[1:]), (path.name, 'outdated footer version')
+            assert all('0.1.0-beta.18' in t for t in texts[1:]), (path.name, 'outdated footer version')
             for forbidden in ('Native Instruments','Editor notes','Banken'):
                 assert forbidden not in text,(path.name,forbidden)
             for other in ('MK1','MK2','MK3','Mikro'):
                 if other not in device:assert not re.search(r'\b'+other+r'\b',text),(path.name,other)
-            assert ('6 November 2026' if lang=='EN' else '6. November 2026') in texts[0]
+            assert ('7 November 2026' if lang=='EN' else '7. November 2026') in texts[0]
             assert ('selected Sound/pad only' if lang=='EN' else 'ausgewählten Sounds/Pads') in text,path.name
             assert ('Your first sound - no samples needed' if lang=='EN' else 'Dein erster Sound - ohne eigene Samples') in text
             assert ('Words you will see on screen' if lang=='EN' else 'Begriffe auf dem Display') in text
-            assert all(value in text for value in ('Ducktor','SoundFont','FOLLOW','SELECT','Sample Sets','Import folder'))
+            assert all(value in text for value in ('Ducktor','SoundFont','FOLLOW','SELECT','Sample Kits','Import folder'))
             if device!='Mikro_MK1':
                 assert not any('\n'+page+'\n' in text for page in ('PARAM NAV','SAMPLING NAV')),(path.name,'Mikro-only intermediate view')
             if device=='MK3':assert all(v in text for v in ('480 x 272','4D','Smart Strip'))
@@ -71,7 +71,7 @@ def verify():
         sources={}
         for pattern in ('tools/*manual*.py','app/mk3*.py','app/pattern_editor.py','app/mk2_surface.py'):
             for source in ROOT.glob(pattern):sources[str(source.relative_to(ROOT))]=hashlib.sha256(source.read_bytes()).hexdigest()
-        manifest=dict(edition='2026-11-06',software='Machinista 0.1.0-beta.17 / Fokus V2',accent='orange',outputs=outputs,sources=sources)
+        manifest=dict(edition='2026-11-07',software='Machinista 0.1.0-beta.18 / Fokus V2',accent='orange',outputs=outputs,sources=sources)
         (OUT/('manuals-manifest.json' if lang=='EN' else 'manuals-manifest-de.json')).write_text(json.dumps(manifest,indent=2)+'\n')
     with zipfile.ZipFile(OUT/'Machinista-Manuals-EN-DE.zip','w',zipfile.ZIP_DEFLATED) as archive:
         for row in results:archive.write(OUT/row['file'],row['file'])

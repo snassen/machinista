@@ -1,5 +1,6 @@
 """96-PPQ pattern positions, quantization, swing and transport count-in."""
 import copy
+from collections import deque
 import math
 import random
 import time
@@ -7,6 +8,7 @@ from app.polyphony import note_id,event_key
 
 PPQ=96
 BASE=24
+COUNT_IN_PICKUP_SECONDS=.060
 RATES=(('1/1',384),('1/2',192),('1/4',96),('1/8',48),('1/16',24),('1/32',12),('1/64',6),
        ('1/4T',64),('1/8T',32),('1/16T',16),('1/32T',8))
 DEFAULTS={'grid':'1/16','grid_on':True,'nudge':'1/16','swing':0,'strength':100,'target':'GROUP',
@@ -57,8 +59,9 @@ class Timing:
         self.grid_tab=2;self.grid_field=0;self.record_field=0
         self.clock_phase=-1;self.count_remaining=0;self.count_phase=0
         self.clock_schedule_key=None;self.clock_schedule=[]
-        self.clock_last=None
+        self.clock_last=None;self.count_downbeat=None;self.count_tick_interval=None
         self.recording_undo=None;self.record_live_skip=set()
+        self.record_diagnostics=deque(maxlen=32)
         self.note_snapshot_cache={}
         self.poly_cache={}
         self.event_voice_counter=0
@@ -163,32 +166,44 @@ class Timing:
             self.redo.clear();self.revision+=1;self.dirty=True
 
     def reset_recording_take(self):
+        self.count_downbeat=None;self.count_tick_interval=None
         self.recording_undo=None;self.record_live_skip.clear();self.modulation_anchor=None;self.modulation_context=None
 
     def record_pad_note(self,pad,velocity,note=None,delay=0):
         stamp=getattr(self,'input_timestamp',None)
         stamp=time.monotonic() if stamp is None else stamp
+        interval=self.clock_interval()
+        boundary=self.count_downbeat
         if self.count_remaining:
-            # Input is drained before pending UI clock ticks. Judge the count-in
-            # boundary by the hardware timestamp, not by that stale UI state.
+            # Controller input can arrive before the UI clock catches up.
             if self.clock_last is None or not self.count_phase:return
-            boundary=self.clock_last+(self.count_remaining+1)*self.clock_interval()
-            if stamp<boundary-1e-9:return
-            position=round((stamp-boundary)/self.clock_interval())
+            boundary=self.clock_last+(self.count_remaining+1)*interval
+        elif not self.playing or not self.recording:
+            return
+        if boundary is not None and stamp<boundary:
+            # A slightly anticipated first note belongs to the downbeat.
+            if stamp<boundary-COUNT_IN_PICKUP_SECONDS:return
+            position=0
+        elif self.count_remaining or (boundary is not None
+                and interval==self.count_tick_interval and stamp<boundary+4*PPQ*interval):
+            # Keep the first bar anchored to the count-in. The native transport
+            # clock can settle a few ticks later as the first audio block starts.
+            position=(stamp-boundary)/interval
         else:
-            if not self.playing or not self.recording:return
             position=max(0,self.clock_phase)
             # Before tick zero, clock_last can still belong to a previous take.
             if self.clock_phase>=0 and self.clock_last is not None:
-                position+=round((stamp-self.clock_last)/self.clock_interval())
+                position+=(stamp-self.clock_last)/interval
         if self.clip_transport:
-            c=self.arranger_clip(self.group,max(0,position))
+            c=self.arranger_clip(self.group,max(0,math.floor(position)))
             if c is None:self.message='NO CLIP AT PLAYHEAD';return
             self.pattern=c['pattern'];position=position-c['start']+c['offset']
-        length=self.pattern_ticks();tick=max(0,position)%length
+        length=self.pattern_ticks();position=max(0,position)
         if self.timing()['record_quantize'] and self.timing()['grid_on']:
-            unit=self.grid_ticks();tick=(((tick+unit//2)//unit)*unit)%length
-        tick=(tick+round(delay/self.clock_interval()))%length
+            unit=self.grid_ticks();tick=math.floor(position/unit+.5)*unit
+        else:
+            tick=round(position)
+        tick=(tick+round(delay/interval))%length
         event={'velocity':velocity,'probability':100,'length':self.grid_ticks()}
         if note is not None:event['note']=note
         existing=self.event_notes();key=None
@@ -260,6 +275,8 @@ class Timing:
                 self.message=f'COUNT {self.count_phase//96+1}/{total}'
             self.count_phase+=1;self.count_remaining-=1
             if not self.count_remaining:
+                self.count_tick_interval=self.clock_interval()
+                self.count_downbeat=self.clock_last+self.count_tick_interval
                 self.playing=self.recording=True;self.step=-1;self.clock_phase=-1;self.message='RECORDING'
                 if getattr(self,'native_clock_enabled',False):self.native_sequence=self.settings['midi_sync']!='IN'
             return

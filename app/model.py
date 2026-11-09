@@ -151,11 +151,17 @@ class Application(ClipArranger,MultiSelection,MidiRemote,AudioExport,Mixer,Relin
         self.hardware_profile=current()
         self.samples = self.root/'samples'
         self.samples.mkdir(parents=True, exist_ok=True)
+        self.browser_preview_pending=None
+        self.browser_preview_active=False
         self.mp3_serial=0;self.mp3_requests={};self.browser_decoded={}
         (self.root/'presets/Sounds').mkdir(parents=True,exist_ok=True)
         (self.root/'presets/Groups').mkdir(parents=True,exist_ok=True)
-        self.browser = Browser(self.samples, (Source('SOUNDS',self.root/'presets/Sounds'),Source('SAMPLE SETS',self.root/'presets/Groups'),Source('PROJECT ASSETS', self.root/'projects'),
-                                             Source('PRESET ASSETS', self.root/'presets')))
+        kit_root=self.root/'presets/Groups'
+        self.browser = Browser(self.samples, kit_root=kit_root)
+        self.browser.internal_sources = (Source('SOUNDS',self.root/'presets/Sounds'),
+                                         Source('SAMPLE KITS',self.browser.kit_menu),
+                                         Source('PROJECT ASSETS',self.root/'projects'),
+                                         Source('PRESET ASSETS',self.root/'presets'))
         self.project_path = self.root/'projects/current.json'
         self.settings_path = self.root/'config/settings.json'
         self.settings = load_json(self.settings_path, {'audio': 'AUTO', 'midi_in': 'OFF',
@@ -313,12 +319,43 @@ class Application(ClipArranger,MultiSelection,MidiRemote,AudioExport,Mixer,Relin
     def browser_index(self, value):
         self.browser.index = value
 
-    def preview_selected(self):
+    def defer_browser_preview(self,now=None):
+        if self.browser_preview_active:
+            self.actions.append(('preview_stop',None))
+            self.browser_preview_active=False
+        self.browser_preview_pending=(
+            (time.monotonic() if now is None else now)+0.5,
+            self.browser.directory,self.browser.index)
+
+    def browser_preview_tick(self,now):
+        pending=self.browser_preview_pending
+        if pending is None:return
+        deadline,directory,index=pending
+        if (self.page!='BROWSE' or not self.browser.prehear
+                or (directory,index)!=(self.browser.directory,self.browser.index)):
+            self.browser_preview_pending=None
+        elif now>=deadline:
+            self.browser_preview_pending=None
+            self.preview_selected()
+
+    def browser_preview_path(self):
         path = self.browser.selected()
+        if path and self.browser.kit_source(path):
+            if path.name == 'Preset.json':
+                candidate = path.parent.parent/'.preview.wav'
+            else:
+                candidate = path/'.preview.wav'
+            if candidate.is_file() and not candidate.is_symlink():
+                path = candidate
+        return path
+
+    def preview_selected(self):
+        path=self.browser_preview_path()
         if path and (path.name=='Preset.json' or path.suffix.lower()=='.sound'):
             self.actions.append(('preview_stop',None));self.message='LOAD SOUND TO AUDITION';return
         if path and path.is_file():
             if self.audio:
+                self.browser_preview_active=True
                 self.actions.append(('preview', path))
             else:
                 self.message = 'NO AUDIO DEVICE'
@@ -415,7 +452,7 @@ class Application(ClipArranger,MultiSelection,MidiRemote,AudioExport,Mixer,Relin
             elif self.page == 'SETTINGS':
                 self.menu = 0
             elif self.page == 'BROWSE':
-                self.browser.up();self.actions.append(('preview_stop',None))
+                self.browser.up();self.browser_preview_pending=None;self.browser_preview_active=False;self.actions.append(('preview_stop',None))
             elif self.page in ('SAMPLING', 'SAMPLE EDIT'):
                 self.sample_field = (self.sample_field+1) % 2
             else:
@@ -449,6 +486,7 @@ class Application(ClipArranger,MultiSelection,MidiRemote,AudioExport,Mixer,Relin
                 if self.browser.prehear:
                     self.preview_selected()
                 else:
+                    self.browser_preview_pending=None;self.browser_preview_active=False
                     self.actions.append(('preview_stop', None))
             elif self.page == 'PAD':
                 self.page = 'BROWSE'
@@ -536,7 +574,12 @@ class Application(ClipArranger,MultiSelection,MidiRemote,AudioExport,Mixer,Relin
             previous=self.browser_index
             self.browser_index = max(0, min(max(0, len(self.entries())-1), self.browser_index+delta))
             if self.browser.prehear and self.browser_index!=previous:
-                self.preview_selected()
+                selected=self.browser.selected()
+                if selected is not None and self.browser.kit_source(selected):
+                    self.defer_browser_preview()
+                else:
+                    self.browser_preview_pending=None
+                    self.preview_selected()
         elif self.page in ('SAMPLE EDIT','SAMPLER'):
             track = self.track()
             if track['sample']:
@@ -579,11 +622,11 @@ class Application(ClipArranger,MultiSelection,MidiRemote,AudioExport,Mixer,Relin
             if self.browser.selected() is None:
                 self.message = 'EMPTY FOLDER'
                 return
-            self.browser.started=True;self.actions.append(('preview_stop',None))
+            self.browser.started=True;self.browser_preview_pending=None;self.browser_preview_active=False;self.actions.append(('preview_stop',None))
             path = self.browser.open()
             if path is not None:
                 if path.name=='Preset.json' or path.suffix.lower()=='.sound':
-                    kind='GROUP' if path.is_relative_to(self.root/'presets/Groups') else 'SOUND'
+                    kind='GROUP' if self.browser.kit_source(path) else 'SOUND'
                     self.request_preset_load(path,kind,self.group,self.pad);return
                 if path.suffix.lower()=='.mp3':
                     self.mp3_serial+=1;slot=(self.group,self.pad);self.mp3_requests[slot]=self.mp3_serial

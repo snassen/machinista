@@ -217,21 +217,24 @@ class Handler(BaseHTTPRequestHandler):
                 origin=self.headers.get('Origin')
                 if origin and origin!='http://'+self.headers.get('Host'):raise PermissionError('Invalid origin.')
                 if not secrets.compare_digest(self.headers.get('X-Machinista-Token',self.headers.get('X-Machinist-Token','')),library.token):raise PermissionError('Please reload the page.')
-                if path in ('/api/sets/import','/api/sets/upload','/api/sets/stage/file'):
+                if path in ('/api/sets/import','/api/sets/upload','/api/sets/stage/file','/api/sets/inspect-mxgrp'):
                     if self.headers.get('Transfer-Encoding'):raise ValueError('Content-Length required.')
                     length=int(self.headers.get('Content-Length','0'))
-                    if path=='/api/sets/stage/file':result=library.sets.editor.upload_file(q.get('upload',''),q.get('path',''),self.rfile,length)
-                    elif path=='/api/sets/import':result=library.sets.editor.import_archive(q.get('name',''),self.rfile,length)
+                    if path=='/api/sets/inspect-mxgrp':result=library.sets.editor.inspect_maschine_kit(q.get('name',''),self.rfile,length,local=q.get('local')=='1')
+                    elif path=='/api/sets/stage/file':result=library.sets.editor.upload_file(q.get('upload',''),q.get('path',''),self.rfile,length)
+                    elif path=='/api/sets/import':result=library.sets.editor.import_archive(q.get('name',''),self.rfile,length,q.get('storage','sd'))
                     else:result=library.sets.upload(q.get('name',''),self.rfile,length)
                     self.json(result);return
-                if path in ('/api/sets/save','/api/sets/delete','/api/sets/stage/start','/api/sets/import-folder'):
+                if path in ('/api/sets/save','/api/sets/delete','/api/sets/stage/start','/api/sets/stage/discard','/api/sets/import-folder','/api/sets/folders/create','/api/sets/folders/delete'):
                     length=int(self.headers.get('Content-Length','0'))
-                    if self.headers.get('Transfer-Encoding') or not 0<length<=2*1024**2:raise ValueError('Invalid sample-set request size.')
+                    if self.headers.get('Transfer-Encoding') or not 0<length<=2*1024**2:raise ValueError('Invalid sample kit request size.')
                     value=json.loads(self.rfile.read(length))
-                    if not isinstance(value,dict):raise ValueError('Invalid sample-set request.')
+                    if not isinstance(value,dict):raise ValueError('Invalid sample kit request.')
                     editor=library.sets.editor
-                    operation={'/api/sets/save':editor.save,'/api/sets/delete':editor.delete,'/api/sets/import-folder':editor.import_folder}.get(path)
-                    self.json(operation(value) if operation else editor.start());return
+                    if path.startswith('/api/sets/folders/'):
+                        self.json(editor.manage_folder(value,delete=path.endswith('/delete')));return
+                    operation={'/api/sets/save':editor.save,'/api/sets/delete':editor.delete,'/api/sets/stage/discard':editor.discard_stage,'/api/sets/import-folder':editor.import_folder}.get(path)
+                    self.json(operation(value) if operation else editor.start(value));return
                 if path in ('/api/stems/start','/api/stems/install','/api/stems/cancel'):
                     length=int(self.headers.get('Content-Length','0'))
                     if self.headers.get('Transfer-Encoding') or not 0<length<=8192:raise ValueError('Invalid stem request size.')
@@ -292,10 +295,9 @@ class Handler(BaseHTTPRequestHandler):
                             result=library.chords.save(preset,q.get('id') if path.endswith('/save') else None)
                     finally:library.upload_lock.release()
                     self.json(result);return
-                if path=='/api/files/trash':
+                if path=='/api/files/delete':
+                    if q.get('confirmed')!='true':raise ValueError('Confirm permanent deletion first.')
                     self.json(library.files.delete(q.get('source','sd'),q.get('path',''),q.get('name','')));return
-                if path=='/api/files/restore':
-                    self.json(library.files.restore(q.get('source','sd'),q.get('id','')));return
                 if path=='/api/files/move':
                     self.json(library.files.move(q.get('source','sd'),q.get('path',''),q.get('name',''),q.get('target_source','sd'),q.get('target_path','')));return
                 if path=='/api/update':
@@ -377,13 +379,15 @@ class Handler(BaseHTTPRequestHandler):
                     value=json.loads(self.rfile.read(length))
                     self.json(request('connect',ssid=value.get('ssid'),password=value.get('password','')));return
             else:
-                if path=='/api/sets':self.json(library.sets.listing());return
+                if path=='/api/sets':self.json(library.sets.listing(q.get('storage','sd')));return
+                if path=='/api/sets/folders':self.json(sorted((p.name for p in library.sets.expansions(library.sets.root(q.get('storage','sd')))),key=str.casefold));return
                 if path=='/api/sets/item':self.json(library.sets.editor.item(q.get('id','')));return
                 if path=='/api/sets/audio':
                     raw=q.get('ref','')
                     if len(raw)>4096:raise ValueError('Invalid sample reference.')
                     ref=json.loads(raw)
                     extension=Path(ref.get('name') or ref.get('path','')).suffix.lower() if isinstance(ref,dict) else ''
+                    if extension=='.png':raise ValueError('Choose an audio sample.')
                     mime={'.mp3':'audio/mpeg','.ogg':'audio/ogg','.flac':'audio/flac','.aif':'audio/aiff','.aiff':'audio/aiff'}.get(extension,'audio/wav')
                     with library.sets.editor.asset(ref) as stream:self.audio_stream(stream,mime)
                     return
@@ -432,7 +436,6 @@ class Handler(BaseHTTPRequestHandler):
                 if path=='/api/sources':
                     self.json([dict(id=k,name=v.name,readOnly=v.read_only) for k,v in library.sources().items()]);return
                 if path=='/api/list':self.json(library.list(q.get('source','sd'),q.get('path','')));return
-                if path=='/api/trash':self.json(library.files.trash_list(q.get('source','sd')));return
                 if path=='/api/system':self.json(library.system());return
                 if path=='/api/update':
                     from app.updater import request,enabled,initial

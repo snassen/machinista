@@ -1,4 +1,5 @@
 import array
+from collections import OrderedDict
 import json
 import os
 from pathlib import Path
@@ -32,6 +33,21 @@ class NativeSequenceTests(unittest.TestCase):
         self.assertIn('external_note 0 38 91 0 0',commands)
         a.track()['mute']=True
         self.assertFalse(any(c.startswith('hit ') for c in sequence_commands(a)))
+    def test_cached_hit_payload_changes_when_sound_parameters_change(self):
+        a=self.a
+        a.active_clips[0]=True
+        a.track().update(sample='fixture.wav',start=0,end=100)
+        a.put_note(0,0,dict(velocity=100,probability=100))
+        a.put_note(0,24,dict(velocity=100,probability=100))
+        cache=OrderedDict()
+        original=sequence_commands(a,payload_cache=cache)
+        self.assertEqual(original,sequence_commands(a,payload_cache=cache))
+        self.assertEqual(len(cache),1)
+        a.track().setdefault('sampler',{})['vel_volume']=0
+        updated=sequence_commands(a,payload_cache=cache)
+        self.assertNotEqual(original,updated)
+        self.assertEqual(updated,sequence_commands(a))
+
     def test_native_clock_suppresses_duplicate_tick_notes_but_keeps_live_pads(self):
         a=self.a;a.active_clips[0]=True;a.playing=True;a.native_sequence=True;a.timing()['metro']=True
         a.put_note(0,0,dict(velocity=100,probability=100));a.actions=[];a.clock_tick(0)

@@ -113,6 +113,39 @@ def browse_origin(sample,cache):
     except (OSError,ValueError,KeyError,TypeError):return sample
 
 
+def prepare_kit_preview(path,cache,cancel):
+    path=Path(path).resolve()
+    stamp=path.stat()
+    with wave.open(str(path),'rb') as wav:
+        frames,rate=wav.getnframes(),wav.getframerate()
+    if not 0<frames*8<=MAX_DECODED:raise ValueError('Invalid kit preview length.')
+    decoder=shutil.which('ffmpeg')
+    if not decoder:raise ValueError('Audio converter is not installed.')
+    pcm=Path(cache)/'kit-preview.f32'
+    fd,temporary=tempfile.mkstemp(prefix='.kit-preview-',dir=pcm.parent);os.close(fd)
+    try:
+        command=[decoder,'-nostdin','-v','error','-y','-threads','1','-f','wav','-i',str(path),
+                 '-map','0:a:0','-ac','2','-c:a','pcm_f32le','-f','f32le','-fs',str(MAX_DECODED),temporary]
+        with subprocess.Popen(command,stdin=subprocess.DEVNULL,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL) as process:
+            try:
+                if hasattr(os,'setpriority'):
+                    try:os.setpriority(os.PRIO_PROCESS,process.pid,12)
+                    except OSError:pass
+                deadline=time.monotonic()+15
+                while process.poll() is None:
+                    if cancel.wait(.025) or time.monotonic()>=deadline:
+                        raise ValueError('Kit preview cancelled or timed out.')
+                if process.returncode:raise ValueError('Could not decode kit preview.')
+            finally:
+                if process.poll() is None:
+                    process.kill()
+        if cancel.is_set():raise ValueError('Kit preview cancelled.')
+        if Path(temporary).stat().st_size!=frames*8:raise ValueError('Incomplete kit preview.')
+        os.replace(temporary,pcm)
+    finally:Path(temporary).unlink(missing_ok=True)
+    return dict(sample=str(path),start=0,end=frames,_ready_pcm=((str(path),stamp.st_mtime_ns,stamp.st_size),str(pcm),rate))
+
+
 class AudioImports:
     def __init__(self,cache,prepare=prepare_mp3):
         self.cache=cache;self.prepare=prepare;self.pool=ThreadPoolExecutor(max_workers=1,thread_name_prefix='mp3-import')
@@ -120,21 +153,22 @@ class AudioImports:
     @property
     def busy(self):return self.pending is not None or bool(self.queued)
     def request(self,kind,path,context):
-        if kind not in ('load','preview'):raise ValueError('Invalid audio import action.')
+        if kind not in ('load','preview','kit_preview'):raise ValueError('Invalid audio import action.')
         request=(kind,path,context)
-        if kind=='preview':self.cancel_preview()
+        if kind!='load':self.cancel_preview()
         if len(self.queued)>=8:return False
         if kind=='load':
             self.cancel_preview();self.queued.insert(0,request)
         else:self.queued.append(request)
         self.start();return True
     def cancel_preview(self):
-        self.queued=[r for r in self.queued if r[0]!='preview']
-        if self.pending and self.pending[0][0]=='preview':self.pending[2].set()
+        self.queued=[r for r in self.queued if r[0]=='load']
+        if self.pending and self.pending[0][0]!='load':self.pending[2].set()
     def start(self):
         if self.pending is None and self.queued:
             request=self.queued.pop(0);cancel=threading.Event()
-            self.pending=(request,self.pool.submit(self.prepare,request[1],self.cache,cancel),cancel)
+            prepare=prepare_kit_preview if request[0]=='kit_preview' else self.prepare
+            self.pending=(request,self.pool.submit(prepare,request[1],self.cache,cancel),cancel)
     def poll(self):
         if not self.pending or not self.pending[1].done():return None
         request,future,cancel=self.pending;self.pending=None

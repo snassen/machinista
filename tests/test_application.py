@@ -135,6 +135,45 @@ class ApplicationTests(unittest.TestCase):
         import struct
         self.assertEqual(struct.unpack('<f', cache.read_bytes()[:4])[0], 0.5)
 
+    def test_kit_scroll_updates_selection_before_debounced_preview(self):
+        app=self.app
+        folder=self.root/'presets/Groups/Test Expansion'
+        for name in ('A','B','C'):
+            kit=folder/name;kit.mkdir(parents=True)
+            (kit/'Set.json').write_text(json.dumps(dict(name=name)))
+            (kit/'.preview.wav').touch()
+        app.page='BROWSE';app.browser.directory=folder;app.browser.prehear=True;app.audio=True
+        with patch('app.model.time.monotonic',return_value=10):
+            app._rotate(1)
+        self.assertEqual(app.browser.selected().name,'B')
+        app.browser_preview_tick(10.49)
+        self.assertEqual(app.actions,[])
+        with patch('app.model.time.monotonic',return_value=10.25):
+            app._rotate(1)
+        app.browser_preview_tick(10.5)
+        self.assertEqual(app.actions,[])
+        app.browser_preview_tick(10.75)
+        self.assertEqual(app.actions,[('preview',folder/'C'/'.preview.wav')])
+
+    def test_single_bank_kit_loads_on_first_enter(self):
+        app=self.app
+        folder=self.root/'presets/Groups'
+        kit=folder/'Test Kit'
+        bank=kit/'bank-001'
+        bank.mkdir(parents=True)
+        (kit/'Set.json').write_text(json.dumps(dict(name='Test Kit')))
+        (bank/'Preset.json').touch()
+        app.page='BROWSE';app.browser.directory=folder
+        app.enter()
+        self.assertEqual(app.browser.directory,folder)
+        self.assertEqual(app.actions[-1][0],'preset_load')
+        self.assertEqual(app.actions[-1][1]['path'],str(bank/'Preset.json'))
+        other=kit/'bank-002';other.mkdir();(other/'Preset.json').touch()
+        app.actions.clear()
+        app.enter()
+        self.assertEqual(app.browser.directory,kit)
+        self.assertFalse(any(action=='preset_load' for action,_ in app.actions))
+
     def test_no_input_does_not_start_sampling_and_tap_tempo(self):
         self.app.button('SAMPLING', True)
         self.app.button('F1', True)

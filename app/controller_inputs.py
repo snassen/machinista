@@ -44,7 +44,13 @@ class ControllerInputs:
         key=(source,slot)
         if key in self.pads:return
         app=self.app;start=len(app.actions)
+        tracing=app.recording or bool(app.count_remaining)
         app.pad_on(slot,velocity,owner=source)
+        if tracing:
+            app.record_diagnostics.append(dict(source=source,pad=slot+1,page=app.page,
+                stamp=getattr(app,'input_timestamp',None),phase=app.clock_phase,count=app.count_remaining,
+                clock=app.clock_last,interval=app.clock_interval(),
+                downbeat=app.count_downbeat,recorded=getattr(app,'last_recorded',None)))
         targets=[];actions=[]
         for action,value in app.actions[start:]:
             if action not in ('hit','event_hit','midi_note','chord_note'):

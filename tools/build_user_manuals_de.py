@@ -14,7 +14,7 @@ WORDS={
 '22 October 2026':'22. Oktober 2026',
 '24 October 2026':'24. Oktober 2026',
 '27 October 2026':'27. Oktober 2026',
-'6 November 2026':'6. November 2026',
+'7 November 2026':'7. November 2026',
 ' / continued':' / Fortsetzung',
 'Workflows, controls and illustrated screen reference':'Arbeitsabläufe, Bedienung und bebilderte Displayübersicht',
 'Contents':'Inhalt',
@@ -58,7 +58,7 @@ def tr(text):
         text=text.replace('Pad config / keyboard True / ','PAD CONFIG / KEYBOARD / Seite ')
 
     # Case-converted headers/footers are drawn directly onto the canvas.
-    if text=='User Manual  |  0.1.0-beta.17  |  English':return 'Bedienungsanleitung  |  0.1.0-beta.17  |  Deutsch'
+    if text=='User Manual  |  0.1.0-beta.18  |  English':return 'Bedienungsanleitung  |  0.1.0-beta.18  |  Deutsch'
     for english,german in WORDS.items():
         if text==english.upper():return german.upper()
     if text.startswith('Screen atlas / '):return text.replace('Screen atlas / ','Displayübersicht / ',1)
@@ -82,7 +82,7 @@ class GermanManual(base.Manual):
         self.path=base.OUT/f'Machinista_{"Mikro_MK1" if device=="mikro" else device.upper()}_User_Manual_DE.pdf'
         self.c=base.canvas.Canvas(str(self.path),pagesize=(base.W,base.H),pageCompression=1)
         self.c.setTitle('Machinista - '+self.name+' Bedienungsanleitung')
-        self.c.setAuthor('Machinista');self.c.setSubject('Deutsche Bedienungsanleitung und Displayübersicht | 0.1.0-beta.17')
+        self.c.setAuthor('Machinista');self.c.setSubject('Deutsche Bedienungsanleitung und Displayübersicht | 0.1.0-beta.18')
         from reportlab.pdfbase.pdfdoc import PDFString
         self.c._doc.Catalog.Lang=PDFString('de-DE')
         self.c=LocalizedCanvas(self.c)

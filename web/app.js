@@ -108,8 +108,8 @@ async function chooseFile(action,item){
  fileChoice={action,name:item.name,source,path,folder:item.folder};
  $('file-title').textContent=action==='move'?'Move '+(item.folder?'folder':'sample'):'Delete '+(item.folder?'folder':'sample')+'?';
  $('file-name').textContent=item.name;$('file-error').textContent='';$('move-controls').hidden=action!=='move';
- $('file-description').textContent=action==='delete'?'This item'+(item.folder?' and all its contents':'')+' will be moved to Trash. You can restore it later.':'Project references to the old location are not changed.';
- $('file-confirm').textContent=action==='move'?'Move here':'Move to Trash';$('file-confirm').disabled=false;
+ $('file-description').textContent=action==='delete'?'This item'+(item.folder?' and all its contents':'')+' will be deleted permanently.':'Project references to the old location are not changed.';
+ $('file-confirm').textContent=action==='move'?'Move here':'Delete permanently';$('file-confirm').disabled=false;
  $('file-dialog').showModal();$('file-cancel').focus();
  if(action==='move'){
   moveSource=source;movePath=path;$('move-source').replaceChildren();
@@ -140,34 +140,14 @@ $('file-cancel').onclick=()=>{if(!fileBusy){$('file-dialog').close();fileChoice=
 $('file-dialog').addEventListener('cancel',e=>{if(fileBusy)e.preventDefault()});
 $('file-confirm').onclick=async()=>{
  if(!fileChoice||fileBusy||uploading)return;fileBusy=true;const choice={...fileChoice};$('file-confirm').disabled=true;$('file-cancel').disabled=true;$('move-source').disabled=true;
- $('file-error').textContent=choice.action==='move'?'Moving… Keep the storage connected until this finishes.':'Moving to Trash…';
+ $('file-error').textContent=choice.action==='move'?'Moving… Keep the storage connected until this finishes.':'Deleting…';
  try{
-  const result=await filePost(choice.action==='delete'?'trash':'move',{source:choice.source,path:choice.path,name:choice.name,target_source:moveSource,target_path:movePath});
+  const result=await filePost(choice.action,{source:choice.source,path:choice.path,name:choice.name,target_source:moveSource,target_path:movePath,confirmed:true});
   $('preview').pause();$('preview').removeAttribute('src');$('preview-name').textContent='No sample selected';
   $('file-dialog').close();fileChoice=null;message(result.message);await load();system();
  }catch(e){$('file-error').textContent=e.message}
  finally{fileBusy=false;$('file-confirm').disabled=false;$('file-cancel').disabled=false;$('move-source').disabled=false;await load()}
 };
-let trashSource='sd';
-async function loadTrash(){
- $('trash-message').textContent='Loading…';$('trash-entries').replaceChildren();
- try{
-  const data=await api('/api/trash?'+new URLSearchParams({source:trashSource}));
-  $('trash-message').textContent=data.entries.length?'':'Trash is empty.';
-  for(const row of data.entries){
-   const box=element('div',undefined,'trash-row'),name=element('div');name.append(element('strong',row.name),element('p',row.path||'Storage root','muted small'));
-   const restore=element('button','Restore');restore.type='button';restore.disabled=!data.writable||fileBusy;
-   restore.onclick=async()=>{if(fileBusy||uploading)return;fileBusy=true;restore.disabled=true;$('trash-message').textContent='Restoring…';
-    try{const result=await filePost('restore',{source:trashSource,id:row.id});message(result.message);await load();fileBusy=false;await loadTrash()}
-    catch(e){$('trash-message').textContent=e.message}
-    finally{fileBusy=false;restore.disabled=false;await load()}};
-   box.append(name,restore);$('trash-entries').append(box);
-  }
- }catch(e){$('trash-message').textContent=e.message}
-}
-$('open-trash').onclick=()=>{if(fileBusy||uploading)return;trashSource=source;$('trash-title').textContent='Trash · '+(sources.find(s=>s.id===source)?.name||'Storage');$('trash-dialog').showModal();loadTrash()};
-$('trash-close').onclick=()=>{if(!fileBusy)$('trash-dialog').close()};
-$('trash-dialog').addEventListener('cancel',e=>{if(fileBusy)e.preventDefault()});
 
 let chordRows=[],chordEditId=null,chordBusy=false;
 $('tab-chords').onclick=()=>workspace('chords');

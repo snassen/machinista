@@ -3,7 +3,7 @@ import math
 import time
 from app.mk3_theme import themed,resolve,foreground,GroupColor
 from pathlib import Path
-from app.mk3_graphics import Canvas,BG,PANEL,LINE,INK,MUTED,ACCENT,GROUPS,font
+from app.mk3_graphics import Canvas,BG,PANEL,LINE,INK,MUTED,ACCENT,GROUPS,font,content_y
 from app.mk3_style import CYAN,PURPLE,YELLOW,GREEN,RED,tint,parameter_color
 
 class Mk3Renderer:
@@ -33,6 +33,40 @@ class Mk3Renderer:
             c.text(x+157,y,value,11,color=MUTED,width=63)
             c.rect(x,y+20,216,3,PANEL)
             c.rect(x,y+20,round(216*max(0,min(1,fraction))),3,color)
+    def kit_cover(self,canvas,browser,selected):
+        if selected is None or not browser.kit_source(selected):
+            return False
+        from app.kit_artwork import KIT_ARTWORK,expansion_artwork,thumbnail
+        base=selected.parent.parent if selected.name=='Preset.json' else selected
+        expansion=not (base/'Set.json').is_file()
+        folder=base if expansion else base.parent
+        try:
+            shared=expansion_artwork(folder,folder.stat().st_mtime_ns) if (folder/'.expansion').is_file() else None
+        except OSError:
+            shared=None
+        if expansion and shared is None:return False
+        base=shared or base
+        art=thumbnail(base/KIT_ARTWORK['artwork'],(230,116))
+        logo=thumbnail(base/KIT_ARTWORK['logo'],(205,76))
+        if art is None and logo is None:
+            return False
+        right=460
+        if art is not None:
+            left=135-art.width//2 if logo else right-art.width
+            canvas.image.paste(art,(left,content_y(142-art.height//2,canvas.compact_header)),art)
+        image=logo or art
+        top=142-image.height//2
+        if logo is not None:
+            canvas.image.paste(logo,(right-logo.width,content_y(top,canvas.compact_header)),logo)
+        if expansion:return True
+        label=browser.label(selected)
+        face=font(15,True)
+        width=220 if logo and art else 440
+        while face.getlength(label)>width:
+            label=label[:-2]+'…' if label.endswith('…') else label[:-1]+'…'
+        canvas.text(right-face.getlength(label),top+image.height+5,label,15,True,width=width)
+        return True
+
     def capture_meter(self,c,peaks,threshold=None):
         # Match the monochrome recording meters: amplitude and trigger marker
         # both use a -60..0 dBFS axis, rather than linear signal amplitude.
@@ -374,16 +408,16 @@ class Mk3Renderer:
                 q.text(20,145,Path(s['wave'][0]).name if s['wave'][0] else 'No sample',15,color=MUTED,width=440)
                 q.text(20,178,'Target '+s.get('sample_target',''),14,color=accent)
         elif 'browser' in s:
-            from app.browser import Browser,Source
-            directory,sources,index,prehear=s['browser'];b=Browser(sources[0][1]) if sources else None
-            if b:
-                b.sources=[Source(n,Path(path)) for n,path in sources];b.directory=Path(directory) if directory else None;entries=b.entries()
-                self.list(p,[('' if v.is_dir() else '♪ ')+b.label(v) for v in entries],index)
-                selected=entries[index] if 0<=index<len(entries) else None
-                if selected and selected.is_file():
-                    ref=s.get('browser_decoded',{}).get(str(selected),str(selected));self.browser_wave=(ref,0,None);self.wave(q,self.browser_wave,s)
-                else:self.browser_wave=None;q.text(20,110,b.label(selected) if selected else 'Empty folder',20,True,width=440)
-                q.text(20,202,'PREHEAR '+('ON' if prehear else 'OFF'),10,color=GREEN)
+            from app.browser import browser_from_snapshot
+            b,index,_=browser_from_snapshot(s['browser'])
+            entries=b.entries()
+            self.list(p,[('' if b.is_folder(v) else '♪ ')+b.label(v) for v in entries],index)
+            selected=entries[index] if 0<=index<len(entries) else None
+            if self.kit_cover(q,b,selected):
+                self.browser_wave=None
+            elif selected and selected.is_file():
+                ref=s.get('browser_decoded',{}).get(str(selected),str(selected));self.browser_wave=(ref,0,None);self.wave(q,self.browser_wave,s)
+            else:self.browser_wave=None;q.text(20,110,b.label(selected) if selected else 'Empty folder',20,True,width=440)
         elif 'plugin_browser' in s:
             entries,index,kind=s['plugin_browser'];self.list(q,entries,index);p.text(20,100,kind,24,True,width=440);p.text(20,147,'Select a plug-in · press to load',16,color=MUTED,width=440)
         elif 'events_native' in s:

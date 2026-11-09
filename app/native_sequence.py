@@ -1,5 +1,7 @@
 """Compile immutable pattern snapshots; audio owns note times and gate releases."""
 import math
+import json
+from collections import OrderedDict
 import hashlib
 import time
 from app.audio import AudioBackend
@@ -8,10 +10,27 @@ from app.note_tokens import NoteTokens
 from app.audio_loop import is_audio_sound
 
 
-def sequence_commands(app,notes=True,metronome=True):
+def sequence_commands(app,notes=True,metronome=True,payload_cache=None):
     commands=['sequence_begin']
     encoder=object.__new__(AudioBackend);encoder.command=commands.append
     encoder.tempo=app.project['tempo'];encoder.instrument_tokens=NoteTokens()
+    payload_cache=payload_cache if payload_cache is not None else OrderedDict()
+    track_keys={}
+    def hit_commands(group,slot,velocity,track,semitones):
+        address=(group,slot)
+        if address not in track_keys:
+            track_keys[address]=json.dumps(track,sort_keys=True,separators=(',',':'))
+        key=(encoder.tempo,address,track_keys[address],velocity,semitones)
+        cached=payload_cache.get(key)
+        if cached is not None:
+            payload_cache.move_to_end(key)
+            commands.extend(cached)
+            return
+        start=len(commands)
+        encoder.hit(group,slot,velocity,dict(track,gain=100),semitones)
+        payload_cache[key]=tuple(commands[start:])
+        if len(payload_cache)>2048:payload_cache.popitem(last=False)
+
     group_solo=any(g.get('solo',False) for g in app.project['groups'])
     total=0
     def voices(event):
@@ -55,7 +74,7 @@ def sequence_commands(app,notes=True,metronome=True):
                         if not event_muted and (track.get('source')=='MIDI' or track.get('routing',{}).get('midi_send')):
                             commands.append(f'external_note {track["channel"]-1} {target_note} {voice["velocity"]} 0 {group*16+slot}')
                         if track.get('source')!='MIDI' or track['sample'] or track.get('plugins') or track.get('routing',{}).get('midi_target','NONE')!='NONE':
-                            encoder.hit(group,slot,voice['velocity'],dict(track,gain=100),semitones)
+                            hit_commands(group,slot,voice['velocity'],track,semitones)
                         total+=1
                         if total>16384:raise ValueError('native sequence exceeds note capacity')
     if notes and metronome and app.timing()['metro']:
@@ -72,6 +91,7 @@ def sequence_commands(app,notes=True,metronome=True):
 
 class NativeSequence:
     def __init__(self):
+        self.payload_cache=OrderedDict()
         self.key=None;self.rejected_key=None;self.transport=None;self.reset_pending=True;self.status_due=0
         self.clock=None;self.overflow=0;self.epoch=time.monotonic_ns();self.last_scene=None;self.seek_position=None;self.stopped_position=None;self.scene_transport_revision=0
     def reset(self,position=None):self.reset_pending=True;self.clock=None;self.seek_position=position
@@ -98,7 +118,7 @@ class NativeSequence:
         key=(clip_mode,enabled,audio_only,app.project_generation,app.revision,app.project['tempo'],getattr(app,'native_sequence_serial',0),(() if clip_mode else tuple(app.active_patterns)),(() if clip_mode else tuple(app.active_clips)),
              tuple((g.get('mute',False),g.get('solo',False),tuple((p['mute'],p['solo']) for p in g['pads'])) for g in app.project['groups']),app.timing()['metro'],app.timing()['metro_level'])
         if (enabled or audio_only) and key!=self.key and key!=self.rejected_key:
-            try:commands=sequence_commands(app,notes=enabled)
+            try:commands=sequence_commands(app,notes=enabled,payload_cache=self.payload_cache)
             except ValueError:
                 self.rejected_key=key;app.playing=app.recording=False;app.message='SEQUENCE CAPACITY ERROR';audio.command('panic');self.reset();return
             # One control write prevents interleaving a half plan with live actions.
