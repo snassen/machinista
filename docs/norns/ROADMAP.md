@@ -160,10 +160,15 @@ the MK3 (2026-11-09): recorded on norns 1, loaded onto a pad.
 - In norns' TAPE menu, K3 starts, pauses and resumes; the file is only
   finished (and loadable) after K2 → "unload". A paused recording shows in
   the browser but won't load.
-- Later (user's wish 2026-11-09): a finished norns recording goes by itself
-  onto the first free pad of the Sound, as a loop (loop on), and starts
-  playing. Still open: trimming to bars, and which Sound when the norns is
-  an Effect.
+- Later (user's wish 2026-11-09): **one-button loop recording** from any
+  norns. One press arms it; recording starts on the next bar 1 (Machinista's
+  clock), runs a chosen number of bars (default 4, needs a way to choose),
+  stops by itself, and the loop lands on the first free pad of the Sound,
+  loop on, playing. Tails (a drone with lots of reverb): either accept the
+  cut at the loop end, or record past the end and fold the tail back onto
+  the loop start (as an extra layer), so the reverb carries across the loop
+  point. Still open: which Sound when the norns is an Effect, and how to
+  choose bars and tail mode.
 
 **Notes:**
 - The Pi 4 add-on already shared folders: norns saw Machinista's samples,
