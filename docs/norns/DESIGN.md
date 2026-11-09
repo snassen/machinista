@@ -27,6 +27,13 @@ decision.
   reverb OFF (user's wish 2026-11-09; measured saving about 1% of a core
   per norns), and turning it up switches it back ON. Reverb return does
   nothing while a script sends nothing into the reverb.
+- **Keys and encoders bypass the script's OSC handler** (2026-11-09). norns
+  passes every OSC message to the script's `osc.event` before handling
+  `/remote/key` and `/remote/enc`. amen assumes every message is a voice
+  position from its engine, errors on any first argument other than 1 or 2,
+  and so swallowed K3 and E3 (also in the script menu while amen was loaded).
+  The mod now hands `/remote/key` and `/remote/enc` to norns directly, and
+  the `/machinista/...` messages never reach the script either.
 - **STOP releases notes** (2026-11-09, after a stuck note in orgn): every
   STOP press, playing or stopped, in or out of NORNS mode, sends OSC
   `/machinista/notes_off` to every norns. The mod remembers which notes it

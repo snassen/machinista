@@ -121,6 +121,12 @@ _norns.osc.event = function(path, args, from)
     end
     return
   end
+  -- The MK3's keys and encoders go straight to norns. norns' own handler
+  -- first calls the script's osc.event, and a script that assumes every OSC
+  -- message is its own (amen indexes its voices by args[1]) raises an error
+  -- there, so K3/E3 never arrived while amen was loaded.
+  if path == "/remote/key" and #args > 1 then return _norns.key(args[1], args[2]) end
+  if path == "/remote/enc" and #args > 1 then return _norns.enc(args[1], args[2]) end
   return osc_dispatch(path, args, from)
 end
 
