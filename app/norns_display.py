@@ -49,12 +49,21 @@ def _side(side, tempo=None):
     layer = side.get('layer') or 0
     values = side.get('values') or ()
     first = side.get('first_cc')
+    labels = side.get('labels') or ()
+
+    def named(i, on):
+        # The norns' name for this control, else its CC number.
+        if len(labels) == 6:
+            text = labels[i][1 if on else 0]
+            if text:
+                return text
+        return None
     if layer and len(values) == 6 and first is not None:
         for i in range(3):
             on = values[i] > 0
             c.rect(i * 120 + 3, 3, 114, 24, ACCENT if on else PANEL, radius=3)
-            c.text(i * 120 + 60, 6, f'CC{first + i} ' + ('ON' if on else 'OFF'), 12, True, PANEL if on else INK,
-                   width=106, center=True)
+            text = named(i, on) or f'CC{first + i} ' + ('ON' if on else 'OFF')
+            c.text(i * 120 + 60, 6, text, 12, True, PANEL if on else INK, width=106, center=True)
         c.rect(3 * 120 + 3, 3, 114, 24, None, ACCENT, 3)
         c.text(3 * 120 + 60, 6, f'MIDI {layer}', 12, True, ACCENT, width=106, center=True)
     else:
@@ -70,7 +79,8 @@ def _side(side, tempo=None):
     if layer and len(values) == 6 and first is not None:
         for i in range(3):
             value = values[3 + i]
-            c.text(i * 120 + 60, 240, f'CC{first + 3 + i} {value}', 12, True, INK, width=106, center=True)
+            name = named(3 + i, False) or f'CC{first + 3 + i}'
+            c.text(i * 120 + 60, 240, f'{name} {value}', 12, True, INK, width=106, center=True)
             c.rect(i * 120 + 13, 260, 94, 6, PANEL, radius=2)
             if value:
                 c.rect(i * 120 + 13, 260, max(2, round(94 * value / 127)), 6, ACCENT, radius=2)

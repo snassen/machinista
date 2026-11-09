@@ -309,6 +309,25 @@ class NornsModeTest(unittest.TestCase):
         side = again.display_state()['norns'][0]
         self.assertEqual((side['layer'], side['values'][0]), (1, 127))
 
+    def test_layer_labels_come_from_the_norns(self):
+        import app.norns_mode as nm
+        shm = tempfile.mkdtemp()
+        old = nm.SHM_ROOT
+        nm.SHM_ROOT = shm
+        try:
+            os.makedirs(os.path.join(shm, '1'))
+            with open(os.path.join(shm, '1', 'layers.txt'), 'w') as f:
+                f.write('1\t1\tLF 200HZ\tLF 1KHZ\n1\t4\tMID TIME\tMID TIME\nbroken line\n')
+            self.toggle()
+            self.mode.handle_event(button('DISPLAY 4', 1))
+            labels = self.mode.display_state()['norns'][0]['labels']
+            self.assertEqual(labels[0], ('LF 200HZ', 'LF 1KHZ'))
+            self.assertEqual(labels[3], ('MID TIME', 'MID TIME'))
+            self.assertEqual(labels[1], ('', ''))
+            self.assertEqual(self.mode.display_state()['norns'][1]['labels'], ())  # native layer
+        finally:
+            nm.SHM_ROOT = old
+
     def test_corrupt_layer_file_is_ignored(self):
         root = tempfile.mkdtemp()
         os.makedirs(os.path.join(root, 'config'))

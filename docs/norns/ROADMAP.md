@@ -116,6 +116,16 @@ on). Order: notes, KNOB 4/8, layers.
   KNOB 4/8 stay reverb/level on every layer. Map the CCs to script
   parameters in norns' PARAMS > MAP. Works on the MK3 (2026-11-09): a
   MIDI 1 knob mapped to the reverb's mid time through PARAMS > MAP.
+- **MIDI 1 is the same everywhere (2026-11-09, user's spec):** the bridge
+  mod (`lib/layers.lua`) applies layer 1 to norns' own reverb and
+  compressor, whatever script runs: keys LF 200 Hz/1 kHz, HF damping
+  6/20 kHz, compressor attack/release 5/50 ms ↔ 80/300 ms; knobs reverb mid
+  time, one-knob compressor (off at the left, then mix 0→1, ratio 1→20,
+  threshold 0→−40 dB, post gain 0→30 dB), reverb send (engine + softcut,
+  Claude's pick). Layers 2/3 come from `maps/<script>.map` per script. The
+  mod writes the names to `layers.txt` next to the screen frame and the
+  MK3 shows them instead of CC numbers. The CCs still reach the script, so
+  PMAP keeps working.
 
 **Notes:**
 - Pads as MIDI: the Instrument's MIDI port can carry them, the same path as
@@ -150,8 +160,10 @@ the MK3 (2026-11-09): recorded on norns 1, loaded onto a pad.
 - In norns' TAPE menu, K3 starts, pauses and resumes; the file is only
   finished (and loadable) after K2 → "unload". A paused recording shows in
   the browser but won't load.
-- Later: straight onto a pad (needs rules: which pad, what happens to its
-  sample, trimming to bars).
+- Later (user's wish 2026-11-09): a finished norns recording goes by itself
+  onto the first free pad of the Sound, as a loop (loop on), and starts
+  playing. Still open: trimming to bars, and which Sound when the norns is
+  an Effect.
 
 **Notes:**
 - The Pi 4 add-on already shared folders: norns saw Machinista's samples,

@@ -13,6 +13,7 @@
 --   writes the same settings into system.state before every start. The clock
 --   source can still be changed in the norns menu until the next start.
 local mod = require "core/mods"
+local layers = require "machinista_bridge/lib/layers"
 local export_ms = tonumber(os.getenv("NORNS_FRAME_EXPORT_MS") or "") or 100
 local path = os.getenv("NORNS_FRAME_PATH") or "/frames/screen.png"
 local midi_clock = os.getenv("NORNS_MIDI_CLOCK") ~= "0"
@@ -92,6 +93,7 @@ _norns.osc.event = function(path, args, from)
       local data = {args[1], args[2]}
       if args[3] ~= nil and args[3] >= 0 then data[3] = args[3] end
       track(data)
+      if data[1] == 0xb0 and data[3] ~= nil then layers.cc(data[2], data[3]) end
       _norns.midi.event(id, data)
     end
     return
@@ -138,6 +140,10 @@ end
 -- Many scripts (Awake among them) start running when they load and only obey
 -- the transport after a START or STOP arrives. A script loaded while
 -- Machinista is stopped gets its STOP at once, so it waits for PLAY.
+mod.hook.register("script_post_init", "machinista_bridge layers", function()
+  layers.script_loaded()
+end)
+
 mod.hook.register("script_post_init", "machinista_bridge transport", function()
   if midi_clock and params.lookup["clock_source"] and params:string("clock_source") == "midi"
      and not machinista_playing() and clock.transport.stop then

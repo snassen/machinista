@@ -163,6 +163,36 @@ def instance_frame(n):
     return f'{SHM_ROOT}/{n}/screen.png'
 
 
+_label_cache = {}
+
+
+def layer_labels(n):
+    """{(layer, control 0-5): (off label, on label)} written by the norns'
+    bridge mod for the running script (layer 1 is the same everywhere)."""
+    path = f'{SHM_ROOT}/{n}/layers.txt'
+    try:
+        mtime = os.stat(path).st_mtime_ns
+    except OSError:
+        return {}
+    cached = _label_cache.get(path)
+    if cached and cached[0] == mtime:
+        return cached[1]
+    labels = {}
+    try:
+        with open(path, encoding='utf-8', errors='replace') as f:
+            for line in f:
+                parts = line.rstrip('\n').split('\t')
+                if len(parts) == 4:
+                    try:
+                        labels[(int(parts[0]), int(parts[1]) - 1)] = (parts[2][:12], parts[3][:12])
+                    except ValueError:
+                        pass
+    except OSError:
+        return {}
+    _label_cache[path] = (mtime, labels)
+    return labels
+
+
 def sound_norns(app):
     """(left, right): the norns numbers of the selected Sound's first Norns
     Instrument and first Norns Effect, or None where there is no such plug-in."""
@@ -428,7 +458,9 @@ class NornsMode:
             layer = entry['layer']
             sides.append(dict(name=str(number), role=role, frame=frame, mtime=mtime, layer=layer,
                               values=tuple(entry['values'][layer - 1]) if layer else (),
-                              first_cc=layer_cc(layer, 0) if layer else None))
+                              first_cc=layer_cc(layer, 0) if layer else None,
+                              labels=tuple(layer_labels(number).get((layer, c), ('', '')) for c in range(6))
+                              if layer else ()))
         return {'norns_mode': True, 'norns': tuple(sides), 'shift': self.shift, 'tempo': self.tempo()}
 
     def close(self):
