@@ -44,13 +44,6 @@ local function set_value(id, v)
   if params.lookup[id] ~= nil then params:set(id, v) end
 end
 
-local function default(id)
-  local i = params.lookup[id]
-  local p = i and params.params[i]
-  if p and p.controlspec then return p.controlspec.default end
-  return p and p.default
-end
-
 -- Layer 1, agreed 2026-11-09. Each entry: label(s) and apply(value 0-127).
 local SYSTEM = {
   { off_label = "LF 200HZ", on_label = "LF 1KHZ",
@@ -60,7 +53,7 @@ local SYSTEM = {
   { off_label = "COMP FAST", on_label = "COMP SLOW",
     apply = function(v)
       set_value("comp_attack", v > 0 and 80 or 5)
-      set_value("comp_release", v > 0 and 300 or (default("comp_release") or 50))
+      set_value("comp_release", v > 0 and 300 or 80)
     end },
   { label = "MID TIME", apply = function(v) set_fraction("rev_mid_time", v / 127) end },
   { label = "COMPRESS",
@@ -75,12 +68,10 @@ local SYSTEM = {
       set_value("comp_threshold", -40 * f)
       set_value("comp_post_gain", 30 * f)
     end },
-  { label = "REV SEND",
-    -- How much of the script's engine and softcut goes into the reverb.
-    apply = function(v)
-      set_fraction("rev_eng_input", v / 127)
-      set_fraction("rev_cut_input", v / 127)
-    end },
+  { label = "COMP REL",
+    -- Compressor release 80-300 ms (changed 2026-11-09 from a reverb send:
+    -- KNOB 4/8 already set the reverb's return level).
+    apply = function(v) set_value("comp_release", 80 + 220 * v / 127) end },
 }
 
 local script_map = {}

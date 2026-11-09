@@ -119,10 +119,11 @@ on). Order: notes, KNOB 4/8, layers.
 - **MIDI 1 is the same everywhere (2026-11-09, user's spec):** the bridge
   mod (`lib/layers.lua`) applies layer 1 to norns' own reverb and
   compressor, whatever script runs: keys LF 200 Hz/1 kHz, HF damping
-  6/20 kHz, compressor attack/release 5/50 ms ↔ 80/300 ms; knobs reverb mid
+  6/20 kHz, compressor attack/release 5/80 ms ↔ 80/300 ms; knobs reverb mid
   time, one-knob compressor (off at the left, then mix 0→1, ratio 1→20,
-  threshold 0→−40 dB, post gain 0→30 dB), reverb send (engine + softcut,
-  Claude's pick). Layers 2/3 come from `maps/<script>.map` per script. The
+  threshold 0→−40 dB, post gain 0→30 dB), compressor release 80→300 ms
+  (changed the same day from a reverb send: KNOB 4/8 set the reverb's
+  return level). Layers 2/3 come from `maps/<script>.map` per script. The
   mod writes the names to `layers.txt` next to the screen frame and the
   MK3 shows them instead of CC numbers. The CCs still reach the script, so
   PMAP keeps working.
