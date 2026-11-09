@@ -114,8 +114,8 @@ on). Order: notes, KNOB 4/8, layers.
   norns screen show the layer, the keys and the knob values. Layer and
   values belong to the norns instance, kept in `config/norns-layers.json`.
   KNOB 4/8 stay reverb/level on every layer. Map the CCs to script
-  parameters in norns' PARAMS > MAP. Tested in unit tests; still to try on
-  the MK3.
+  parameters in norns' PARAMS > MAP. Works on the MK3 (2026-11-09): a
+  MIDI 1 knob mapped to the reverb's mid time through PARAMS > MAP.
 
 **Notes:**
 - Pads as MIDI: the Instrument's MIDI port can carry them, the same path as
