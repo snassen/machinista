@@ -15,7 +15,10 @@ Nothing new touches the library the playing instances use until it passes:
      a missing UGen) would stop every norns at its next start; its script is
      taken out and the compile is tried again.
   3. Each new script is loaded and watched for Lua and SuperCollider errors
-     and CPU use (test-scripts.py does the measuring).
+     and CPU use (test-scripts.py does the measuring). A script can leave
+     something behind that breaks the next ones (taweeet leaves a failing
+     startup hook), so after any failure the instance restarts and the
+     script is tried once more on a clean start; that second result counts.
   4. A script that passes is copied into ~/norns/code and added to pack.txt at
      the commit that was tested. Every outcome goes to results.json.
 The playing instances compile new engines at their next restart.
@@ -191,12 +194,31 @@ def main():
             return
     inst.lua('norns.script.clear()')
     time.sleep(3)
+    def attempt(inst, folder):
+        try:
+            return tester.test(inst, STAGING / 'code' / folder)
+        except subprocess.TimeoutExpired:
+            return {'status': 'timeout'}
+
+    def fresh():
+        inst, _ = restart_instance()
+        inst.lua('norns.script.clear()')
+        time.sleep(3)
+        return inst
+
     for folder, (entry, rev) in staged.items():
         tester.CODE = STAGING / 'code'
-        try:
-            r = tester.test(inst, STAGING / 'code' / folder)
-        except subprocess.TimeoutExpired:
-            r = {'status': 'timeout'}
+        r = attempt(inst, folder)
+        if r.get('status') == 'no script file':
+            results[folder] = {'status': 'skipped', 'reason': 'not a script (a library for other scripts)',
+                               'tags': entry['tags'], 'rev': rev}
+            save_results(results)
+            log(f'{folder:22} not a script')
+            continue
+        if r.get('status') != 'ok':
+            log(f'{folder:22} {r.get("status")}: retrying on a clean start')
+            inst = fresh()
+            r = attempt(inst, folder)
         status = r.get('status')
         record = {'status': 'installed' if status == 'ok' else 'failed', 'test': status, 'cpu': r.get('cpu'),
                   'engine': r.get('engine', ''), 'tags': entry['tags'], 'rev': rev,
@@ -213,11 +235,8 @@ def main():
         save_results(results)
         log(f'{folder:22} {status:16} cpu {r.get("cpu", "")}  {r.get("engine", "")}'
             + (f'  {r["errors"][0][:80]}' if r.get('errors') else ''))
-        if status in ('matron died', 'timeout'):
-            log('instance unhealthy; restarting it for the rest')
-            inst, _ = restart_instance()
-            inst.lua('norns.script.clear()')
-            time.sleep(3)
+        if status != 'ok':
+            inst = fresh()  # whatever it left behind must not reach the next script
         time.sleep(2)
     run('docker', 'stop', f'norns-{N}', timeout=60)
     log('done')
