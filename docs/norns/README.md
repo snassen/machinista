@@ -57,6 +57,7 @@ repository): upstream norns built for ARM64 Linux in Docker.
 
 ## Quick start (on the Pi)
 ```bash
+loginctl enable-linger machinista   # once: keeps /dev/shm/norns alive (below)
 docker build -t norns-station norns/container   # once, after the norns-lab image
 norns/library/install-pack.sh   # the script pack into ~/norns/code (shared)
 norns/run-norns.sh 1        # OSC on 127.0.0.1:10111, files in /dev/shm/norns/1
@@ -74,6 +75,13 @@ control picks the instance (Instrument defaults to 1, Effect to 2). Press
 **SHIFT + PLUG-IN** to enter or leave NORNS mode.
 
 Check a bridge: `norns/bridge/bridge_stat <n>`.
+
+**Linger is required.** systemd (RemoveIPC, on by default) deletes
+everything a user owns in `/dev/shm` when that user's last login session
+ends, even while Machinista (a system service) and the containers still use
+it. Without linger, logging out of SSH wipes `/dev/shm/norns`: the displays
+show the norns as OFFLINE and the audio bridge loses its shared file until
+Machinista and the instances are restarted. Found 2026-11-09.
 
 Test input without the MK3:
 ```bash
