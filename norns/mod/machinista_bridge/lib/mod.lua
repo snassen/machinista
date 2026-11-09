@@ -147,6 +147,10 @@ mod.hook.register("script_post_init", "machinista_bridge transport", function()
 end)
 
 mod.hook.register("system_post_startup", "machinista_bridge", function()
+  -- A script resumed at startup runs init before norns has set
+  -- _menu.redraw; amen calls it there and fails ("error: init"). Choosing
+  -- the script from the menu never shows this, run-norns.sh restarts do.
+  if _menu ~= nil and _menu.redraw == nil then _menu.redraw = function() end end
   timer.time = export_ms / 1000
   timer.count = -1
   timer.event = function() _norns.screen_export_png(path) end

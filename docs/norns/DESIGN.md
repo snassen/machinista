@@ -34,6 +34,10 @@ decision.
   and so swallowed K3 and E3 (also in the script menu while amen was loaded).
   The mod now hands `/remote/key` and `/remote/enc` to norns directly, and
   the `/machinista/...` messages never reach the script either.
+- **Scripts resumed at startup** (2026-11-09): norns runs a resumed script's
+  init before it has set `_menu.redraw`. amen calls it there and stops with
+  "error: init" after every restart, though it loads fine from the menu.
+  The mod sets a no-op `_menu.redraw` at startup if there is none.
 - **STOP releases notes** (2026-11-09, after a stuck note in orgn): every
   STOP press, playing or stopped, in or out of NORNS mode, sends OSC
   `/machinista/notes_off` to every norns. The mod remembers which notes it
