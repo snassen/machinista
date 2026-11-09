@@ -147,8 +147,12 @@ end)
 mod.hook.register("script_post_init", "machinista_bridge transport", function()
   if midi_clock and params.lookup["clock_source"] and params:string("clock_source") == "midi"
      and not machinista_playing() and clock.transport.stop then
-    clock.transport.stop()
-    print("MACHINISTA_BRIDGE_TRANSPORT stopped (Machinista is stopped)")
+    -- Some scripts' stop handler assumes a start came first (giro, tidbit
+    -- and n.kria cancel a clock they never started). That only means there
+    -- was nothing to stop; the script waits for PLAY all the same.
+    local ok = pcall(clock.transport.stop)
+    print("MACHINISTA_BRIDGE_TRANSPORT stopped (Machinista is stopped)"
+          .. (ok and "" or "; the script's own stop handler failed (harmless)"))
   end
 end)
 

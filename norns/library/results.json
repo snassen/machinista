@@ -38,6 +38,225 @@
   ],
   "test": "ok"
  },
+ "4CCFader": {
+  "cpu": 6.6,
+  "description": " a four channel CC MIDI fader controller for Norns",
+  "engine": "",
+  "rev": "9f60877d3d22cf920916bad6a86195da08bfff3e",
+  "status": "installed",
+  "tags": [
+   "midi",
+   "controller",
+   "utility",
+   "performance"
+  ],
+  "test": "ok"
+ },
+ "Duatone": {
+  "cpu": 11.2,
+  "description": "two-voice tone generator for oscilloscope and Lissajous visualization",
+  "engine": "Duatone",
+  "rev": "271ffde0f4dbccf8fcf359be849d64fd43fd04ba",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "utility",
+   "engine"
+  ],
+  "test": "ok"
+ },
+ "Hiswing": {
+  "reason": "engine breaks the compile: ERROR: Superclass 'FxBase' of class 'FxFixedFilterBankingCrisis' is not defined in any file.",
+  "status": "rejected",
+  "tags": [
+   "sequencer",
+   "midi",
+   "velocity"
+  ]
+ },
+ "KoiBoi2": {
+  "cpu": 10.8,
+  "description": "A sequencer based on fish in a pond",
+  "engine": "PolyPerc",
+  "rev": "febc0149f5bf313680ee7618ad53c5fb5e29d85a",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "midi",
+   "generative"
+  ],
+  "test": "ok"
+ },
+ "MDPatch": {
+  "cpu": 8.1,
+  "description": " a powerful and flexible MIDI CC randomizer for the Elektron Machinedrum",
+  "engine": "",
+  "rev": "77eb251c09ca6b9a7267377887eac3dde650f6f4",
+  "status": "installed",
+  "tags": [
+   "midi",
+   "controller",
+   "utility",
+   "performance"
+  ],
+  "test": "ok"
+ },
+ "MDScaler": {
+  "cpu": 6.9,
+  "description": " a tonal performance utility for the Elektron Machinedrum",
+  "engine": "",
+  "rev": "aea6e52a0f797330dce5840ccfaae28073c71438",
+  "status": "installed",
+  "tags": [
+   "midi",
+   "controller",
+   "utility",
+   "performance"
+  ],
+  "test": "ok"
+ },
+ "Mnmpatch": {
+  "reason": "engine breaks the compile: ERROR: Superclass 'FxBase' of class 'FxFixedFilterBankingCrisis' is not defined in any file.",
+  "status": "rejected",
+  "tags": [
+   "midi",
+   "randomizer",
+   "monomachine",
+   "sound design",
+   "hardware"
+  ]
+ },
+ "NARF": {
+  "cpu": 6.6,
+  "description": "quad sequential midi source with fractional durations",
+  "engine": "",
+  "rev": "eb7c1a28e98f8797b314eed9edb0f12c8a0fbd4b",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "NISP": {
+  "cpu": 9.2,
+  "description": "scheme dialect livecoding tracker for norns",
+  "engine": "Timber",
+  "rev": "b4a2c14fba4e53a1883d64fa4e99bddcf0a41ee6",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "tracker"
+  ],
+  "test": "ok"
+ },
+ "ORTF": {
+  "cpu": 5.9,
+  "description": "Sort of Radio music clone where each audio file in tape folder is a station",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: init",
+   "/home/we/norns/lua/core/softcut.lua:350: bad argument #1 to 'cut_buffer_read_stereo' (string expected, got nil)",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "2de4e5d7089098c58e0509cbebab4b80833bff3f",
+  "status": "failed",
+  "tags": [
+   "utility",
+   "sampler",
+   "midi"
+  ],
+  "test": "lua error"
+ },
+ "QUENCE": {
+  "cpu": 6.7,
+  "description": "probabilistic 4-track sequencer",
+  "engine": "MollyThePoly",
+  "rev": "0dd3224c3af8798807a29f9ce325c52406decc41",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "generative",
+   "grid",
+   "crow",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "SMASH": {
+  "cpu": 10.0,
+  "description": "sequencer for apes",
+  "engine": "StereoLpg",
+  "rev": "a81327f48513d8989c5a03ebb38e5e59da30ed18",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "drum"
+  ],
+  "test": "ok"
+ },
+ "SuperBrain": {
+  "cpu": 8.2,
+  "description": "a five track sequencer with various sequencer engines per track",
+  "engine": "PolyPerc",
+  "rev": "6e6a66b2cb79dfc104a8bc401bbe3056157ffdf9",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "grid",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "TetraBobo": {
+  "cpu": 7.0,
+  "description": "triangle wave organ with variable slope for norns & shbobo shnth",
+  "engine": "Tetrabobo",
+  "rev": "9fb040999a1a0cc68fabfdd429852e131e6361ec",
+  "status": "installed",
+  "tags": [
+   "synth"
+  ],
+  "test": "ok"
+ },
+ "Tetrabotis": {
+  "cpu": 13.9,
+  "description": "tetrabobo + otis = tetrabotis",
+  "engine": "Tetrabotis",
+  "rev": "d5b96eaada6738ad85b37aaad0c909213d61e8fe",
+  "status": "installed",
+  "tags": [
+   "synth"
+  ],
+  "test": "ok"
+ },
+ "Vinker": {
+  "cpu": 7.8,
+  "description": "Jaap Vink inspired recursive sound instrument",
+  "engine": "Vinker",
+  "rev": "9b22df19f85503e7f3bfad97b2056642dca8dc92",
+  "status": "installed",
+  "tags": [
+   "feedback",
+   "norns",
+   "synth"
+  ],
+  "test": "ok"
+ },
+ "Ygg": {
+  "cpu": 21.0,
+  "description": "A drone engine inspired by the Lyra-8",
+  "engine": "Ygg",
+  "rev": "7c0ef3c123145d6fb6829d64fc3752e04d4b7dc0",
+  "status": "installed",
+  "tags": [
+   "drone",
+   "midi",
+   "generative"
+  ],
+  "test": "ok"
+ },
  "abacus": {
   "cpu": 8.9,
   "description": "sequence rows of beats with samples",
@@ -187,6 +406,20 @@
   ],
   "test": "lua error"
  },
+ "ashsynth": {
+  "cpu": 10.8,
+  "description": "Norns monophonic synthesizer: dual oscillators, FM, split envelopes, clock-synced delay & reverb",
+  "engine": "Ash",
+  "rev": "de6f8edb2809568bd3156576d5b719bdc93bde33",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "engine",
+   "midi",
+   "grid"
+  ],
+  "test": "ok"
+ },
  "asterion": {
   "cpu": 15.5,
   "description": "adventure game as drone sequencer",
@@ -229,6 +462,20 @@
    "generative",
    "art",
    "drone"
+  ],
+  "test": "ok"
+ },
+ "awake-ashsynth": {
+  "cpu": 12.2,
+  "description": "Awake dual sequencer with AshSynth \u2014 TIE legato, glide, grid",
+  "engine": "Ash",
+  "rev": "cb073515b8415f6971871a84050c29747ad7f31b",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "grid",
+   "synth",
+   "midi"
   ],
   "test": "ok"
  },
@@ -297,6 +544,18 @@
   ],
   "test": "ok"
  },
+ "beacon": {
+  "cpu": 7.4,
+  "description": "keyboard based softcut sample mangler",
+  "engine": "",
+  "rev": "6b9c171ea36f8106313442dc88674a9bf3b80dd8",
+  "status": "installed",
+  "tags": [
+   "sampler",
+   "keyboard"
+  ],
+  "test": "ok"
+ },
  "beets": {
   "cpu": 8.7,
   "description": "drum loop re-sequencer",
@@ -333,6 +592,14 @@
   ],
   "test": "ok"
  },
+ "bitebeet": {
+  "reason": "runs system commands: lib/installctrl.lua: reboot",
+  "status": "rejected",
+  "tags": [
+   "synth",
+   "keyboard"
+  ]
+ },
  "bitters": {
   "cpu": 7.4,
   "description": "lo-fi FM capable mono/poly",
@@ -344,6 +611,26 @@
    "midi"
   ],
   "test": "ok"
+ },
+ "bline": {
+  "cpu": 7.0,
+  "description": "Bline is a parametric acid-style bassline explorer.",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/bline/lib/classes/class_channel.lua:19: module '/home/we/dust/code/bline/lib/data/dat_pattern_data' not found:",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "3482894d88a84962c8a8f39a881ec82db43360de",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "generative",
+   "synth",
+   "midi"
+  ],
+  "test": "lua error"
  },
  "blippoo": {
   "cpu": 10.6,
@@ -401,6 +688,18 @@
   "tags": [
    "looper",
    "delay"
+  ],
+  "test": "ok"
+ },
+ "bowering": {
+  "cpu": 7.0,
+  "description": "crow script loader with dynamic UI generation",
+  "engine": "",
+  "rev": "6205750e1a27f1ec76ff5e465da52ba0c30215c7",
+  "status": "installed",
+  "tags": [
+   "utility",
+   "crow"
   ],
   "test": "ok"
  },
@@ -536,6 +835,825 @@
   ],
   "test": "ok"
  },
+ "clockabout": {
+  "cpu": 7.4,
+  "description": "A non-linear MIDI clock",
+  "engine": "",
+  "rev": "420d18a24c15ebe4351761e0af1cac659bc47e55",
+  "status": "installed",
+  "tags": [
+   "midi",
+   "utilities",
+   "clock",
+   "mod"
+  ],
+  "test": "ok"
+ },
+ "combiner": {
+  "reason": "not a script (a library for other scripts)",
+  "rev": "3cbfb8aee132d80de42ff895683a91f3d1384af6",
+  "status": "skipped",
+  "tags": [
+   "mod",
+   "utility",
+   "grid"
+  ]
+ },
+ "combos": {
+  "cpu": 11.3,
+  "description": "combo scripts",
+  "engine": "PolySub",
+  "errors": [
+   "! please contact the script maintainer - this will cause a load failure in future updates",
+   "! please contact the script maintainer - this will cause a load failure in future updates"
+  ],
+  "rev": "8853fcd9a698f5f7a99f62438758922d5ae873fb",
+  "status": "failed",
+  "tags": [],
+  "test": "lua error"
+ },
+ "complete-source-code.zip": {
+  "reason": "download failed: fatal: repository 'https://github.com/andr-ew/ndls/releases/download/latest/complete-source-code.zip/' not found",
+  "status": "rejected",
+  "tags": [
+   "delay",
+   "looper",
+   "sampler",
+   "grid",
+   "arc"
+  ]
+ },
+ "corners": {
+  "cpu": 6.8,
+  "description": "a grid controlled physics instrument. ported from tehn's m4l script",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/corners/corners.lua:8: module 'molly_the_poly/lib/molly_the_poly_engine' not found:",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "3cdef327e83bc8dfd4413b54b3367f2e18c22885",
+  "status": "failed",
+  "tags": [
+   "synth",
+   "generative",
+   "grid",
+   "midi"
+  ],
+  "test": "lua error"
+ },
+ "crow_talk": {
+  "cpu": 8.1,
+  "description": "talk to crow with norns",
+  "engine": "",
+  "rev": "5fd2fb92d5625e0ee1ac47779853e89c0d58c06e",
+  "status": "installed",
+  "tags": [
+   "utility",
+   "keyboard",
+   "crow"
+  ],
+  "test": "ok"
+ },
+ "cryptkeeper": {
+  "cpu": 8.8,
+  "description": "Create and edit crypts for arcologies",
+  "engine": "",
+  "rev": "58c02bae7caa4eae0f70e36f1741ab35d5daf792",
+  "status": "installed",
+  "tags": [
+   "utility"
+  ],
+  "test": "ok"
+ },
+ "cybermidi": {
+  "reason": "not a script (a library for other scripts)",
+  "rev": "5d8bc681e65d0849bc5e69e2894c5435eece7892",
+  "status": "skipped",
+  "tags": [
+   "mod",
+   "utility",
+   "midi"
+  ]
+ },
+ "cyrene": {
+  "cpu": 6.7,
+  "description": "a drum sequencer based on Mutable Instruments Grids",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/cyrene/cyrene.lua:86: module 'ack/lib/ack' not found:",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "cc99a6d5f0a7f678375e1b0ec30d2cf1c1121f81",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "drum",
+   "midi",
+   "arc",
+   "grid",
+   "crow"
+  ],
+  "test": "lua error"
+ },
+ "d": {
+  "cpu": 11.2,
+  "description": "distort, destroy, downsample and disintegrate",
+  "engine": "D",
+  "rev": "23d010c0ddb74ac546f99d0ef9a70f8b3261f321",
+  "status": "installed",
+  "tags": [
+   "audio_fx",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "delayyyyyyyy": {
+  "cpu": 7.4,
+  "description": "warm delay with modulation and stereo separation",
+  "engine": "Delayyyyyyyy",
+  "rev": "7ba2ff3fc0b323e389a58d5489e83bb15b3ef6c6",
+  "status": "installed",
+  "tags": [
+   "delay"
+  ],
+  "test": "ok"
+ },
+ "delinquencer": {
+  "cpu": 9.2,
+  "description": "a sequencer but with a mind of its own",
+  "engine": "PolySaw",
+  "rev": "3b6f66732e00d3488f6e99da8e23947fe1161b4b",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "demoncore": {
+  "cpu": 18.2,
+  "description": "a simple noise module but with a mind of its own",
+  "engine": "DemonCore",
+  "rev": "89ae13841779d4470c2e13afeb37267755e50bcd",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "noise"
+  ],
+  "test": "ok"
+ },
+ "descartes": {
+  "cpu": 6.9,
+  "description": "a cartesian sequencer for grid",
+  "engine": "",
+  "rev": "1b56336e5626add1cd12f4f736a7d274d05f3389",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "dimension-expander": {
+  "cpu": 8.1,
+  "description": "stereo spreader fx for norns",
+  "engine": "DimExp",
+  "errors": [
+   "FAILURE IN SERVER /n_set Node 1012 not found",
+   "FAILURE IN SERVER /n_set Node 1012 not found",
+   "FAILURE IN SERVER /n_set Node 1012 not found"
+  ],
+  "rev": "d1e2cfbd67d6ab04610be14584b6644a518c6954",
+  "status": "failed",
+  "tags": [
+   "audio_fx"
+  ],
+  "test": "sc error"
+ },
+ "downtown": {
+  "cpu": 24.2,
+  "description": "record stereo loops while engine loops",
+  "engine": "Downtown",
+  "rev": "f995734abf106f6967b848408f09615ac33034c7",
+  "status": "installed",
+  "tags": [
+   "looper"
+  ],
+  "test": "ok"
+ },
+ "drift": {
+  "cpu": 7.4,
+  "description": "drifting relationships creating sequences",
+  "engine": "PolyPerc",
+  "rev": "ad7150de808362d91e9f0b6ee5b18704512ed743",
+  "status": "installed",
+  "tags": [
+   "sequencer"
+  ],
+  "test": "ok"
+ },
+ "drum_room": {
+  "cpu": 7.9,
+  "description": "midi-controlled drum kits",
+  "engine": "Timber",
+  "rev": "59a8300caa1b1b75548274a4452cfed3436bda4e",
+  "status": "installed",
+  "tags": [
+   "drum",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "dunes": {
+  "cpu": 7.2,
+  "description": "a function sequencer",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/dunes/dunes.lua:38: MISSING INCLUDE: passersby/lib/passersby_engine",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "400e23eaac9df21fbccea88e97c6bb3ec572ee2e",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "midi"
+  ],
+  "test": "lua error"
+ },
+ "easygrain": {
+  "cpu": 10.7,
+  "description": "a simple granulator, now with optional arc support",
+  "engine": "EasyGlut",
+  "errors": [
+   "lua: /home/we/norns/lua/core/paramset.lua:491: invalid paramset index: 1speed",
+   "stack traceback:",
+   "/home/we/norns/lua/core/paramset.lua:491: in function 'core/paramset.lookup_param'",
+   "/home/we/norns/lua/core/paramset.lua:378: in function 'core/paramset.get'"
+  ],
+  "rev": "64e6d8cb8b558f4543df7edad8db98c3546ba266",
+  "status": "failed",
+  "tags": [
+   "granulator",
+   "arc"
+  ],
+  "test": "lua error"
+ },
+ "ekombi": {
+  "cpu": 6.8,
+  "description": "polyrhythmic sequencer/sampler using ack",
+  "engine": "SimplePassThru",
+  "rev": "7a16ef389a40349a63a2089f3d69d8d030c3f1f9",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "midi",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "endless-stairs": {
+  "cpu": 12.6,
+  "description": "shepard tone generator",
+  "engine": "Shepard",
+  "rev": "a162f4e9d006ddfab51ebf5348ac4596dc55ce53",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "sequencer",
+   "grid",
+   "crow",
+   "jf"
+  ],
+  "test": "ok"
+ },
+ "esper": {
+  "cpu": 6.6,
+  "description": "an image sonifier",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/esper/lib/colorizer.lua:2: MISSING INCLUDE: mx.synths/lib/mx.synths",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "44cf0530a4d2f86ad514ca6ad8e86d060b3f7b69",
+  "status": "failed",
+  "tags": [
+   "sequencer"
+  ],
+  "test": "lua error"
+ },
+ "euclidigons": {
+  "cpu": 19.4,
+  "description": "geometric rhythm generator",
+  "engine": "PrimitiveString",
+  "rev": "118a1c7b81b79a071169d6f41d86bd5995c5b115",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "synth"
+  ],
+  "test": "ok"
+ },
+ "faeng": {
+  "cpu": 7.4,
+  "description": "faeng is a sequencer. inspired by kria. powered by timber.",
+  "engine": "Timber",
+  "errors": [
+   "lua: /home/we/norns/lua/core/clock.lua:68: /home/we/dust/code/faeng/faeng.lua:1099: attempt to call a nil value (method 'reset_phase')",
+   "stack traceback:",
+   "/home/we/norns/lua/core/clock.lua:68: in function 'core/clock.resume'"
+  ],
+  "rev": "2882d4e2fbabe4a02a7d2df34ef4d3d0fe3ee262",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "grid",
+   "arc"
+  ],
+  "test": "lua error"
+ },
+ "fiahod": {
+  "cpu": 15.8,
+  "description": "i will show you fear in a handful of dust",
+  "engine": "Fiahod",
+  "rev": "0e790e5805e448ee5a7243e8dcf3e69e0aa5c376",
+  "status": "installed",
+  "tags": [
+   "art",
+   "generative"
+  ],
+  "test": "ok"
+ },
+ "fibonacci": {
+  "cpu": 6.7,
+  "description": "a sequencer that travels through numbers and time",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/fibonacci/fibonacci.lua:22: module 'molly_the_poly/lib/molly_the_poly_engine' not found:",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "a454e4d5baa911f6a2f7a088cd39ee9b37f417ed",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "generative",
+   "crow",
+   "midi"
+  ],
+  "test": "lua error"
+ },
+ "fixed-filter-banking-crisis": {
+  "reason": "engine breaks the compile: ERROR: Superclass 'FxBase' of class 'FxFixedFilterBankingCrisis' is not defined in any file.",
+  "status": "rejected",
+  "tags": [
+   "audio_fx"
+  ]
+ },
+ "fm7": {
+  "cpu": 10.9,
+  "description": "polyphonic 6 operator fm synth",
+  "engine": "FM7",
+  "rev": "21b690f07bc9d6ce3a1ca828fa5fbfffc44082bd",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "grid",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "folio": {
+  "cpu": 6.9,
+  "description": "browse downloadable scripts from the comfort of your norns",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: init",
+   "/home/we/dust/code/folio/folio.lua:116: attempt to concatenate a table value (global 'fatal')",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in metamethod '__concat'"
+  ],
+  "rev": "ddc11893cff3f0a57421e683bf876916d90a2680",
+  "status": "failed",
+  "tags": [
+   "utility"
+  ],
+  "test": "lua error"
+ },
+ "footfoot": {
+  "cpu": 11.1,
+  "description": "my pal",
+  "engine": "",
+  "rev": "4cfea20d0aeabfa31c1b9731c78de6863f49b3e7",
+  "status": "installed",
+  "tags": [
+   "looper",
+   "generative"
+  ],
+  "test": "ok"
+ },
+ "forge": {
+  "cpu": 8.9,
+  "description": "a playable  oscilloscope for norns and crow",
+  "engine": "PolyPerc",
+  "rev": "b88c7d09a2d76664ace9cbfb4453ab15a880efdf",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "generative",
+   "crow",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "foulplay": {
+  "cpu": 7.1,
+  "description": "euclidean rhythms with logic and probability",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/foulplay/foulplay.lua:103: module 'ack/lib/ack' not found:",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "952ba47cc798c40239724d84ecac8d051429eaa8",
+  "status": "failed",
+  "tags": [
+   "drum",
+   "sequencer",
+   "midi",
+   "grid"
+  ],
+  "test": "lua error"
+ },
+ "foundry": {
+  "cpu": 7.1,
+  "description": "Font / glyph catalog",
+  "engine": "",
+  "rev": "71d751c3fb6608a700e8935db4c6b5f4e5da58c0",
+  "status": "installed",
+  "tags": [
+   "utility"
+  ],
+  "test": "ok"
+ },
+ "fugarc": {
+  "cpu": 7.5,
+  "description": "fugu meets awake sequencer",
+  "engine": "",
+  "rev": "60ef045a1177963e44746666df43edf1445d9075",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "grid",
+   "arc"
+  ],
+  "test": "ok"
+ },
+ "fugu": {
+  "cpu": 6.9,
+  "description": "multi playhead sequencer",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/fugu/fugu.lua:29: module 'molly_the_poly/lib/molly_the_poly_engine' not found:",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "c31a6db11b67239560427a70f04cd0045e5bbaf7",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "grid"
+  ],
+  "test": "lua error"
+ },
+ "gematria": {
+  "cpu": 9.4,
+  "description": "organized electricty with norns & crow",
+  "engine": "",
+  "rev": "1bdf320474f3132d65b3a3676076365ca809309c",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "crow"
+  ],
+  "test": "ok"
+ },
+ "gemini": {
+  "cpu": 10.0,
+  "description": "twin granulators. watch them race.",
+  "engine": "Gemini",
+  "rev": "6dda3361645d0f37f9630bafdf38a2e4339ebce8",
+  "status": "installed",
+  "tags": [
+   "granulator",
+   "arc"
+  ],
+  "test": "ok"
+ },
+ "get_in_the_sea": {
+  "cpu": 7.3,
+  "description": "your norns plays Terry Riley's In C",
+  "engine": "PolyPerc",
+  "rev": "985e85a1088587f2e69af1c64db72a2c900227f8",
+  "status": "installed",
+  "tags": [
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "giro": {
+  "cpu": 13.7,
+  "description": "performance oriented (a)sync looper",
+  "engine": "",
+  "errors": [
+   "hook: machinista_bridge transport failed, error: /home/we/norns/lua/core/clock.lua:36: bad argument #1 to 'clock_cancel' (number expected, got nil)"
+  ],
+  "rev": "22c20a6d79a286b4a4f6bd474a46a2951a08d7c9",
+  "status": "failed",
+  "tags": [
+   "looper",
+   "midi"
+  ],
+  "test": "lua error"
+ },
+ "glitchlets": {
+  "cpu": 18.3,
+  "description": "lets glitch with glitchlets.",
+  "engine": "Warb",
+  "rev": "ffd13cd8cadb1965b89b11b31da6689f6031bc93",
+  "status": "installed",
+  "tags": [
+   "audio_fx"
+  ],
+  "test": "ok"
+ },
+ "glitchlooper": {
+  "cpu": 7.8,
+  "description": "5 unsynchronized loops with an auto mode",
+  "engine": "GlitchLooper",
+  "rev": "140ad7a1bd13482c074122d0e51de37818d78398",
+  "status": "installed",
+  "tags": [
+   "looper",
+   "audio_fx"
+  ],
+  "test": "ok"
+ },
+ "glut": {
+  "cpu": 10.6,
+  "description": "granular synth inspired by mlr/rove, grainfields 20 and loomer cumulus",
+  "engine": "Glut",
+  "rev": "f92324261df2603333ea21c8e9850ff98432776f",
+  "status": "installed",
+  "tags": [
+   "granulator",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "goldeneye": {
+  "cpu": 8.2,
+  "description": "entropic background radiation",
+  "engine": "Goldeneye",
+  "rev": "4ee39479fb20be3ba3e43f5c940bafb9065ca46b",
+  "status": "installed",
+  "tags": [
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "grains": {
+  "reason": "runs system commands: lib/installer/installer.lua: sudo",
+  "status": "rejected",
+  "tags": [
+   "granulator",
+   "audio_fx"
+  ]
+ },
+ "graintopia": {
+  "cpu": 6.7,
+  "description": "three lands with six grains",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>",
+   "/home/we/dust/code/graintopia/graintopia.lua:29: in main chunk"
+  ],
+  "rev": "2c7efd88adf1b847cdff00cfdb166fdeb8b6953c",
+  "status": "failed",
+  "tags": [
+   "granulator"
+  ],
+  "test": "lua error"
+ },
+ "grendy": {
+  "cpu": 7.8,
+  "description": "simple drone synth, grendel drone commander inspired",
+  "engine": "Grendy",
+  "rev": "b9111da40f53ff42dd5b199cbe186728c2caad83",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "greyhole": {
+  "cpu": 12.0,
+  "description": "echo / delay",
+  "engine": "Greyhole",
+  "rev": "3caf14778469850e1035a57eda9d22d8582bc88d",
+  "status": "installed",
+  "tags": [
+   "delay"
+  ],
+  "test": "ok"
+ },
+ "grid-test": {
+  "cpu": 6.4,
+  "description": "A utility script for testing grids",
+  "engine": "",
+  "rev": "22c7f9848dfb4bdf97802d7e36705391d396e5c0",
+  "status": "installed",
+  "tags": [
+   "utility",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "gridofpoints": {
+  "cpu": 6.9,
+  "description": "sixteen notes, seven timbres",
+  "engine": "GridofPoints",
+  "rev": "10129bce15a2752c109951fb40bdd13cf0faea1c",
+  "status": "installed",
+  "tags": [
+   "generative",
+   "controller",
+   "norns",
+   "grid",
+   "arc",
+   "crow",
+   "midi",
+   "jf"
+  ],
+  "test": "ok"
+ },
+ "gridofrings": {
+  "cpu": 6.5,
+  "description": "A Karper-esque take on Duncan Geere's gridofpoints",
+  "engine": "KarplusRings_gor",
+  "rev": "50e33dd5e28ea001aa46735c796d1e3e1c0e6d88",
+  "status": "installed",
+  "tags": [
+   "grid",
+   "synth"
+  ],
+  "test": "ok"
+ },
+ "gridstep": {
+  "cpu": 8.1,
+  "description": "16 track isomorphic grid sequencer for timber and midi",
+  "engine": "Timber_Gridstep",
+  "rev": "f6a960b442d93db9d7e02bc368db99f1e5c139a3",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "midi",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "groovecats": {
+  "cpu": 6.7,
+  "description": "physics based sequencer for people who like cats",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/groovecats/groovecats.lua:32: MISSING INCLUDE: thebangs/lib/thebangs_engine",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "af50ca7414acbc2ab85a6d30433a8b0202d306d8",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "generative",
+   "grid",
+   "midi"
+  ],
+  "test": "lua error"
+ },
+ "grurder": {
+  "cpu": 7.1,
+  "description": "generative dual-voice MIDI sequencer with Euclidean rhythms and Turing Machine melodies",
+  "engine": "",
+  "rev": "daf044e3db0c3f456d36facbe9714eebd1e38014",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "midi",
+   "generative",
+   "euclidean"
+  ],
+  "test": "ok"
+ },
+ "hachi": {
+  "cpu": 5.9,
+  "description": "euclidean drum machine emulating the TR-808 sound",
+  "engine": "Hachi",
+  "rev": "e9d807a0a2f501d2dd62f920b615a77fa1ce309b",
+  "status": "installed",
+  "tags": [
+   "drum"
+  ],
+  "test": "ok"
+ },
+ "hands": {
+  "cpu": 5.8,
+  "description": "A piano player.",
+  "engine": "",
+  "rev": "08dbe85471b67277297ecb5290d59bbab609fb2b",
+  "status": "installed",
+  "tags": [
+   "generative",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "haze": {
+  "cpu": 8.1,
+  "description": "four track live granular looper",
+  "engine": "Haze",
+  "errors": [
+   "ERROR: Function argument 'pos' already declared in Interpreter:functionCompileContext"
+  ],
+  "rev": "1d91f35d6dc3dcee814919cee1fbf076a62c9036",
+  "status": "failed",
+  "tags": [
+   "looper",
+   "granulator"
+  ],
+  "test": "sc error"
+ },
+ "here-there": {
+  "cpu": 13.9,
+  "description": "the sound begins here but you began there",
+  "engine": "HereThere",
+  "rev": "1d0bcf5a6be9e7ac1fafa87e066039f6e150c428",
+  "status": "installed",
+  "tags": [
+   "granulator",
+   "audio_fx",
+   "synth"
+  ],
+  "test": "ok"
+ },
+ "hid-demo": {
+  "cpu": 5.7,
+  "description": "demo scripts for hid functionality",
+  "engine": "",
+  "rev": "79ece89ba991f12d0d3611aa0e97691342d84cb4",
+  "status": "installed",
+  "tags": [
+   "eduscript"
+  ],
+  "test": "ok"
+ },
+ "hpns": {
+  "cpu": 5.8,
+  "description": "probablistic step sequencer for modular. its basically parc",
+  "engine": "",
+  "rev": "2af38ae8f5402631af1164fb2139f67ee38715fa",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "grid",
+   "crow",
+   "ansible"
+  ],
+  "test": "ok"
+ },
+ "hs010": {
+  "reason": "runs system commands: lib/mod.lua: shutdown",
+  "status": "rejected",
+  "tags": [
+   "synth",
+   "sequencer",
+   "midi"
+  ]
+ },
  "icarus": {
   "cpu": 38.2,
   "description": "supersaw synth with feedback",
@@ -545,6 +1663,1998 @@
   "tags": [
    "synth",
    "midi"
+  ],
+  "test": "ok"
+ },
+ "iiitoii": {
+  "cpu": 6.9,
+  "description": " a collection of iii community scripts ported to norns + crow ",
+  "engine": "",
+  "rev": "ccb05bb7066b522d0376f5683e6fa6a00a9b2b9b",
+  "status": "installed",
+  "tags": [
+   "jf",
+   "crow",
+   "arc",
+   "grid",
+   "mod"
+  ],
+  "test": "ok"
+ },
+ "impact": {
+  "cpu": 6.4,
+  "description": "drum machine based on arturia's drumbrute impact",
+  "engine": "Impact",
+  "rev": "d230a5b7b35fff3064737ba457d2fbab5deb8d6f",
+  "status": "installed",
+  "tags": [
+   "drum",
+   "sequencer",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "ingenue": {
+  "reason": "runs system commands: install.sh: sudo",
+  "status": "rejected",
+  "tags": [
+   "utility"
+  ]
+ },
+ "initenere": {
+  "cpu": 8.0,
+  "description": "2-dimensional polyrythmic, random note sequencer.",
+  "engine": "PolySub",
+  "errors": [
+   "! please contact the script maintainer - this will cause a load failure in future updates"
+  ],
+  "rev": "91759ddbcb5ff356eaa4bebe75e1d3b12f2f7dab",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "crow",
+   "midi",
+   "grid"
+  ],
+  "test": "lua error"
+ },
+ "internorns": {
+  "cpu": 5.6,
+  "description": "a live-coding environment",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/internorns/internorns.lua:32: MISSING INCLUDE: mx.samples/lib/mx.samples",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "e1eaa29589d7b104286fe6b79e0e24a0e9432462",
+  "status": "failed",
+  "tags": [
+   "utility"
+  ],
+  "test": "lua error"
+ },
+ "interpret": {
+  "cpu": 6.6,
+  "description": "just-interpret-engine",
+  "engine": "Interpret",
+  "rev": "928e35475a01c7c50b35d7eda275cd922ffdb5f6",
+  "status": "installed",
+  "tags": [
+   "utility",
+   "engine"
+  ],
+  "test": "ok"
+ },
+ "intervaltrainer.lua": {
+  "reason": "download failed: fatal: repository 'https://github.com/yams7457/intervaltrainer/blob/main/intervaltrainer.lua/' not found",
+  "status": "rejected",
+  "tags": [
+   "utility",
+   "midi"
+  ]
+ },
+ "islands": {
+  "cpu": 6.0,
+  "description": "fm7, earthsea, kria, looper",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/islands/lib/kria.lua:12: module 'kria_midi/lib/scales' not found:",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "5c84d6736656175afbe77efe839e4ee580f1229a",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "synth",
+   "looper",
+   "grid"
+  ],
+  "test": "lua error"
+ },
+ "isoseq": {
+  "cpu": 5.9,
+  "description": "isomorphic sequencer for norns and grid",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/isoseq/isoseq.lua:16: module 'passersby/lib/passersby_engine' not found:",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "4bdff2549fc2c4e8b2b1f9ab91b686cf27e10a25",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "grid"
+  ],
+  "test": "lua error"
+ },
+ "jala": {
+  "cpu": 8.5,
+  "description": "ambient random sequencer",
+  "engine": "PolyPerc",
+  "rev": "93a9088159c17fb6778f2daa7b845a0cb4229cbb",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "jiffy": {
+  "cpu": 8.1,
+  "description": "16 second looper",
+  "engine": "",
+  "rev": "0d189160b29e57ade08e1256645fbd9ed18bb377",
+  "status": "installed",
+  "tags": [
+   "looper"
+  ],
+  "test": "ok"
+ },
+ "just-play": {
+  "cpu": 6.5,
+  "description": "play just friends with midi",
+  "engine": "",
+  "rev": "c8dd5ef5e2f3e9405eced12978cc75dc3ae7af74",
+  "status": "installed",
+  "tags": [
+   "utility",
+   "crow",
+   "grid",
+   "midi",
+   "jf"
+  ],
+  "test": "ok"
+ },
+ "justharmonicon": {
+  "cpu": 8.2,
+  "description": "subharmonic sequencer for jf",
+  "engine": "",
+  "rev": "e2052cfed8b550ee4a39a7559e7e7a2e7b4a1f53",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "crow",
+   "jf"
+  ],
+  "test": "ok"
+ },
+ "kolor": {
+  "cpu": 5.9,
+  "description": "grid-based sample sequencer",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>",
+   "/home/we/dust/code/kolor/lib/kolor.lua:6: in main chunk"
+  ],
+  "rev": "b46f170c9dbd20a1487c257bea5a50ab57a6ef7b",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "drum",
+   "grid"
+  ],
+  "test": "lua error"
+ },
+ "kreislauf": {
+  "cpu": 10.3,
+  "description": "beat sequencing rund um den kreis ",
+  "engine": "",
+  "rev": "5bd60ba1391ff5a6f59f9955b9749ed6e87f8cf0",
+  "status": "installed",
+  "tags": [
+   "drum",
+   "sequencer",
+   "midi",
+   "crow"
+  ],
+  "test": "ok"
+ },
+ "kria_midi": {
+  "cpu": 6.5,
+  "description": "port of kria from ansible",
+  "engine": "",
+  "rev": "c388e56618826ff233842d5389e4f0bb110cb8c3",
+  "status": "installed",
+  "tags": [],
+  "test": "ok"
+ },
+ "krill": {
+  "cpu": 24.3,
+  "description": "a Lorenz system sequencer and mod matrix with a physical modelling synthesis engine",
+  "engine": "Krill",
+  "rev": "2a76acea3b2478f2ef8aab2affba79dec41856c9",
+  "status": "installed",
+  "tags": [],
+  "test": "ok"
+ },
+ "lamellae": {
+  "cpu": 6.3,
+  "description": "a music box inspired generative instrument/sequencer",
+  "engine": "PolyPerc",
+  "rev": "8aeb6aac101663f60cd3decc1871ff5456b99cb6",
+  "status": "installed",
+  "tags": [
+   "generative",
+   "sequencer",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "lamination": {
+  "cpu": 6.5,
+  "description": "substitution sequencer",
+  "engine": "FormantPerc",
+  "rev": "2f87c2bc9f897c690f90baa2da955217016b7bb1",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "sequencer",
+   "crow"
+  ],
+  "test": "ok"
+ },
+ "larc": {
+  "cpu": 14.4,
+  "description": "looper/delay",
+  "engine": "",
+  "rev": "0ebb533462fc6c72fb85ff71fc04c02e114a90a7",
+  "status": "installed",
+  "tags": [
+   "delay",
+   "looper",
+   "arc"
+  ],
+  "test": "ok"
+ },
+ "lemniscate": {
+  "cpu": 7.1,
+  "description": "an 8-track-cassette-inspired looper",
+  "engine": "Lemnisc8",
+  "rev": "0fae84352aac04109e1c2ba24287b48eefeb7d6b",
+  "status": "installed",
+  "tags": [
+   "looper"
+  ],
+  "test": "ok"
+ },
+ "leslie": {
+  "cpu": 8.4,
+  "description": "doppler, tremolo, and the slow spin-up",
+  "engine": "Leslie",
+  "rev": "23c33c7e1da95a165f7d0819903020725b166cb8",
+  "status": "installed",
+  "tags": [
+   "audio_fx",
+   "engine"
+  ],
+  "test": "ok"
+ },
+ "less_concepts": {
+  "cpu": 6.6,
+  "description": "1d cellular automata sequencer",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/less_concepts/less-concepts.lua:46: MISSING INCLUDE: passersby/lib/passersby_engine",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "d98bfd9d1cce8a958b0aaaabaeea3700c1b45112",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "grid",
+   "crow",
+   "jf",
+   "w",
+   "midi",
+   "generative"
+  ],
+  "test": "lua error"
+ },
+ "lissadron": {
+  "cpu": 10.9,
+  "description": "seeding fields forever",
+  "engine": "Lissadron",
+  "rev": "0d65009f76c275b8969fa8780c8bf0db48b0de98",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "generative",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "loom": {
+  "cpu": 6.5,
+  "description": "pattern weaving sequencer for grids",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/loom/loom.lua:32: module 'molly_the_poly/lib/molly_the_poly_engine' not found:",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "25a6459995c3f180cfd12fa75353033a97952115",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "generative",
+   "midi",
+   "jf",
+   "crow",
+   "grid"
+  ],
+  "test": "lua error"
+ },
+ "lorenz": {
+  "cpu": 13.2,
+  "description": "strange attractors for crow",
+  "engine": "",
+  "rev": "1ed3688a54dcbeb22f73f6611a5dca2e780899c6",
+  "status": "installed",
+  "tags": [
+   "happyaccident",
+   "norns",
+   "utilities",
+   "utility",
+   "crow"
+  ],
+  "test": "ok"
+ },
+ "lorenzos-drums": {
+  "cpu": 6.0,
+  "description": "an electroacoustic drumset and sequencer",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>",
+   "/home/we/dust/code/lorenzos-drums/lorenzos-drums.lua:20: in main chunk"
+  ],
+  "rev": "f45001518f627e7ffbe33b1996266026b2f4167b",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "drum"
+  ],
+  "test": "lua error"
+ },
+ "loudnumbers_norns": {
+  "cpu": 6.7,
+  "description": "data sonification for norns",
+  "engine": "PolyPerc",
+  "rev": "7d4390eb58dde03fbdeec301a5e86a0ecdc8d5c4",
+  "status": "installed",
+  "tags": [
+   "norns",
+   "sequencer",
+   "generative",
+   "midi",
+   "crow",
+   "utility",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "luck": {
+  "cpu": 6.1,
+  "description": "probabilistic sequencer",
+  "engine": "PolyPerc",
+  "rev": "d469280a4315a6224d17d2e7e0136b304b239caa",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "generative"
+  ],
+  "test": "ok"
+ },
+ "m18s": {
+  "cpu": 11.4,
+  "description": "a sequencer based on the RYK M-185",
+  "engine": "PolySub",
+  "rev": "b749fc0792197c3906e36554816e0cbed1677eab",
+  "status": "installed",
+  "tags": [
+   "generative",
+   "sequencer",
+   "synth",
+   "jf",
+   "midi",
+   "crow"
+  ],
+  "test": "ok"
+ },
+ "magnetar": {
+  "cpu": 7.1,
+  "description": "polyphonic pulsar synthesizer",
+  "engine": "Magnetar",
+  "rev": "83a0895fb2363155ae02132bdc2dbd6292f54099",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "midi",
+   "keyboard"
+  ],
+  "test": "ok"
+ },
+ "magpie": {
+  "cpu": 7.9,
+  "description": "signal routing and modulated note echo for midi and cv",
+  "engine": "",
+  "rev": "7569e0933c089ce38a55206d8b8131499839bfb8",
+  "status": "installed",
+  "tags": [
+   "midi",
+   "crow"
+  ],
+  "test": "ok"
+ },
+ "main": {
+  "reason": "download failed: fatal: repository 'https://github.com/junklight/eastwind/tree/main/' not found",
+  "status": "rejected",
+  "tags": [
+   "grid",
+   "synth"
+  ]
+ },
+ "makebreakbeat": {
+  "reason": "runs system commands: lib/install.sh: sudo",
+  "status": "rejected",
+  "tags": [
+   "sampler",
+   "drum"
+  ]
+ },
+ "manifold": {
+  "cpu": 7.7,
+  "description": "multi-effects processing for live performance",
+  "engine": "Manifold",
+  "rev": "4780c1b1f4dfc7eb9e96aafab1444bbafdcca2e1",
+  "status": "installed",
+  "tags": [
+   "audio_fx"
+  ],
+  "test": "ok"
+ },
+ "marcovaldo": {
+  "cpu": 6.9,
+  "description": "spatial sequencer with cats",
+  "engine": "MxSynths",
+  "errors": [
+   "### SCRIPT ERROR: missing MxSynths"
+  ],
+  "rev": "56ab94c462907035bae089e0ad431d5522813db6",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "arc",
+   "grid"
+  ],
+  "test": "lua error"
+ },
+ "massif": {
+  "cpu": 8.0,
+  "description": "8 band resonator",
+  "engine": "ResonatorBank",
+  "rev": "3daf8d9e5770612a4e2613f6d286351818712ddc",
+  "status": "installed",
+  "tags": [
+   "audio_fx"
+  ],
+  "test": "ok"
+ },
+ "meadowphysics": {
+  "cpu": 5.8,
+  "description": "grid-enabled rhizomatic cascading counter",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/meadowphysics/ack.lua:21: MISSING INCLUDE: ack/lib/ack",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "8b738351954e32435a2860efe9fa31d485218f0a",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "synth",
+   "drum",
+   "grid",
+   "crow",
+   "jf"
+  ],
+  "test": "lua error"
+ },
+ "metrix": {
+  "cpu": 6.4,
+  "description": "it's like metropolix for norns",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/metrix/metrix.lua:35: module 'molly_the_poly/lib/molly_the_poly_engine' not found:",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "6f4914723d2fe81b01cdcd177e20caaf611cca86",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "midi",
+   "grid",
+   "crow"
+  ],
+  "test": "lua error"
+ },
+ "metronome": {
+  "cpu": 6.5,
+  "description": "bing, buk, buk, buk",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/metronome/metronome.lua:24: module 'metronome/lib/nb' not found:",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "ae24be83f2776e4236c76d7019b4687ce619370e",
+  "status": "failed",
+  "tags": [
+   "norns",
+   "midi",
+   "nb",
+   "grid"
+  ],
+  "test": "lua error"
+ },
+ "midarto": {
+  "cpu": 9.8,
+  "description": "two-deck MIDI file DJ: mix .mid files with a crossfader to General MIDI modules or nb voices, with a full 16x8 grid controller",
+  "engine": "",
+  "rev": "09f1de502f53811747613bcff820b45e1b7375ce",
+  "status": "installed",
+  "tags": [
+   "grid",
+   "midi",
+   "sequencer",
+   "nb"
+  ],
+  "test": "ok"
+ },
+ "midi-monitor": {
+  "cpu": 6.5,
+  "description": "A MIDI monitor for norns",
+  "engine": "PolyPerc",
+  "rev": "d7c48583ef2f4414f0aa8247e92f79acf98f271d",
+  "status": "installed",
+  "tags": [
+   "utility",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "midi-review": {
+  "cpu": 7.3,
+  "description": "Simple visualisation, recording and playback of MIDI notes",
+  "engine": "",
+  "rev": "49469d8c274551a419f2942d8d4e36568e5a6f3c",
+  "status": "installed",
+  "tags": [
+   "utility",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "midididi": {
+  "cpu": 6.2,
+  "description": "midi cc looper mod",
+  "engine": "",
+  "rev": "d25b088ef2491a92b3d30dc3eb339b047689cf8d",
+  "status": "installed",
+  "tags": [
+   "looper",
+   "midi",
+   "mod"
+  ],
+  "test": "ok"
+ },
+ "midigrid": {
+  "reason": "runs system commands: lib/mod.lua: shutdown",
+  "status": "rejected",
+  "tags": [
+   "utility",
+   "midi",
+   "mod"
+  ]
+ },
+ "midiplayer": {
+  "cpu": 5.9,
+  "description": "midi file playback for norns",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/midiplayer/midiplayer.lua:19: MISSING INCLUDE: nb/lib/nb",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "608f4e0f29d99a22910045ceba1f1768dcf3d059",
+  "status": "failed",
+  "tags": [
+   "midi"
+  ],
+  "test": "lua error"
+ },
+ "molly_the_poly": {
+  "cpu": 8.0,
+  "description": "classic polysynth with solar system patch creator",
+  "engine": "MollyThePoly",
+  "rev": "76cd4dc86f043546e3525c58e09eba688696172c",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "grid",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "moln": {
+  "cpu": 6.5,
+  "description": "polyphonic subtractive synthesizer",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/moln/moln.lua:4: module 'r/lib/r' not found:",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "c58466610732e1859915f2b4ef5b1f960ac4d03a",
+  "status": "failed",
+  "tags": [
+   "synth"
+  ],
+  "test": "lua error"
+ },
+ "monitor": {
+  "cpu": 6.1,
+  "description": "small kit of midi utilities to transpose and route midi messages",
+  "engine": "",
+  "rev": "8a47db5fdaf845fb878c9727c12cfdfc6b2aee01",
+  "status": "installed",
+  "tags": [
+   "utility",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "monomaniac": {
+  "reason": "not a script (a library for other scripts)",
+  "rev": "9157479aa35406ea130f2ec144f776dd06f9c644",
+  "status": "skipped",
+  "tags": [
+   "mod",
+   "utility"
+  ]
+ },
+ "moonraker": {
+  "cpu": 6.4,
+  "description": "explore a galaxy of rhythm",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>",
+   "/home/we/dust/code/moonraker/moonraker.lua:22: in main chunk"
+  ],
+  "rev": "02e9278de742a1cc5b59554a718416d4dc118792",
+  "status": "failed",
+  "tags": [
+   "drum",
+   "grid"
+  ],
+  "test": "lua error"
+ },
+ "mosaic": {
+  "reason": "runs system commands: tests/behaviour/lifecycle_cycles.py: shutdown",
+  "status": "rejected",
+  "tags": [
+   "sequencer",
+   "midi",
+   "generative",
+   "grid",
+   "nb",
+   "crow",
+   "keyboard"
+  ]
+ },
+ "mouse": {
+  "cpu": 6.4,
+  "description": "sound maker and sequencer heavily inspired by Laurie Spiegel's Music Mouse",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/mouse/mouse.lua:26: MISSING INCLUDE: thebangs/lib/thebangs_engine",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "581d575dcfb23293e7e4044b2be31d08b2e23e9e",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "mouse",
+   "keyboard",
+   "grid"
+  ],
+  "test": "lua error"
+ },
+ "mx.samples": {
+  "cpu": 10.4,
+  "description": "like mr.radar or mr.coffee but for samples",
+  "engine": "MxSamples",
+  "rev": "7ec2007aeeea20e8922e94b0b39402302faaaf7b",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "mx.synths": {
+  "cpu": 7.4,
+  "description": "like mr.radar or mr.coffee but for synths",
+  "engine": "MxSynths",
+  "rev": "ada23b839db5cda0cc36110b588a999c79a2cef3",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "n.kria": {
+  "cpu": 10.8,
+  "description": "native norns Kria",
+  "engine": "",
+  "errors": [
+   "hook: machinista_bridge transport failed, error: /home/we/dust/code/n.kria/n.kria.lua:146: attempt to call a nil value (method 'global_set_val')"
+  ],
+  "rev": "36c95094ac223a7da7db1eed4546bd10a2b7a389",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "grid",
+   "midi",
+   "nb"
+  ],
+  "test": "lua error"
+ },
+ "n16o": {
+  "cpu": 6.5,
+  "description": "i2c-based ER-301 control via KORG nanoKONTROL2",
+  "engine": "",
+  "rev": "329608416ee0090c7adfc545d7613f80ecb71622",
+  "status": "installed",
+  "tags": [
+   "utility"
+  ],
+  "test": "ok"
+ },
+ "nb_drumcrow": {
+  "reason": "not a script (a library for other scripts)",
+  "rev": "892ee538d88a3af20dc77fb3a5fdd070df0dc56f",
+  "status": "skipped",
+  "tags": [
+   "mod",
+   "synth",
+   "crow",
+   "drum",
+   "nb"
+  ]
+ },
+ "nb_mxsynths": {
+  "reason": "not a script (a library for other scripts)",
+  "rev": "89d45cb87e3f6361b0e827cd276b129fddd7d233",
+  "status": "skipped",
+  "tags": [
+   "mod",
+   "synth",
+   "nb"
+  ]
+ },
+ "nb_plyprc": {
+  "reason": "not a script (a library for other scripts)",
+  "rev": "eb9ea9219ae3a8002434ca8934d0455bbfd73968",
+  "status": "skipped",
+  "tags": [
+   "mod",
+   "synth",
+   "nb"
+  ]
+ },
+ "nb_smpKit": {
+  "reason": "not a script (a library for other scripts)",
+  "rev": "22cd2375b01366834b8160551f935cc3481463c1",
+  "status": "skipped",
+  "tags": [
+   "mod",
+   "sampler",
+   "nb"
+  ]
+ },
+ "nc02-rs": {
+  "cpu": 7.2,
+  "description": "norns/circle/02 rhythm and sound",
+  "engine": "",
+  "rev": "c358c4efd21a1a8ea5564bc1be3c1b4a6c2e128e",
+  "status": "installed",
+  "tags": [
+   "art"
+  ],
+  "test": "ok"
+ },
+ "nc03-ds": {
+  "cpu": 9.7,
+  "description": "norns/circle/03 dressed in sequins",
+  "engine": "",
+  "errors": [
+   "lua: /home/we/norns/lua/core/clock.lua:68: /home/we/norns/lua/lib/util.lua:148: attempt to compare nil with number",
+   "stack traceback:",
+   "/home/we/norns/lua/core/clock.lua:68: in function 'core/clock.resume'",
+   "lua: /home/we/dust/code/nc03-ds/gimbal.lua:605: attempt to perform arithmetic on a nil value (field 'raw')"
+  ],
+  "rev": "1148bcaca5df267a62ab8b9c93ec9a30f541f311",
+  "status": "failed",
+  "tags": [
+   "art"
+  ],
+  "test": "lua error"
+ },
+ "nice-tapes": {
+  "reason": "not a script (a library for other scripts)",
+  "rev": "ee8eff72bea95e8c1188a6596d9264cb81a91053",
+  "status": "skipped",
+  "tags": [
+   "mod"
+  ]
+ },
+ "nmMelodyMagic": {
+  "cpu": 6.7,
+  "description": "a port of ken stone's infinite melody and modulo magic cgs serge modules",
+  "engine": "PolyPerc",
+  "rev": "00c8583d20d4ab6bc26253df41cd297a6eb607e5",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "nmQuadroDubber": {
+  "cpu": 12.5,
+  "description": "overdub external audio onto four tape loops",
+  "engine": "",
+  "rev": "d6ffa75da829d817294dcf5286948afbd10869e9",
+  "status": "installed",
+  "tags": [
+   "delay",
+   "looper"
+  ],
+  "test": "ok"
+ },
+ "nmRain": {
+  "cpu": 8.8,
+  "description": "a weird stereo delay effect for external audio",
+  "engine": "",
+  "rev": "95701bff6b15f422b144cd1cb391e96eb845ca72",
+  "status": "installed",
+  "tags": [
+   "delay"
+  ],
+  "test": "ok"
+ },
+ "nmSmartyPants": {
+  "cpu": 10.5,
+  "description": "deform external audio with math and impress your nerd friends",
+  "engine": "",
+  "rev": "f2883bf43d837cd53aeca2035290cdbed9c8ff2c",
+  "status": "installed",
+  "tags": [
+   "delay",
+   "looper",
+   "granulator"
+  ],
+  "test": "ok"
+ },
+ "noergaard": {
+  "cpu": 14.2,
+  "description": "A small library to generate N\u00f8rg\u00e5rd infinity sequences for Norns",
+  "engine": "PolyPerc",
+  "rev": "44a38edd1b7579ab79ba22f258d02f0c5402158a",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "generative",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "noize": {
+  "cpu": 8.3,
+  "description": "noize is a little synth to make some noise - simple as that!",
+  "engine": "Noize",
+  "rev": "2fc105860781d989510d86c360e8ace951d90c79",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "noizeop": {
+  "cpu": 8.6,
+  "description": "Four oscillators, six algorithms to mix and mangle.",
+  "engine": "NoizeOp",
+  "rev": "a9637068d1125396a10170b9895db3bd1ef820fd",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "norman": {
+  "reason": "runs system commands: norman.lua: sudo",
+  "status": "rejected",
+  "tags": [
+   "utility"
+  ]
+ },
+ "norns.online": {
+  "reason": "runs system commands: norns.online.lua: sudo",
+  "status": "rejected",
+  "tags": [
+   "utility"
+  ]
+ },
+ "nornsfetch": {
+  "cpu": 6.1,
+  "description": "neofetch style system info for norns",
+  "engine": "",
+  "rev": "196becfa63bdf32b4b8f023cad58ed963606c725",
+  "status": "installed",
+  "tags": [
+   "art",
+   "utility"
+  ],
+  "test": "ok"
+ },
+ "nydl": {
+  "cpu": 8.4,
+  "description": "beat-synced looper, slicer, and sequencer",
+  "engine": "NotYourDreamLooper",
+  "rev": "7ec1654636241ba116fdfcbb49ca52e543c72108",
+  "status": "installed",
+  "tags": [
+   "delay",
+   "looper",
+   "sequencer",
+   "grid",
+   "crow"
+  ],
+  "test": "ok"
+ },
+ "o-o-o": {
+  "cpu": 5.4,
+  "description": "connect-the-dots sequencer w/ fm synthesizer",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>",
+   "/home/we/dust/code/o-o-o/o-o-o.lua:30: in main chunk"
+  ],
+  "rev": "c96d644c5b4c75d1b62528609fcdce5e8b9f914f",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "synth"
+  ],
+  "test": "lua error"
+ },
+ "oblique": {
+  "cpu": 6.0,
+  "description": "a mod to insert oblique strategies into the params menu",
+  "engine": "",
+  "rev": "dd1c6b599aa96b5b3d3a5869382e84017d7db600",
+  "status": "installed",
+  "tags": [
+   "mod"
+  ],
+  "test": "ok"
+ },
+ "oilcan": {
+  "reason": "not a script (a library for other scripts)",
+  "rev": "257915f433c7d2c32b2b09c4fe5eed5434a16de5",
+  "status": "skipped",
+  "tags": [
+   "mod",
+   "drum",
+   "synth",
+   "nb"
+  ]
+ },
+ "onehanded": {
+  "cpu": 5.3,
+  "description": "minimal manual controller script",
+  "engine": "",
+  "rev": "c530b8184d0b4e1db71167e7991e3f47b47de865",
+  "status": "installed",
+  "tags": [
+   "utility",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "ong": {
+  "cpu": 11.4,
+  "description": "ocean noise generator",
+  "engine": "Ong",
+  "rev": "12b23b3c9d7bc68ea45aa51f2eb51170131e13c2",
+  "status": "installed",
+  "tags": [
+   "art"
+  ],
+  "test": "ok"
+ },
+ "orbital": {
+  "cpu": 6.7,
+  "description": "orbital is an experiment in simple sequences and interface design",
+  "engine": "PolyPerc",
+  "rev": "c2d7352122eca2fb8caf3645e6522f633e89adb0",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "art"
+  ],
+  "test": "ok"
+ },
+ "orgnwrms": {
+  "cpu": 16.8,
+  "description": "orgn + wrms",
+  "engine": "Orgn",
+  "errors": [
+   "! please contact the script maintainer - this will cause a load failure in future updates"
+  ],
+  "rev": "09555fc1e2d6c06486ae2a2bd439884ff0a41f2c",
+  "status": "failed",
+  "tags": [
+   "synth",
+   "delay",
+   "looper",
+   "audio_fx",
+   "grid"
+  ],
+  "test": "lua error"
+ },
+ "overtones": {
+  "cpu": 6.5,
+  "description": "a synth based on additive synthesis",
+  "engine": "Overtones",
+  "rev": "536334ffdb8b1721a2457a0f9d033d249e87f99b",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "additive",
+   "midi",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "p8": {
+  "cpu": 10.5,
+  "description": "run PICO-8 tweetcarts on norns",
+  "engine": "",
+  "rev": "57f604030cb03f599fd9c77570f64425e5c964c6",
+  "status": "installed",
+  "tags": [
+   "art"
+  ],
+  "test": "ok"
+ },
+ "paracosms": {
+  "reason": "runs system commands: paracosms.lua: rm -rf /",
+  "status": "rejected",
+  "tags": [
+   "sequencer",
+   "tracker",
+   "sampler",
+   "keyboard",
+   "grid",
+   "crow"
+  ]
+ },
+ "paranibbles": {
+  "cpu": 5.9,
+  "description": "paranibbles for paradiddles",
+  "engine": "",
+  "rev": "783a1b0659e2914ae616a3cbc9b7d2bfd68afcaa",
+  "status": "installed",
+  "tags": [
+   "midi",
+   "sequencer",
+   "norns"
+  ],
+  "test": "ok"
+ },
+ "parrot": {
+  "cpu": 6.6,
+  "description": "cv recorder and player for norns+crow",
+  "engine": "",
+  "rev": "65a349085cf73a7999a80a8a72f6492a29575f3e",
+  "status": "installed",
+  "tags": [
+   "crow"
+  ],
+  "test": "ok"
+ },
+ "passersby": {
+  "cpu": 7.9,
+  "description": "west coast style mono synth",
+  "engine": "Passersby",
+  "rev": "0869e1473774c0acbcdcac5920bd362145e07a8d",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "midi",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "passthrough": {
+  "cpu": 6.1,
+  "description": "midi passthrough library with examples",
+  "engine": "",
+  "rev": "3ddfdcd852cca9c562e88f7028f4c95392d27248",
+  "status": "installed",
+  "tags": [
+   "utility",
+   "mod",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "patchwork": {
+  "cpu": 6.7,
+  "description": "dual function sequencer for monome norns, crow and grid",
+  "engine": "",
+  "rev": "6530b5810f61c45d9027ab6a0a7951082cb890c6",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "grid",
+   "crow"
+  ],
+  "test": "ok"
+ },
+ "path-trace": {
+  "cpu": 5.8,
+  "description": "A movement recorder for norns and crow",
+  "engine": "",
+  "rev": "8817ef18ff52999568e27b7805f68e88d9963792",
+  "status": "installed",
+  "tags": [
+   "crow",
+   "utility"
+  ],
+  "test": "ok"
+ },
+ "pedalboard": {
+  "reason": "runs system commands: lib/ui/util/mi_ugens_installer.lua: sudo",
+  "status": "rejected",
+  "tags": [
+   "audio_fx",
+   "crow",
+   "arc"
+  ]
+ },
+ "phonotype": {
+  "cpu": 6.3,
+  "description": "livecoding environment",
+  "engine": "Phonotype",
+  "rev": "b7cb9f48c691fcaa2944d74f605efb432679e899",
+  "status": "installed",
+  "tags": [
+   "generative",
+   "keyboard",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "phyllis": {
+  "cpu": 9.2,
+  "description": "a digitally modeled analog filter",
+  "engine": "Phyllis",
+  "rev": "ff0d8985855e960c9964eace31dd437f56dbc64e",
+  "status": "installed",
+  "tags": [
+   "audio_fx"
+  ],
+  "test": "ok"
+ },
+ "pirate-radio": {
+  "reason": "runs system commands: lib/prereqs.lua: sudo",
+  "status": "rejected",
+  "tags": [
+   "utility",
+   "art",
+   "16n"
+  ]
+ },
+ "pit-orchisstra": {
+  "cpu": 7.4,
+  "description": "snake game inspired sequencer for norns",
+  "engine": "RudimentsSnek",
+  "rev": "779ad12395f51c86c817409e091f9c0d1c137084",
+  "status": "installed",
+  "tags": [
+   "generative",
+   "grid",
+   "happyaccident",
+   "keyboard",
+   "nb",
+   "sequencer"
+  ],
+  "test": "ok"
+ },
+ "pitfalls": {
+  "cpu": 6.8,
+  "description": "microtonal scale explorer / arpeggiator / grid keyboard",
+  "engine": "",
+  "rev": "c5e4074ea91e800806320b8e5db4e9ba040a8ee7",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "utility",
+   "midi",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "pitter-patter": {
+  "cpu": 5.4,
+  "description": "sequencer and sampler player based around the OP-1 'pattern' sequencer",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>",
+   "/home/we/dust/code/pitter-patter/pitter-patter.lua:29: in main chunk"
+  ],
+  "rev": "393b25fbd1a5d77dd87c7a292130ec64f990c6a2",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "sampler",
+   "midi",
+   "grid",
+   "looper"
+  ],
+  "test": "lua error"
+ },
+ "piwip": {
+  "cpu": 8.4,
+  "description": "a sampler that works in realtime",
+  "engine": "",
+  "rev": "5d30b4c14b46d4ebb55cc01d74d805e31fffdb64",
+  "status": "installed",
+  "tags": [
+   "looper",
+   "sampler"
+  ],
+  "test": "ok"
+ },
+ "plasma": {
+  "cpu": 8.1,
+  "description": "function animator",
+  "engine": "",
+  "rev": "d4e1208614fd7a49bd897e2cd28ff644473f22f5",
+  "status": "installed",
+  "tags": [
+   "art",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "plonky": {
+  "cpu": 5.9,
+  "description": "string-like keyboard and sequencer",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>",
+   "/home/we/dust/code/plonky/lib/plonky.lua:6: in main chunk"
+  ],
+  "rev": "2a7234f4c98c3959bb933e5a86da941fd4816f99",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "keyboard",
+   "grid"
+  ],
+  "test": "lua error"
+ },
+ "pools": {
+  "cpu": 14.1,
+  "description": "a shimmery reverb",
+  "engine": "Pools",
+  "rev": "4d2ae537c98e7b9df57791694615af14efb94816",
+  "status": "installed",
+  "tags": [
+   "audio_fx"
+  ],
+  "test": "ok"
+ },
+ "ppm_norns": {
+  "cpu": 7.5,
+  "description": "parts per million",
+  "engine": "TestSine",
+  "rev": "36bf522e366a23487829e321c1ad67131ae240ee",
+  "status": "installed",
+  "tags": [
+   "art",
+   "drone",
+   "crow"
+  ],
+  "test": "ok"
+ },
+ "punchcard": {
+  "cpu": 6.4,
+  "description": "an experimental sequencer that works a bit like the classic punchcard computer",
+  "engine": "",
+  "rev": "602fb418ff77c24526db135ed16b2221e5d8e36f",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "qfwfq": {
+  "cpu": 5.8,
+  "description": "A brute-force password hack inspired sequencer.",
+  "engine": "PolyPerc",
+  "rev": "15b58334d4d8403ca74b062d998ea8f39e1f4782",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "generative",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "r": {
+  "reason": "not a script (a library for other scripts)",
+  "rev": "585ed81e125bab10d31048ad748bfda0f45dcefa",
+  "status": "skipped",
+  "tags": [
+   "lib"
+  ]
+ },
+ "rachim": {
+  "cpu": 6.2,
+  "description": "a five-piece orchestra sequence synthesizer",
+  "engine": "",
+  "rev": "2f70ad47551109846f6b9b66f6eb496c43c78b96",
+  "status": "installed",
+  "tags": [
+   "generative",
+   "sequencer",
+   "drone"
+  ],
+  "test": "ok"
+ },
+ "raft": {
+  "cpu": 11.7,
+  "description": "a scene-setting, softcut-based modulated delay and noise generator",
+  "engine": "Ocean",
+  "rev": "9bee5d386e5989cd5b43daf60a2b693661f9e88d",
+  "status": "installed",
+  "tags": [
+   "delay",
+   "audio_fx"
+  ],
+  "test": "ok"
+ },
+ "randomizer_typhon": {
+  "cpu": 5.9,
+  "description": "Randomizer for Dreadbox Typhon",
+  "engine": "",
+  "rev": "332222020b011885a224ff34f6a2964e235da416",
+  "status": "installed",
+  "tags": [
+   "utility"
+  ],
+  "test": "ok"
+ },
+ "rangl": {
+  "cpu": 9.1,
+  "description": "arc based granular four track sampler with live recording and friction.",
+  "engine": "Glut",
+  "rev": "4d7deece32c258057af23371739ac121078c59c6",
+  "status": "installed",
+  "tags": [
+   "sampler",
+   "granulator",
+   "arc"
+  ],
+  "test": "ok"
+ },
+ "rebound": {
+  "cpu": 6.0,
+  "description": "a kinetic sequencer",
+  "engine": "PolyPerc",
+  "rev": "4dd789476733b79b19dbc8291959a8818b3c185e",
+  "status": "installed",
+  "tags": [
+   "sequencer"
+  ],
+  "test": "ok"
+ },
+ "repeater": {
+  "cpu": 11.9,
+  "description": "textural delay orchestra with multiple tempo-synced lines. port of the original by Bryant Smith.",
+  "engine": "Repeater",
+  "rev": "1b4375743fb3fcc5d432f49ea5919479624c2973",
+  "status": "installed",
+  "tags": [
+   "delay",
+   "looper",
+   "texture",
+   "engine"
+  ],
+  "test": "ok"
+ },
+ "repl-looper": {
+  "cpu": 15.1,
+  "description": "mash of REPL and looper; a live performance code sequencer",
+  "engine": "ReplLooper",
+  "rev": "cb9b42ac71085009f4efbd840c9b449acc671bd6",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "looper",
+   "grid",
+   "keyboard"
+  ],
+  "test": "ok"
+ },
+ "ribbons": {
+  "cpu": 8.6,
+  "description": "folded euclidean arpeggiator",
+  "engine": "PolyPerc",
+  "rev": "c56b987fe83ae450b0b7b4095903ac9e958ac9f6",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "arc"
+  ],
+  "test": "ok"
+ },
+ "rpmate": {
+  "cpu": 8.0,
+  "description": "record a sound an play it back at various RPM ratios",
+  "engine": "TimberEq",
+  "rev": "a07521b0a9fa417ef370eaf9f47e078f0453a1b1",
+  "status": "installed",
+  "tags": [
+   "utility",
+   "sampler"
+  ],
+  "test": "ok"
+ },
+ "rudiments": {
+  "cpu": 6.2,
+  "description": "an 8 voice lofi percussion synthesizer and sequencer",
+  "engine": "Rudiments",
+  "rev": "80eeb918852720ae452fcb7aa63a149fdc56bc27",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "drum"
+  ],
+  "test": "ok"
+ },
+ "sam": {
+  "cpu": 7.2,
+  "description": "a simple sample recorder/slicer",
+  "engine": "",
+  "rev": "f79feaf23213f9e4aef8656c1bbfa7f1f4097149",
+  "status": "installed",
+  "tags": [
+   "sampler",
+   "utility"
+  ],
+  "test": "ok"
+ },
+ "sampswap": {
+  "reason": "runs system commands: lib/install.sh: sudo",
+  "status": "rejected",
+  "tags": [
+   "sampler"
+  ]
+ },
+ "samsara": {
+  "cpu": 7.6,
+  "description": "a minimalist clock-synced looper",
+  "engine": "PolyPerc",
+  "rev": "65a34d5f2e73591fe74fa385f5db129bcc389416",
+  "status": "installed",
+  "tags": [
+   "looper",
+   "delay"
+  ],
+  "test": "ok"
+ },
+ "samthree": {
+  "cpu": 7.2,
+  "description": "3 voice looper based on samsara",
+  "engine": "PolyPerc",
+  "rev": "fc82361a860f9f569cae92fa2ed1126b0ab4397b",
+  "status": "installed",
+  "tags": [
+   "looper",
+   "sampler",
+   "happyaccident"
+  ],
+  "test": "ok"
+ },
+ "sath-lemon": {
+  "cpu": 7.3,
+  "description": "4 voice live looper with dynamic loop control and grid visualization",
+  "engine": "None",
+  "rev": "352d95b005919cf132844a2ca71593bea02928c6",
+  "status": "installed",
+  "tags": [
+   "looper",
+   "grid",
+   "softcut",
+   "live"
+  ],
+  "test": "ok"
+ },
+ "schicksalslied": {
+  "cpu": 5.9,
+  "description": "a poetry sequencer",
+  "engine": "LiedMotor",
+  "errors": [
+   "ERROR: Message 'ar' not understood.",
+   "^^ The preceding error dump is for ERROR: Message 'ar' not understood."
+  ],
+  "rev": "fe974108fb1a8d2fd5b6c94709ef7b3e72a13af3",
+  "status": "failed",
+  "tags": [
+   "generative",
+   "synth",
+   "art",
+   "sequencer",
+   "keyboard",
+   "grid",
+   "crow",
+   "jf",
+   "w/"
+  ],
+  "test": "sc error"
+ },
+ "scholastic": {
+  "cpu": 6.4,
+  "description": "multitrack polyrhythmic sequencer",
+  "engine": "PolyPerc",
+  "rev": "69f2a5ff2ef7a33f917cc640132e019104ecce5e",
+  "status": "installed",
+  "tags": [
+   "norns",
+   "sequencer",
+   "nb",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "scryingstone": {
+  "cpu": 25.5,
+  "description": "scrying stone for monome norns",
+  "engine": "scryingstone",
+  "rev": "7a987683029771ac05678c32baefbc8486569f47",
+  "status": "installed",
+  "tags": [
+   "norns",
+   "noise",
+   "art",
+   "drone"
+  ],
+  "test": "ok"
+ },
+ "seaflex": {
+  "cpu": 97.6,
+  "description": "companion app for earthsea",
+  "engine": "PolySub",
+  "errors": [
+   "spins norns at ~96% CPU when norns starts with it"
+  ],
+  "rev": "5882bc6bf190c612f064d2ff2f5d84798eab21b2",
+  "status": "failed",
+  "tags": [
+   "utility",
+   "grid"
+  ],
+  "test": "cpu"
+ },
+ "seeker_ii": {
+  "cpu": 16.7,
+  "description": "compositional interface for music, voltage, and video",
+  "engine": "MxSamples",
+  "rev": "1ba7ae76648ac770c0e28c40aba13682e69826d8",
+  "status": "installed",
+  "tags": [
+   "grid",
+   "arc",
+   "midi",
+   "osc",
+   "crow"
+  ],
+  "test": "ok"
+ },
+ "semiconductor": {
+  "reason": "download failed: fatal: could not read Username for 'https://github.com': No such device or address",
+  "status": "rejected",
+  "tags": [
+   "mod",
+   "utility"
+  ]
+ },
+ "sempra": {
+  "cpu": 6.8,
+  "description": "continuous dynamic melody sequencer for 16n+grid",
+  "engine": "",
+  "rev": "a5f392acb5559aa8d931f3adc789c5114ff9c565",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "grid",
+   "crow"
+  ],
+  "test": "ok"
+ },
+ "serialism": {
+  "cpu": 7.4,
+  "description": "Explore serialism in the spirit of Arnold Sch\u00f6nberg and others",
+  "engine": "",
+  "rev": "b6cbcc2888332d9135539e164ff3e4018a3b64c3",
+  "status": "installed",
+  "tags": [
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "shapes": {
+  "cpu": 7.5,
+  "description": "visuals-based modulation source for crow and midi",
+  "engine": "",
+  "rev": "b42eb0e177a581bf147581505511db9715c94456",
+  "status": "installed",
+  "tags": [
+   "utility"
+  ],
+  "test": "ok"
+ },
+ "shfts": {
+  "cpu": 7.1,
+  "description": "random sequencer for norns, crow, and grid",
+  "engine": "",
+  "rev": "58cb7ee9bdaaa96c9713a744d7bc042b14eecc65",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "crow",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "shnthsalslied": {
+  "cpu": 6.8,
+  "description": "fork of schicksalslied for use with shbobo shnth",
+  "engine": "",
+  "rev": "d8247a4741ca300f67ecfb07925e443b5708413b",
+  "status": "installed",
+  "tags": [
+   "generative",
+   "synth",
+   "art",
+   "sequencer",
+   "keyboard",
+   "grid",
+   "crow",
+   "jf",
+   "w/"
+  ],
+  "test": "ok"
+ },
+ "showers": {
+  "cpu": 9.8,
+  "description": "a thunderstorm for norns",
+  "engine": "Showers",
+  "rev": "4dccf5db13d97ca1476b00ceace36b2c1f0d6868",
+  "status": "installed",
+  "tags": [
+   "art"
+  ],
+  "test": "ok"
+ },
+ "sidvagn": {
+  "reason": "not a script (a library for other scripts)",
+  "rev": "d896b47b0ae5ee03e9745ffa132d6e43b434f603",
+  "status": "skipped",
+  "tags": [
+   "keyboard",
+   "sequencer",
+   "grid",
+   "mod",
+   "nb"
+  ]
+ },
+ "skylines": {
+  "cpu": 6.6,
+  "description": "a sequencer inspired on the M185/Intellijel Metropolis",
+  "engine": "PolyPerc",
+  "rev": "3eeffc92382e492de34a80c4a1f07c2df7afe159",
+  "status": "installed",
+  "tags": [
+   "sequencer"
+  ],
+  "test": "ok"
+ },
+ "sonde": {
+  "cpu": 12.7,
+  "description": "orbital sequencer for low-res earth",
+  "engine": "Sonde",
+  "rev": "4a220ab8d9f9eb5ec3980b4a6be7c371a1023af2",
+  "status": "installed",
+  "tags": [
+   "drone",
+   "generative",
+   "engine",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "spirals": {
+  "cpu": 7.8,
+  "description": "sequencer",
+  "engine": "PolyPerc",
+  "rev": "7dfd18404abbed7441020994986f5980e946b3a3",
+  "status": "installed",
+  "tags": [
+   "generative",
+   "sequencer",
+   "grid",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "splicer": {
+  "cpu": 8.9,
+  "description": "an eduscript for sequins and lattice",
+  "engine": "PolyPerc",
+  "rev": "b1285bf4593298b8aab0cfb35f0c31f5150c841f",
+  "status": "installed",
+  "tags": [
+   "eduscript"
+  ],
+  "test": "ok"
+ },
+ "splnkr": {
+  "cpu": 13.9,
+  "description": "an amplitude and frequency tracking effects processor/sampler/sequencer",
+  "engine": "Splnkr",
+  "errors": [
+   "ERROR: Message 'theSynth' not understood.",
+   "^^ The preceding error dump is for ERROR: Message 'theSynth' not understood.",
+   "ERROR: Message 'theSynth' not understood.",
+   "^^ The preceding error dump is for ERROR: Message 'theSynth' not understood."
+  ],
+  "rev": "b75e4cb4817cb5134982a99be0fb8a4c10e4768e",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "audio_fx",
+   "sampler",
+   "jf",
+   "crow",
+   "grid"
+  ],
+  "test": "sc error"
+ },
+ "stack": {
+  "cpu": 7.7,
+  "description": "a stack of 8 fixed-frequency resonant bandpass filters",
+  "engine": "Stack",
+  "rev": "14ba720d6d50b3474df6e6d167a0ff440cbb3d1f",
+  "status": "installed",
+  "tags": [
+   "audio_fx"
+  ],
+  "test": "ok"
+ },
+ "step": {
+  "cpu": 7.0,
+  "description": "a simple step sequencer",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/step/step.lua:6: module 'ack/lib/ack' not found:",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "42f767313dabd7c056f599cafc39d6e3aaf915d1",
+  "status": "failed",
+  "tags": [
+   "sampler",
+   "sequencer"
+  ],
+  "test": "lua error"
+ },
+ "stjoernuithrott": {
+  "cpu": 8.5,
+  "description": "drone inspired by Moffenzeef Stargazer",
+  "engine": "SCgazer",
+  "rev": "05afd6279f3422c7b52ddbb0555eeee8ad9fc452",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "drone",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "streams": {
+  "cpu": 7.2,
+  "description": "a multi play head sequencer",
+  "engine": "Moonshine",
+  "errors": [
+   "### SCRIPT ERROR: missing Moonshine"
+  ],
+  "rev": "8aa0f9f62586dc49c952fba411dcdcc5c488c849",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "grid",
+   "crow",
+   "midi"
+  ],
+  "test": "lua error"
+ },
+ "strides": {
+  "cpu": 6.5,
+  "description": "a collection of pattern recorders",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/strides/strides.lua:102: module 'ack/lib/ack' not found:",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "5f22b5a1a90ecfc46bc404459cf01afc045d1d4f",
+  "status": "failed",
+  "tags": [
+   "sampler",
+   "sequencer",
+   "grid",
+   "midi"
+  ],
+  "test": "lua error"
+ },
+ "strum": {
+  "cpu": 7.6,
+  "description": "a plucky little pattern sequencer",
+  "engine": "KarplusRings",
+  "rev": "a22acc930339359ff0831ad47cf5b982f7186d6e",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "supertonic": {
+  "cpu": 8.9,
+  "description": "an introspective drum machine",
+  "engine": "Supertonic",
+  "rev": "c6fff47d08c2dfeb7d49d7c5abdff5bf56e8e57d",
+  "status": "installed",
+  "tags": [
+   "generative",
+   "drum"
+  ],
+  "test": "ok"
+ },
+ "sway": {
+  "cpu": 9.2,
+  "description": "analysis-driven live audio processing",
+  "engine": "Sway",
+  "errors": [
+   "FAILURE IN SERVER /n_set Node 1012 not found",
+   "FAILURE IN SERVER /n_set Node 1018 not found",
+   "FAILURE IN SERVER /s_new duplicate node ID",
+   "FAILURE IN SERVER /s_new duplicate node ID"
+  ],
+  "rev": "84f82182104adf327e8decc2420367eef22988ab",
+  "status": "failed",
+  "tags": [
+   "generative",
+   "audio_fx"
+  ],
+  "test": "sc error"
+ },
+ "sweet-bees": {
+  "cpu": 10.8,
+  "description": "asynchronous tape looper and reverb",
+  "engine": "",
+  "rev": "19c42bfa41662feb85a48771a0216b88839deb31",
+  "status": "installed",
+  "tags": [
+   "looper"
+  ],
+  "test": "ok"
+ },
+ "synthy": {
+  "cpu": 19.0,
+  "description": "a synthesizer critter",
+  "engine": "Synthy",
+  "rev": "43b92d4d64ddf141b618bbbff0f476c37d74234f",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "sequencer"
+  ],
+  "test": "ok"
+ },
+ "tambla": {
+  "cpu": 11.6,
+  "description": "bending rhythmic arpeggio",
+  "engine": "PolyPerc",
+  "rev": "381a0fe603934217631f670995004ccaccc3e1d1",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "midi",
+   "arc",
+   "grid"
   ],
   "test": "ok"
  },
@@ -565,5 +3675,379 @@
    "birds"
   ],
   "test": "lua error"
+ },
+ "tetra": {
+  "cpu": 7.3,
+  "description": "use the grid to create, perform and sequence sound objects",
+  "engine": "",
+  "rev": "f44dfb01fa09dc13ad812aa882cbb387e0913b61",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "sequencer",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "thebangs": {
+  "cpu": 13.2,
+  "description": "one-shot synthesis engine",
+  "engine": "Thebangs",
+  "rev": "d027e9f30598e7541b2e78c2891e1a5219c0b8b5",
+  "status": "installed",
+  "tags": [
+   "engine"
+  ],
+  "test": "ok"
+ },
+ "thirtythree": {
+  "reason": "runs system commands: lib/utils.lua: sudo",
+  "status": "rejected",
+  "tags": [
+   "sequencer",
+   "grid"
+  ]
+ },
+ "thorns": {
+  "cpu": 7.1,
+  "description": "fractal sequencer for norns + grid",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/thorns/thorns.lua:16: module 'nb/lib/nb' not found:",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "4cd1b45d38d3ce79033d1722a783822d6c9410f6",
+  "status": "failed",
+  "tags": [
+   "norns",
+   "grid",
+   "midi",
+   "sequencer",
+   "generative"
+  ],
+  "test": "lua error"
+ },
+ "tidbit": {
+  "cpu": 6.9,
+  "description": "Use Just Friends or a MIDI device as a 'melodic' granular synth.",
+  "engine": "",
+  "errors": [
+   "hook: machinista_bridge transport failed, error: /home/we/norns/lua/core/clock.lua:36: bad argument #1 to 'clock_cancel' (number expected, got nil)"
+  ],
+  "rev": "3647720a8f46a7e5c353fabaa4020766ab737c9f",
+  "status": "failed",
+  "tags": [
+   "jf",
+   "midi",
+   "crow",
+   "synth",
+   "granulator",
+   "w"
+  ],
+  "test": "lua error"
+ },
+ "time-rhythm": {
+  "cpu": 7.2,
+  "description": "duophonic synthesizer for norns",
+  "engine": "TimeRhythm",
+  "rev": "7e60c4efd0c9522484f7cdcb0b244f05f6ad101a",
+  "status": "installed",
+  "tags": [
+   "drum",
+   "synth"
+  ],
+  "test": "ok"
+ },
+ "timeparty": {
+  "cpu": 8.3,
+  "description": "grid based delay sequencer",
+  "engine": "",
+  "rev": "cb5ee70794535d60f8fec55bb11ab4fa7bf8b387",
+  "status": "installed",
+  "tags": [
+   "audio_fx",
+   "delay",
+   "grid",
+   "crow"
+  ],
+  "test": "ok"
+ },
+ "tmi": {
+  "cpu": 6.9,
+  "description": "library for sequencing midi with text",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/tmi/lib/tmi.lua:4: MISSING INCLUDE: kolor/lib/lattice",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "c8e5587b1d4725fe8d6a1ced063e073e74d73fd7",
+  "status": "failed",
+  "tags": [
+   "utility",
+   "midi"
+  ],
+  "test": "lua error"
+ },
+ "torii": {
+  "cpu": 7.2,
+  "description": "gated audio sequencer",
+  "engine": "",
+  "errors": [
+   "### SCRIPT ERROR: load fail",
+   "/home/we/dust/code/torii/torii.lua:41: module 'r/lib/r' not found:",
+   "stack traceback:",
+   "/home/we/norns/lua/core/norns.lua:154: in function </home/we/norns/lua/core/norns.lua:154>"
+  ],
+  "rev": "3d2c5c9088dd6a13aa4d4d87784025d2cc9c9298",
+  "status": "failed",
+  "tags": [
+   "sequencer",
+   "grid",
+   "midi"
+  ],
+  "test": "lua error"
+ },
+ "traffic": {
+  "cpu": 8.6,
+  "description": "edit of @markeats loom for quickly decoupling motifs from their harmonic framework",
+  "engine": "MollyThePoly",
+  "rev": "468af752bd0b9f5263b6ee3a7061b9df7c273e88",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "grid",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "triangles": {
+  "cpu": 9.7,
+  "description": "4-voice triangle wave drone synth",
+  "engine": "Triangles",
+  "rev": "99a1b541a42373c36aa87df92e135f509dcf060a",
+  "status": "installed",
+  "tags": [
+   "synth"
+  ],
+  "test": "ok"
+ },
+ "tulpamancer": {
+  "cpu": 14.4,
+  "description": "Every night, the kingdom crumbles. And our MIDI pattern, is conjured anew.",
+  "engine": "",
+  "rev": "709cd372ff9eb00f56e6c41f208a1076d06d9da3",
+  "status": "installed",
+  "tags": [
+   "generative",
+   "sequencer",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "tuner": {
+  "cpu": 7.4,
+  "description": "tune stuff",
+  "engine": "TestSine",
+  "rev": "b016059c14bf24677416550151942e4c64d6b813",
+  "status": "installed",
+  "tags": [
+   "utility"
+  ],
+  "test": "ok"
+ },
+ "tunnels": {
+  "cpu": 11.3,
+  "description": "a collection of uncertain delays using norns softcut",
+  "engine": "TestSine",
+  "rev": "ceba64329be4e710e48ab969d749591bd9e3f1e6",
+  "status": "installed",
+  "tags": [
+   "delay",
+   "audio_fx"
+  ],
+  "test": "ok"
+ },
+ "turntable": {
+  "cpu": 12.6,
+  "description": "a turntable for norns",
+  "engine": "turntable",
+  "rev": "83dbe3ba5733132267160ed2974067f8b31cae09",
+  "status": "installed",
+  "tags": [
+   "norns",
+   "crow",
+   "sampler"
+  ],
+  "test": "ok"
+ },
+ "tviburar": {
+  "cpu": 11.1,
+  "description": "2x4 complex step sequencer w. free running lfo's",
+  "engine": "PolySub",
+  "rev": "0c660ba4b0359e8e5c144e6e63ce1a16f1f6cb0b",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "crow"
+  ],
+  "test": "ok"
+ },
+ "twine": {
+  "cpu": 10.8,
+  "description": "random granulator for two samples",
+  "engine": "Glut",
+  "rev": "ff761bb88f8a82cc02b3cd4aa913b9e2591ab740",
+  "status": "installed",
+  "tags": [
+   "granulator"
+  ],
+  "test": "ok"
+ },
+ "twins": {
+  "reason": "runs system commands: lib/installer/installer.lua: sudo",
+  "status": "rejected",
+  "tags": [
+   "granulator",
+   "audio_fx"
+  ]
+ },
+ "u": {
+  "cpu": 7.2,
+  "description": "norns utility scripts",
+  "engine": "",
+  "rev": "41c99fa68ad4ead8f067a9ab6dbb5fec1505e57f",
+  "status": "installed",
+  "tags": [
+   "utility"
+  ],
+  "test": "ok"
+ },
+ "uhf": {
+  "cpu": 13.7,
+  "description": "your tapes transmitted thru late-night static and broken antenna frequencies",
+  "engine": "Glut",
+  "rev": "524b56669ac31387da76f40fd752fbcff2e07d5a",
+  "status": "installed",
+  "tags": [
+   "granulator"
+  ],
+  "test": "ok"
+ },
+ "vcr": {
+  "cpu": 6.9,
+  "description": "collect and recall voltages",
+  "engine": "",
+  "rev": "7df61601dbae7a9eb27450a74bd6e1ef3e5f0945",
+  "status": "installed",
+  "tags": [
+   "crow",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "vials": {
+  "reason": "download failed: fatal: could not read Username for 'https://github.com': No such device or address",
+  "status": "rejected",
+  "tags": [
+   "sequencer",
+   "sampler",
+   "grid"
+  ]
+ },
+ "warmreload": {
+  "reason": "not a script (a library for other scripts)",
+  "rev": "2623fb313dfd3e276d878d25ab0589c2594db65b",
+  "status": "skipped",
+  "tags": [
+   "mod"
+  ]
+ },
+ "waver": {
+  "cpu": 13.5,
+  "description": "assemble a song from TAPE",
+  "engine": "",
+  "rev": "c0085fb977e92b2680515b8b9d5e8f5cf4e7be22",
+  "status": "installed",
+  "tags": [
+   "utility"
+  ],
+  "test": "ok"
+ },
+ "window-crowparator": {
+  "cpu": 7.8,
+  "description": "Window comparator for crow",
+  "engine": "",
+  "rev": "1a02f84cdb8e6141f01ba6e0d71680799b9481b3",
+  "status": "installed",
+  "tags": [
+   "crow"
+  ],
+  "test": "ok"
+ },
+ "wobblewobble": {
+  "cpu": 8.8,
+  "description": "slow oscillators for crow",
+  "engine": "",
+  "rev": "46291711266311c083b075a1d05080bdd9ae7bcb",
+  "status": "installed",
+  "tags": [
+   "utility",
+   "crow",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "xD1": {
+  "cpu": 6.7,
+  "description": "xD1 is an FM synth",
+  "engine": "xD1",
+  "rev": "7f3090d2e5e5fafbec9fa08d5b8c9722d82d4e70",
+  "status": "installed",
+  "tags": [
+   "synth",
+   "midi"
+  ],
+  "test": "ok"
+ },
+ "yggdrasil": {
+  "cpu": 10.2,
+  "description": "a norns cyberdeck tracker",
+  "engine": "YggdrasilSynth",
+  "rev": "0991adfd46c77886e82a85056f41b03815a01f97",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "tracker",
+   "midi",
+   "keyboard"
+  ],
+  "test": "ok"
+ },
+ "zellen": {
+  "cpu": 6.8,
+  "description": "game of life based sequencer",
+  "engine": "PolyPerc",
+  "rev": "355e576cc02a4d7f4af1cc8135c6510bba927f45",
+  "status": "installed",
+  "tags": [
+   "sequencer",
+   "grid"
+  ],
+  "test": "ok"
+ },
+ "zxcvbn": {
+  "reason": "runs system commands: lib/installer.lua: sudo",
+  "status": "rejected",
+  "tags": [
+   "sequencer",
+   "tracker",
+   "keyboard",
+   "midi",
+   "crow"
+  ]
  }
 }

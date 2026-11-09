@@ -19,8 +19,13 @@ Nothing new touches the library the playing instances use until it passes:
      something behind that breaks the next ones (taweeet leaves a failing
      startup hook), so after any failure the instance restarts and the
      script is tried once more on a clean start; that second result counts.
+     A script using more than MAX_CPU counts as a failure too, and every
+     start begins without a script (norns would load the last one).
   4. A script that passes is copied into ~/norns/code and added to pack.txt at
-     the commit that was tested. Every outcome goes to results.json.
+     the commit that was tested, and so is a library (no script of its own:
+     ack, r...), which other scripts include. Every outcome goes to
+     results.json. Name scripts to try them again (after their dependency
+     arrived, say).
 The playing instances compile new engines at their next restart.
 """
 import json
@@ -42,6 +47,7 @@ RESULTS = HERE / 'results.json'
 PACK = HERE / 'pack.txt'
 IMAGE = 'norns-station'
 N = 5
+MAX_CPU = 60  # percent of one core, the whole instance
 BLOCKED = re.compile(r'\b(sudo|apt-get|apt install|systemctl|shutdown|reboot|poweroff|nmcli|passwd|chpasswd|mkfs|dd if=)\b'
                      r'|rm\s+-rf\s+[/~]')
 COMPILE_ERROR = re.compile(r'ERROR:|Class not defined|Duplicate|duplicate|COMPILE ERROR|Compile failed|Parse error')
@@ -109,8 +115,20 @@ def clone(entry, folder):
     return rev, None
 
 
+def forget_script():
+    """Start with no script: norns loads the last one at start, and one that
+    misbehaves there (seaflex spins the CPU when norns starts with it) would
+    skew every test after it."""
+    state = STAGING / 'data' / str(N) / 'system.state'
+    if state.exists():
+        lines = state.read_text().splitlines()
+        keep = [l for l in lines if not re.match(r'norns\.state\.(script|name|shortname|path|data) ', l)]
+        state.write_text('\n'.join(keep) + '\n')
+
+
 def restart_instance():
-    env = f'NORNS_HOME={STAGING} NORNS_TAPE_ROOT={STAGING}/tape NORNS_NO_MIDI=1'
+    forget_script()
+    env =f'NORNS_HOME={STAGING} NORNS_TAPE_ROOT={STAGING}/tape NORNS_NO_MIDI=1'
     run('bash', '-c', f'{env} {ROOT}/run-norns.sh {N}', timeout=120)
     inst = tester.Instance(N)
     for _ in range(90):
@@ -131,6 +149,15 @@ def culprit(errors, folders):
         if f'/{folder}/' in text:
             return folder
     return None
+
+
+def install(folder, entry, rev):
+    target = CODE / folder
+    if not target.exists():
+        shutil.copytree(STAGING / 'code' / folder, target, symlinks=True)
+    if folder not in pack_dirs():
+        with PACK.open('a') as f:
+            f.write(f'{folder} {entry["url"]} {rev}\n')
 
 
 def pick(names, count):
@@ -196,9 +223,15 @@ def main():
     time.sleep(3)
     def attempt(inst, folder):
         try:
-            return tester.test(inst, STAGING / 'code' / folder)
+            r = tester.test(inst, STAGING / 'code' / folder)
         except subprocess.TimeoutExpired:
             return {'status': 'timeout'}
+        # More than most of a core is a runaway (or something left behind):
+        # retried on a clean start like any failure.
+        if r.get('status') == 'ok' and (r.get('cpu') or 0) > MAX_CPU:
+            r['status'] = 'cpu'
+            r.setdefault('errors', []).insert(0, f'uses {r["cpu"]}% CPU')
+        return r
 
     def fresh():
         inst, _ = restart_instance()
@@ -210,10 +243,13 @@ def main():
         tester.CODE = STAGING / 'code'
         r = attempt(inst, folder)
         if r.get('status') == 'no script file':
-            results[folder] = {'status': 'skipped', 'reason': 'not a script (a library for other scripts)',
+            # A library other scripts include (ack, r, nb...): installed, or
+            # they fail with "module not found".
+            results[folder] = {'status': 'library', 'reason': 'a library for other scripts, installed',
                                'tags': entry['tags'], 'rev': rev}
+            install(folder, entry, rev)
             save_results(results)
-            log(f'{folder:22} not a script')
+            log(f'{folder:22} library, installed')
             continue
         if r.get('status') != 'ok':
             log(f'{folder:22} {r.get("status")}: retrying on a clean start')
@@ -226,11 +262,7 @@ def main():
         if r.get('errors'):
             record['errors'] = r['errors']
         if status == 'ok':
-            target = CODE / folder
-            if not target.exists():
-                shutil.copytree(STAGING / 'code' / folder, target, symlinks=True)
-            with PACK.open('a') as f:
-                f.write(f'{folder} {entry["url"]} {rev}\n')
+            install(folder, entry, rev)
         results[folder] = record
         save_results(results)
         log(f'{folder:22} {status:16} cpu {r.get("cpu", "")}  {r.get("engine", "")}'

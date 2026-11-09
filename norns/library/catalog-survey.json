@@ -7745,5 +7745,13 @@
 "lua_top": [
 "terrarium.lua"
 ]
+},
+{
+"name": "nb",
+"url": "https://github.com/sixolet/nb",
+"tags": [
+"library"
+],
+"description": "voice library other scripts include (nb/lib/nb)"
 }
 ]
