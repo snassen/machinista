@@ -125,6 +125,14 @@ class NornsModeTest(unittest.TestCase):
         self.assertFalse(self.mode.handle_event({'kind': 'pad_on', 'name': 'PAD_1', 'value': 100}))
         self.assertTrue(self.mode.handle_event(button('BROWSE', 1)))
 
+    def test_keyboard_and_fixed_velocity_stay_with_machinista(self):
+        self.toggle()
+        for name in ('KEYBOARD', 'FIXED VEL'):
+            self.assertFalse(self.mode.handle_event(button(name, 1)))
+            self.assertFalse(self.mode.handle_event(button(name, 0)))
+        self.assertTrue(self.mode.handle_event(button('CHORDS', 1)))
+        self.assertEqual(self.sent, [])
+
     def test_keys_follow_the_selected_sound(self):
         sides = [(3, None)]
         self.mode = NornsMode(tempfile.mkdtemp(), sides=lambda: sides[0],

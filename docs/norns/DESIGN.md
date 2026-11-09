@@ -15,7 +15,9 @@ decision.
 - **Enter/exit:** SHIFT + PLUG-IN toggles the mode. The PLUG-IN LED stays lit
   and both displays carry a "NORNS" label, so the mode is never ambiguous.
 - **Machinista keeps playing underneath.** PLAY, STOP, REC, RESTART and the
-  pads stay with Machinista while NORNS mode is active.
+  pads stay with Machinista while NORNS mode is active, and so do KEYBOARD
+  and FIXED VEL (agreed 2026-11-09), so the pads can switch to keyboard mode
+  while they play a norns. Root and octave still need leaving the mode.
 - **norns runs in Docker** (norns-lab runtime image), one container per
   instance.
 - **Bridges** use the simplest working transport first (files and OSC).

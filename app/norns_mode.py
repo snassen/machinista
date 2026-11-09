@@ -45,8 +45,10 @@ KNOB_IDLE_S = 0.3
 PACE_S = 0.04
 # How often a running session looks for changes to config/norns.json.
 CONFIG_CHECK_S = 1.0
-# Controls Machinista keeps while NORNS mode is active.
-PASS_THROUGH = frozenset(('PLAY', 'STOP', 'REC', 'RESTART'))
+# Controls Machinista keeps while NORNS mode is active: the transport, and
+# KEYBOARD and FIXED VEL so the pads can be switched to keyboard mode while
+# they play a norns.
+PASS_THROUGH = frozenset(('PLAY', 'STOP', 'REC', 'RESTART', 'KEYBOARD', 'FIXED VEL'))
 # Tempo stays with Machinista in NORNS mode: TEMPO selects it, the master
 # encoder (raw control 0) changes it while TEMPO is selected, and SHIFT +
 # NOTE REPEAT taps it.
