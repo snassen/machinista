@@ -53,6 +53,25 @@ image):**
 - Still to do: check by ear that effect scripts process the Sound's audio;
   measure while scripts are being played.
 
+**Community library, 2026-11-09:** the norns.community catalog (354
+entries, `catalog-survey.json`) went through `try-batch.py` on the spare
+norns 5:
+- 309 tried: 236 installed, 14 libraries installed (ack, r, nb… which other
+  scripts include), 30 failed on their own errors, 29 rejected (system
+  commands, an engine clashing with an installed one, download failed).
+  Every outcome and reason is in `results.json`; `pack.txt` pins them all.
+- Lessons built into the tester: start each test without a saved script
+  (seaflex spins norns at ~96% when norns starts with it), count over 60%
+  CPU as a failure, install libraries, and retest by name once a
+  dependency arrives.
+- SELECT's folders (`script-library.lua`) cover the whole catalog, so new
+  scripts appear in their folder once installed.
+- MIDI 3 maps for 210 scripts (see 3); about 70 scripts have nothing worth
+  mapping (mostly MIDI and grid utilities).
+- Both Pis carry the same library; norns 1–4 restarted on both.
+- A script's own folder can be missing until its first save (oooooo's load
+  shows an `ls` error until then); harmless, or create the folder.
+
 **Notes from planning:**
 - The Pi 4 pack is in `snassen/machinista-norns` (`library/pack.txt`):
   44 community scripts pinned to commits, all of which loaded on a Pi 4.
