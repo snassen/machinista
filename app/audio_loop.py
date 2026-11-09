@@ -121,7 +121,7 @@ class AudioLoops:
         if context.get('expected') is not None and track!=context['expected']:
             self.message='TARGET CHANGED: RECORDING KEPT';return False
         if context.get('norns_loop'):  # norns-mode fork hook
-            from app.norns_loop import finish_hook;finish_hook(context,path,context.get('tempo',self.project['tempo']))
+            from app.norns_loop import finish_hook;finish_hook(context,path,context.get('tempo',self.project['tempo']),self,target)
         with wave.open(str(path),'rb') as wav:end=wav.getnframes();rate=wav.getframerate()
         if not end:return False
         self.remember()

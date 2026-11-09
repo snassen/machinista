@@ -176,15 +176,41 @@ class NornsLoop:
         return {'state': state, 'bars': bars, 'tail': tail, 'text': f'{word} {bars} {tail}', 'show': show}
 
 
-def finish_hook(context, path, tempo):
-    """Called by finish_sample_recording before the take is loaded: folds the
-    tail of a loop recorded here and restores the loop's length in bars."""
-    bars = context.get('fold_bars')
-    if not bars:
-        return
+def fit_pattern(app, group, bars):
+    """Machinista restarts an audio loop with its group's pattern, so a loop
+    longer than the pattern (a 4-bar take in a 1-bar pattern) would restart
+    every bar. Double the playing pattern (notes and all, like DBL on the
+    PATTERN page) until it is a whole number of loops long. Loops are 1-16
+    bars, so doubling always gets there. Returns how many times it doubled."""
+    if getattr(app, 'clip_transport', False) or not app.active_clips[group]:
+        return 0  # the arranger plays clips; a group with no pattern gets one sized for the loop
+    pattern = app.active_patterns[group]
+    loop = round(bars * 16)
+    if loop < 1 or loop & (loop - 1):
+        return 0  # not a power of two in steps: doubling would never fit it
+    saved = app.group, app.pattern
+    app.group, app.pattern = group, pattern
+    doubled = 0
     try:
-        fold_tail(path, bars, tempo)
-    except (OSError, EOFError, wave.Error) as error:
-        print('NORNS loop fold failed: ' + str(error), flush=True)
-        return
-    context.setdefault('options', {})['bars'] = bars
+        while app.pattern_steps(group, pattern) % loop and app.pattern_steps(group, pattern) * 2 <= 4096:
+            app.double_pattern()
+            doubled += 1
+    finally:
+        app.group, app.pattern = saved
+    return doubled
+
+
+def finish_hook(context, path, tempo, app=None, target=None):
+    """Called by finish_sample_recording before the take is loaded: folds the
+    tail of a loop recorded here, restores the loop's length in bars and makes
+    the target group's pattern long enough for the loop."""
+    bars = context.get('fold_bars')
+    if bars:
+        try:
+            fold_tail(path, bars, tempo)
+            context.setdefault('options', {})['bars'] = bars
+        except (OSError, EOFError, wave.Error) as error:
+            print('NORNS loop fold failed: ' + str(error), flush=True)
+    bars = context.get('options', {}).get('bars')
+    if app is not None and target is not None and isinstance(bars, (int, float)):
+        fit_pattern(app, target[0], bars)

@@ -139,6 +139,46 @@ class NornsLoopTest(unittest.TestCase):
         self.assertEqual(track['audio_loop']['bars'], 4)
         self.assertEqual(read_wav(path)[1][0], 2)  # the tail bar folded onto the start
 
+    def finish(self, job, bars):
+        job['tempo'] = self.app.project['tempo']
+        path = Path(self.tmp.name) / 'samples/recordings/Sample 2.wav'
+        path.parent.mkdir(parents=True, exist_ok=True)
+        write_wav(path, [1, 1] * bar_frames(bars, job['tempo'], 48000), 48000)
+        self.app.capture_jobs[str(path)] = job
+        self.assertTrue(self.app.finish_sample_recording(job['target'], path, self.app.project_generation))
+
+    def playing_one_bar_pattern(self):
+        bank = self.app.project['groups'][0]
+        bank['patterns'][0][0][0] = True  # a note on pad 1, step 1
+        self.app.active_patterns[0] = 0
+        self.app.active_clips[0] = True
+        self.assertEqual(self.app.pattern_steps(0, 0), 16)
+        return bank
+
+    def test_short_pattern_is_doubled_to_fit_the_loop(self):
+        bank = self.playing_one_bar_pattern()
+        self.loop.toggle_tail()  # CUT: exactly 4 bars
+        self.loop.toggle()
+        job = self.app.actions[0][1]
+        self.finish(job, 4)
+        self.assertEqual(self.app.pattern_steps(0, 0), 64)
+        self.assertEqual([bank['patterns'][0][0][s] for s in (0, 16, 32, 48)], [True] * 4)
+        self.assertEqual((self.app.group, self.app.pattern), (0, 0))
+
+    def test_folded_loop_fits_its_own_length_and_long_patterns_stay(self):
+        bank = self.playing_one_bar_pattern()
+        self.loop.change_bars(-1)  # 2 bars, FOLD records 3
+        self.loop.toggle()
+        job = self.app.actions[0][1]
+        self.finish(job, 3)
+        self.assertEqual(self.app.pattern_steps(0, 0), 32)
+        self.app.actions.clear()
+        self.app.capture_armed = False  # the engine clears this when a take ends
+        self.loop.change_bars(-1)  # 1 bar: the 2-bar pattern already fits
+        self.loop.toggle()
+        self.finish(self.app.actions[0][1], 2)
+        self.assertEqual(self.app.pattern_steps(0, 0), 32)
+
 
 class NornsModeLoopTest(unittest.TestCase):
     def setUp(self):

@@ -102,6 +102,10 @@ sounds); CUT stops exactly at the end (for sequences). The display's
 bottom-right slot shows it: outlined while waiting for the bar, filled
 while recording. SHIFT + REC again cancels. REC alone is still Machinista's
 pattern record.
+Machinista restarts an audio loop with its group's pattern, so when the
+group already plays a shorter pattern (say 1 bar under a 4-bar loop), the
+pattern is doubled, notes and all, like DBL on the PATTERN page, until the
+loop fits.
 
 Check a bridge: `norns/bridge/bridge_stat <n>`.
 

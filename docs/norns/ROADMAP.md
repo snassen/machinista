@@ -211,7 +211,11 @@ the MK3 (2026-11-09): recorded on norns 1, loaded onto a pad.
   loop lands on the first empty pad of the group as an AUDIO pad in a
   pattern. Bars are picked before arming, not while armed: with "next
   bar" the wait is under a bar, and a stopped transport starts recording
-  at once. Tests: `tests/test_norns_loop.py`. Not yet tried on the MK3.
+  at once. Tests: `tests/test_norns_loop.py`.
+  First try on the MK3 (2026-11-09): a 4-bar take landed in a group playing
+  a 1-bar pattern and restarted every bar (Machinista phases an audio loop
+  by its group's pattern). Fixed: `fit_pattern` doubles that pattern, notes
+  and all, until it is a whole number of loops long.
 
 **Notes:**
 - The Pi 4 add-on already shared folders: norns saw Machinista's samples,
