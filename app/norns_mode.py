@@ -55,6 +55,10 @@ PASS_THROUGH = frozenset(('PLAY', 'STOP', 'REC', 'RESTART', 'KEYBOARD', 'FIXED V
 # encoder (raw control 0) changes it while TEMPO is selected, and SHIFT +
 # NOTE REPEAT taps it.
 TEMPO_BUTTON = 'TEMPO'
+# STOP (pressed while playing or while stopped, in or out of NORNS mode)
+# releases every note Machinista has played on every norns, so a note whose
+# note-off got lost never hangs. Machinista still handles STOP itself.
+STOP_BUTTON = 'STOP'
 TAP_BUTTON = 'NOTE REPEAT'
 MASTER_ENCODER = 0
 KEY_BUTTONS = {f'DISPLAY {i + 1}': (0, i + 1) for i in range(3)}
@@ -203,6 +207,8 @@ class NornsMode:
                 port, key = self.held.pop(name)
                 self.sender(port, osc_message('/remote/key', key, 0))
                 return True
+            if name == STOP_BUTTON and pressed:
+                self.release_all_notes()
             if name == 'PLUG-IN' and self.shift:
                 if pressed:
                     self.active = not self.active
@@ -252,6 +258,12 @@ class NornsMode:
                     self.flush(now)
             return True
         return False
+
+    def release_all_notes(self):
+        """Ask every norns (1-MAX_INSTANCES; a port nobody listens on just
+        drops the message) to release the notes Machinista played on it."""
+        for n in range(1, MAX_INSTANCES + 1):
+            self.sender(instance_port(n), osc_message('/machinista/notes_off'))
 
     def flush(self, now=None):
         """Send collected knob steps, at most one message per knob per PACE_S.

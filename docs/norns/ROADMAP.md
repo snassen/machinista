@@ -93,8 +93,10 @@ on). Order: notes, KNOB 4/8, layers.
   in NORNS mode.
 - **KNOB 4/8: built 2026-11-09.** KNOB 4 (left, Instrument) and KNOB 8
   (right, Effect) set norns' reverb return; with SHIFT, its output level.
-  One step = 1% of the parameter's range. Tested over OSC; still to try on
-  the MK3. Nothing shows the value yet (norns' screen belongs to the script).
+  One step = 1% of the parameter's range. Works on the MK3. At the bottom
+  the reverb switches off. Nothing shows the value yet (norns' screen
+  belongs to the script).
+- STOP releases every note Machinista played on every norns (stuck notes).
 
 **Notes:**
 - Pads as MIDI: the Instrument's MIDI port can carry them, the same path as

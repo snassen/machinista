@@ -23,8 +23,15 @@ decision.
   (`rev_return_level`, how much reverb is heard from every source), or the
   output level (`output_level`) while SHIFT is held. Machinista sends OSC
   `/machinista/param <id> <steps>`; the mod applies `params:delta`, so one
-  step is 1% of the range. Reverb return does nothing while a script has
-  the reverb OFF or sends nothing into it.
+  step is 1% of the range. At the bottom (-inf) the mod switches norns'
+  reverb OFF (user's wish 2026-11-09; measured saving about 1% of a core
+  per norns), and turning it up switches it back ON. Reverb return does
+  nothing while a script sends nothing into the reverb.
+- **STOP releases notes** (2026-11-09, after a stuck note in orgn): every
+  STOP press, playing or stopped, in or out of NORNS mode, sends OSC
+  `/machinista/notes_off` to every norns. The mod remembers which notes it
+  played from Machinista and sends each a note-off. STOP still reaches
+  Machinista as before.
 - **norns runs in Docker** (norns-lab runtime image), one container per
   instance.
 - **Bridges** use the simplest working transport first (files and OSC).

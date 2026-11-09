@@ -76,6 +76,14 @@ local function virtual_id()
     if d.name == "virtual" then return id end
   end
 end
+-- Notes held now (status|note -> true), so STOP in Machinista can release
+-- any whose note-off got lost: /machinista/notes_off.
+local held = {}
+local function track(data)
+  local kind, ch = data[1] & 0xf0, data[1] & 0x0f
+  if kind == 0x90 and (data[3] or 0) > 0 then held[ch * 128 + data[2]] = true
+  elseif kind == 0x80 or kind == 0x90 then held[ch * 128 + data[2]] = nil end
+end
 local osc_dispatch = _norns.osc.event
 _norns.osc.event = function(path, args, from)
   if path == "/machinista/midi" then
@@ -83,8 +91,19 @@ _norns.osc.event = function(path, args, from)
     if id ~= nil and args[1] ~= nil then
       local data = {args[1], args[2]}
       if args[3] ~= nil and args[3] >= 0 then data[3] = args[3] end
+      track(data)
       _norns.midi.event(id, data)
     end
+    return
+  end
+  if path == "/machinista/notes_off" then
+    local id = virtual_id()
+    if id ~= nil then
+      for key in pairs(held) do
+        _norns.midi.event(id, {0x80 | (key // 128), key % 128, 0})
+      end
+    end
+    held = {}
     return
   end
   -- KNOB 4/8: /machinista/param <id> <steps> nudges a parameter (reverb
@@ -93,6 +112,12 @@ _norns.osc.event = function(path, args, from)
     local id, steps = args[1], tonumber(args[2])
     if type(id) == "string" and steps ~= nil and params.lookup[id] ~= nil then
       params:delta(id, steps)
+      -- Reverb return at its bottom (-inf) switches norns' reverb off, which
+      -- saves its CPU; turning it up switches the reverb back on.
+      if id == "rev_return_level" and params.lookup["reverb"] ~= nil then
+        local on = params:get(id) > -math.huge
+        if on ~= (params:get("reverb") == 2) then params:set("reverb", on and 2 or 1) end
+      end
     end
     return
   end

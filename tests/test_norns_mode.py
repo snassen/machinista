@@ -119,6 +119,15 @@ class NornsModeTest(unittest.TestCase):
         self.turn(2, 2)
         self.assertEqual(self.sent, [(10111, osc_message('/remote/enc', 2, 1))])
 
+    def test_stop_releases_notes_on_every_norns(self):
+        for active in (False, True):
+            self.sent.clear()
+            self.assertFalse(self.mode.handle_event(button('STOP', 1)))
+            self.assertFalse(self.mode.handle_event(button('STOP', 0)))
+            self.assertEqual(self.sent, [(10110 + n, osc_message('/machinista/notes_off')) for n in range(1, 9)])
+            if not active:
+                self.toggle()
+
     def test_transport_and_pads_stay_with_machinista(self):
         self.toggle()
         self.assertFalse(self.mode.handle_event(button('PLAY', 1)))
