@@ -66,5 +66,7 @@ docker run -d -i --name "norns-$n" --restart unless-stopped \
   -v "$here/container:/opt/machinista/container:ro" \
   -v "$here/mod/machinista_bridge:/home/we/dust/code/machinista_bridge:ro" \
   -v "$here/data/system.mods:/home/we/dust/data/system.mods:ro" \
+  -v "$here/library:/opt/machinista/library:ro" \
+  -v "$here/library/select.lua:/home/we/norns/lua/core/menu/select.lua:ro" \
   "$image" >/dev/null
 echo "norns $n: OSC 127.0.0.1:$port, files in $frames"
