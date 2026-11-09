@@ -145,8 +145,11 @@ norns' tape folder is `samples/norns-tape/<n>` in Machinista's sample
 library (`run-norns.sh` mounts it over norns' `dust/audio/tape`). A
 recording shows in Machinista's sample browser (SD CARD → norns-tape → n)
 and loads onto a pad like any sample; norns' TAPE menu still plays it.
-norns writes 48 kHz 24-bit stereo WAV, which Machinista reads. Tested by
-recording on norns 5; still to load one onto a pad on the MK3.
+norns writes 48 kHz 24-bit stereo WAV, which Machinista reads. Works on
+the MK3 (2026-11-09): recorded on norns 1, loaded onto a pad.
+- In norns' TAPE menu, K3 starts, pauses and resumes; the file is only
+  finished (and loadable) after K2 → "unload". A paused recording shows in
+  the browser but won't load.
 - Later: straight onto a pad (needs rules: which pad, what happens to its
   sample, trimming to bars).
 
