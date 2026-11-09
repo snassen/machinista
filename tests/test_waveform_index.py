@@ -58,3 +58,22 @@ class WaveformIndexTests(unittest.TestCase):
                     result=reader.envelope(paths[-1]);time.sleep(.001)
                 self.assertEqual(result.frames,500)
             finally:reader.close()
+
+    def test_mk2_reuses_waveforms_when_returning_to_pads(self):
+        from app.mk2_display import Mk2Renderer
+
+        with tempfile.TemporaryDirectory() as tmp:
+            renderer = Mk2Renderer()
+            self.addCleanup(renderer.close)
+            paths = [Path(tmp) / f'{i}.wav' for i in range(4)]
+            for path in paths:
+                self.write(path, frames=300)
+            with patch('app.waveform_index.wave.open', wraps=wave.open) as opened:
+                for path in paths:
+                    self.assertIsNone(renderer.waveforms.envelope(path))
+                    renderer.waveforms.future.result(timeout=3)
+                    self.assertIsNotNone(renderer.waveforms.envelope(path))
+                first = renderer.waveforms.envelope(paths[0])
+                self.assertIsNotNone(first)
+                self.assertIs(renderer.waveforms.envelope(paths[0]), first)
+                self.assertEqual(opened.call_count, len(paths))

@@ -528,7 +528,7 @@ class Manual:
         self.path=OUT/f'Machinista_{"Mikro_MK1" if device=="mikro" else device.upper()}_User_Manual_EN.pdf'
         self.c=canvas.Canvas(str(self.path),pagesize=(W,H),pageCompression=1)
         self.c.setTitle('Machinista - '+self.name+' User Manual')
-        self.c.setAuthor('Machinista project');self.c.setSubject('English workflow and display reference | 0.1.0-beta.18 | Fokus V2')
+        self.c.setAuthor('Machinista project');self.c.setSubject('English workflow and display reference | 0.1.0-beta.19 | Fokus V2')
         self.page=0;self.links=[];self.overflow=[];self.atlas=[];self.chapter_pages={};self.atlas_start=None;self.flow_title=""
         seen=set()
         for item in catalog:
@@ -552,7 +552,7 @@ class Manual:
         c.drawString(M+36,H-36,'MACHINISTA / '+self.name.upper())
         c.setFont('Manual',8);c.drawRightString(W-M,H-36,section.upper())
         c.setStrokeColor(LINE);c.line(M,43,W-M,43)
-        c.setFillColor(MUTED);c.setFont('Manual',8);c.drawString(M,29,'User Manual  |  0.1.0-beta.18  |  English')
+        c.setFillColor(MUTED);c.setFont('Manual',8);c.drawString(M,29,'User Manual  |  0.1.0-beta.19  |  English')
         c.drawRightString(W-M,29,str(self.page))
         if key:c.bookmarkPage(key);c.addOutlineEntry(title,key,0,False)
         self.y=self.text(escape(title),M,H-62,style=ParagraphStyle('title',parent=STYLE,fontName='ManualBold',fontSize=23,leading=27,spaceAfter=13))
@@ -599,7 +599,7 @@ class Manual:
         width=CW if self.device!='mikro' else 300;height=width*(272/976 if self.device=='mk3' else 64/528 if self.device!='mikro' else .5)
         c.drawImage(item['paths'][self.device],M,H-320-height,width,height)
         c.setFillColor(HexColor('#b8d2d6'));c.setFont('Manual',11)
-        for i,line in enumerate(['Play. Record. Slice. Sequence. Arrange.','English edition','Machinista 0.1.0-beta.18 / Fokus V2','7 November 2026']):c.drawString(M,160-i*22,line)
+        for i,line in enumerate(['Play. Record. Slice. Sequence. Arrange.','English edition','Machinista 0.1.0-beta.19 / Fokus V2','8 November 2026']):c.drawString(M,160-i*22,line)
         c.showPage()
 
     def contents(self):

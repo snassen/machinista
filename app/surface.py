@@ -614,7 +614,7 @@ class OriginalSurface:
         if self.page in ('NOTE REPEAT','ARP'):return tuple(f'1/{rate}' for rate in self.project['repeat_presets'][self.repeat_bank*2:self.repeat_bank*2+2])+('LOCK',)
         if self.page == 'BROWSE':
             entry=self.browser.selected()
-            return ('BACK','FIND' if self.shift else 'OPEN' if entry and entry.is_dir() else 'LOAD' if entry else '-','PREH')
+            return ('BACK','FIND' if self.shift else 'OPEN' if entry and self.browser.is_folder(entry) else 'LOAD' if entry else '-','PREH')
         if self.page == 'CHOP': return ('EDIT','ADD' if self.slice_edit and not self.slice_single_apply else 'APPL.TO',('APPLY' if self.slice_single_apply else 'DEL ALL' if self.shift else 'REMOVE') if self.slice_edit else 'APPLY')
         if self.page == 'DUPLICATE': return ('+ EVNT','-','-')
         return None

@@ -6,7 +6,7 @@ from functools import lru_cache
 from app.branding_bitmaps import BITMAPS
 
 NAME = 'Machinista'
-VERSION = '0.1.0-beta.18'
+VERSION = '0.1.0-beta.19'
 
 @lru_cache(maxsize=2)
 def logo_mask(width):

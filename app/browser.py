@@ -26,6 +26,7 @@ class Browser:
         self.internal_sources = tuple(internal_sources)
         self.sources = [Source('SD CARD', self.samples)]
         self.kit_menu = Path(kit_root).parent / '.sample-kits' if kit_root is not None else None
+        self.expansion_samples = False
         self.kit_sources = [Source('SD CARD',Path(kit_root))] if kit_root is not None else []
         self.directory = self.samples
         self.index = 0
@@ -43,6 +44,7 @@ class Browser:
             if root is None or (not self.directory.is_dir() and not self.kit_source(self.directory)):
                 self.directory = None
                 self.index = 0
+                self.expansion_samples = False
                 self.error = 'MEDIA REMOVED'
 
     def current_root(self):
@@ -63,12 +65,19 @@ class Browser:
         root = self.current_root()
         if root is None:
             self.directory, self.index = None, 0
+            self.expansion_samples = False
             return [source.path for source in self.sources if source.name not in ('PROJECT ASSETS','PRESET ASSETS')]
         try:
             rows=self.directory_rows(root)
             self._visible_rows=(self.directory,rows)
             self.error=''
-            return list(rows)
+            entries=list(rows)
+            kit_root=self.sample_kit_root(self.directory/'.expansion-samples')
+            if kit_root is not None and kit_root.is_dir():
+                info=kit_root.stat()
+                if _expansion_sample_rows(kit_root,kit_root.resolve(),info.st_ino,info.st_mtime_ns):
+                    entries.append(self.directory/'.expansion-samples')
+            return entries
         except FileNotFoundError:
             return []
         except OSError:
@@ -77,9 +86,22 @@ class Browser:
 
     def directory_rows(self,root=None):
         root=root or self.current_root() or self.directory.resolve()
-        return _directory_rows(self.directory,root,self.directory.stat().st_mtime_ns)
+        info=self.directory.stat()
+        if self.expansion_samples:
+            return _expansion_sample_rows(self.directory,root,info.st_ino,info.st_mtime_ns)
+        return _directory_rows(self.directory,root,info.st_mtime_ns)
+
+    def sample_kit_root(self,path):
+        if self.expansion_samples or not self.kit_sources or path.name != '.expansion-samples':
+            return None
+        if path.parent == self.samples:
+            return self.kit_sources[0].path
+        root=path.parent/USB_KIT_DIRECTORY
+        return root if any(source.path == root for source in self.kit_sources[1:]) else None
 
     def label(self, path):
+        if self.sample_kit_root(path) is not None:
+            return 'EXPANSION SAMPLES'
         if self.directory is None:
             return next(source.name for source in self.sources if source.path == path)
         if self.directory == self.kit_menu:
@@ -117,16 +139,24 @@ class Browser:
             return 'SD / USB'
         source = next(s for s in self.sources+self.kit_sources if s.path.resolve() == root)
         relative = self.directory.resolve().relative_to(root)
+        if self.expansion_samples:
+            return self.file_label(self.directory) if relative.parts else 'EXPANSION SAMPLES'
         return source.name if str(relative) == '.' else str(relative)
 
     def up(self):
         child=self.directory
         if self.directory == self.kit_menu:
             self.directory = None
+            self.expansion_samples = False
         elif self.directory is not None:
             root = self.current_root()
             if root == self.directory.resolve():
-                self.directory = self.kit_menu if self.kit_source(self.directory) else None
+                if self.expansion_samples:
+                    self.directory = self.samples if child == self.kit_sources[0].path else child.parent
+                    child = self.directory/'.expansion-samples'
+                    self.expansion_samples = False
+                else:
+                    self.directory = self.kit_menu if self.kit_source(self.directory) else None
             else:
                 self.directory = self.directory.parent
         entries=self.entries()
@@ -163,10 +193,10 @@ class Browser:
             return 'SOURCE UNAVAILABLE'
 
     def is_folder(self,path):
-        return path == self.kit_menu or (self.kit_menu is not None and self.directory == self.kit_menu) or path.is_dir()
+        return path == self.kit_menu or (self.kit_menu is not None and self.directory == self.kit_menu) or self.sample_kit_root(path) is not None or path.is_dir()
 
     def single_kit_bank(self,path):
-        if path==self.kit_menu or self.directory==self.kit_menu:return None
+        if self.expansion_samples or path == self.kit_menu or self.directory==self.kit_menu:return None
         manifest=path/'Set.json'
         if not self.kit_source(path) or not manifest.is_file() or manifest.is_symlink():
             return None
@@ -182,6 +212,11 @@ class Browser:
     def open(self):
         path = self.selected()
         if path is None:
+            return None
+        kit_root=self.sample_kit_root(path)
+        if kit_root is not None:
+            self.directory, self.index = kit_root, 0
+            self.expansion_samples = True
             return None
         if self.is_folder(path):
             bank=self.single_kit_bank(path)
@@ -214,11 +249,46 @@ def _directory_rows(directory,root,modified):
     return {path:label for path,_,label in rows}
 
 
+
+@lru_cache(maxsize=16)
+def _expansion_sample_rows(directory,root,inode,modified):
+    """Expose the assets referenced by kit pads, using their readable names."""
+    manifest=directory/'Set.json'
+    if not manifest.is_file() or manifest.is_symlink():
+        folders=[path for path in directory.iterdir() if not path.name.startswith('.')
+                 and not path.is_symlink() and path.is_dir()
+                 and any((path/name).is_file() for name in ('.expansion','Set.json'))]
+        return dict(sorted(((path,Browser.file_label(path)) for path in folders),
+                           key=lambda row:row[1].casefold()))
+
+    from app.assets import sample_references
+    rows={}
+    for bank in sorted(directory.glob('bank-*/Preset.json')):
+        if bank.is_symlink() or bank.parent.is_symlink():
+            continue
+        try:
+            if bank.stat().st_size > 8*1024**2:
+                continue
+            pads=json.loads(bank.read_text())['project']['groups'][0]['pads']
+            for pad in pads:
+                for obj,key in sample_references({'groups':[{'pads':[pad]}]}):
+                    ref=Path(obj[key])
+                    asset=(bank.parent/ref).resolve()
+                    if (asset.suffix.lower() != '.wav' or not asset.is_relative_to(root)
+                            or not asset.is_relative_to(bank.parent.resolve()) or not asset.is_file()):
+                        continue
+                    label=pad.get('name') if obj is pad else ref.stem
+                    label=str(label or ref.stem)
+                    rows.setdefault(asset,label if label.lower().endswith('.wav') else label+'.wav')
+        except (OSError,ValueError,TypeError,KeyError,IndexError,AttributeError):
+            continue
+    return rows
+
 def browser_snapshot(browser):
     def rows(sources):
         return tuple((s.name,str(s.path)) for s in sources)
     return (str(browser.directory) if browser.directory is not None else None,
-            rows(browser.sources),browser.index,browser.prehear,rows(browser.kit_sources))
+            rows(browser.sources),browser.index,browser.prehear,rows(browser.kit_sources),browser.expansion_samples)
 
 
 def browser_from_snapshot(state):
@@ -227,6 +297,7 @@ def browser_from_snapshot(state):
     browser = Browser(sources[0][1],kit_root=kit_sources[0].path if kit_sources else None)
     browser.sources = [Source(name,Path(path)) for name,path in sources]
     browser.kit_sources = kit_sources
+    browser.expansion_samples = bool(kits[1]) if len(kits)>1 else False
     browser.directory = Path(directory) if directory else None
     return browser,index,prehear
 

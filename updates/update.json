@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "beta",
-  "version": "0.1.0-beta.18",
+  "version": "0.1.0-beta.19",
   "minimum_version": "0.1.0-beta.8",
   "os_codename": "trixie",
   "architecture": "arm64",
   "hardware_profile": "standard",
-  "notes": "Sample Kits with MXGRP batch imports, kit previews and artwork, SD/USB browsing, and improved live recording after count-in.",
+  "notes": "Browse single WAVs from expansion kits, import additional MXGRP layouts and reuse MK2 waveforms across pads.",
   "artifact": {
-    "url": "https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.18/machinista-0.1.0-beta.18-arm64.tar.gz",
-    "size": 48173816,
-    "sha256": "db6a0aefc98d4b0e3e630c01615cddcbd36c660809b82d34cd60dcb957e763c8"
+    "url": "https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.19/machinista-0.1.0-beta.19-arm64.tar.gz",
+    "size": 48174294,
+    "sha256": "930527b7da1d6dbbf1cbe41cd80ffa1d2357a49b1fd49699edbb01a3fe659f28"
   }
 }

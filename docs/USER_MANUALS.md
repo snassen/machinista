@@ -2,7 +2,7 @@
 
 [Read online / Online lesen](https://photogeen.github.io/machinista/) — English & Deutsch.
 
-[Download all illustrated manuals (English and German)](https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.18/Machinista-Manuals-EN-DE.zip)
+[Download all illustrated manuals (English and German)](https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.19/Machinista-Manuals-EN-DE.zip)
 
 Choose the illustrated guide for your controller, in English or German. Start
 with setup and **Your first sound**: it uses a built-in patch, so no sample pack
@@ -18,10 +18,10 @@ Controller mode with Machinista running on the connected Pi.
 
 | Controller | English | Deutsch |
 | --- | --- | --- |
-| Mikro MK1 / MK2 | [HTML](https://photogeen.github.io/machinista/mikro-en.html) · [PDF](https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.18/Machinista_Mikro_MK1_User_Manual_EN.pdf) | [HTML](https://photogeen.github.io/machinista/mikro-de.html) · [PDF](https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.18/Machinista_Mikro_MK1_User_Manual_DE.pdf) |
-| MK1 | [HTML](https://photogeen.github.io/machinista/mk1-en.html) · [PDF](https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.18/Machinista_MK1_User_Manual_EN.pdf) | [HTML](https://photogeen.github.io/machinista/mk1-de.html) · [PDF](https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.18/Machinista_MK1_User_Manual_DE.pdf) |
-| MK2 | [HTML](https://photogeen.github.io/machinista/mk2-en.html) · [PDF](https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.18/Machinista_MK2_User_Manual_EN.pdf) | [HTML](https://photogeen.github.io/machinista/mk2-de.html) · [PDF](https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.18/Machinista_MK2_User_Manual_DE.pdf) |
-| MK3 / Maschine+ controller mode | [HTML](https://photogeen.github.io/machinista/mk3-en.html) · [PDF](https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.18/Machinista_MK3_User_Manual_EN.pdf) | [HTML](https://photogeen.github.io/machinista/mk3-de.html) · [PDF](https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.18/Machinista_MK3_User_Manual_DE.pdf) |
+| Mikro MK1 / MK2 | [HTML](https://photogeen.github.io/machinista/mikro-en.html) · [PDF](https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.19/Machinista_Mikro_MK1_User_Manual_EN.pdf) | [HTML](https://photogeen.github.io/machinista/mikro-de.html) · [PDF](https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.19/Machinista_Mikro_MK1_User_Manual_DE.pdf) |
+| MK1 | [HTML](https://photogeen.github.io/machinista/mk1-en.html) · [PDF](https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.19/Machinista_MK1_User_Manual_EN.pdf) | [HTML](https://photogeen.github.io/machinista/mk1-de.html) · [PDF](https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.19/Machinista_MK1_User_Manual_DE.pdf) |
+| MK2 | [HTML](https://photogeen.github.io/machinista/mk2-en.html) · [PDF](https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.19/Machinista_MK2_User_Manual_EN.pdf) | [HTML](https://photogeen.github.io/machinista/mk2-de.html) · [PDF](https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.19/Machinista_MK2_User_Manual_DE.pdf) |
+| MK3 / Maschine+ controller mode | [HTML](https://photogeen.github.io/machinista/mk3-en.html) · [PDF](https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.19/Machinista_MK3_User_Manual_EN.pdf) | [HTML](https://photogeen.github.io/machinista/mk3-de.html) · [PDF](https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.19/Machinista_MK3_User_Manual_DE.pdf) |
 
 ## What changed in this edition?
 
@@ -37,7 +37,7 @@ Controller mode with Machinista running on the connected Pi.
 
 ## Editions and rebuilding
 
-Edition: 7 November 2026, Machinista 0.1.0-beta.18 / Fokus V2.
+Edition: 8 November 2026, Machinista 0.1.0-beta.19 / Fokus V2.
 
 `output/pdf/` contains separate illustrated English and German manuals for
 Mikro MK1, full-size MK1, MK2 and MK3. Screens and menu names stay English in both

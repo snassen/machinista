@@ -350,7 +350,7 @@ def tiles(p,items):
 class Mk2Renderer:
     def __init__(self,startup=False):
         from app.waveform_index import IndexedWaveforms
-        self.waveforms=IndexedWaveforms();self.needs_refresh=False;self.sample_headers={}
+        self.waveforms=IndexedWaveforms(max_assets=16);self.needs_refresh=False;self.sample_headers={}
         from app.branding import BootSplash
         self.boot=BootSplash()
         self.boot_requested=startup

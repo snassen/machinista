@@ -340,7 +340,7 @@ class Application(ClipArranger,MultiSelection,MidiRemote,AudioExport,Mixer,Relin
 
     def browser_preview_path(self):
         path = self.browser.selected()
-        if path and self.browser.kit_source(path):
+        if path and not self.browser.expansion_samples and self.browser.kit_source(path):
             if path.name == 'Preset.json':
                 candidate = path.parent.parent/'.preview.wav'
             else:
@@ -575,7 +575,7 @@ class Application(ClipArranger,MultiSelection,MidiRemote,AudioExport,Mixer,Relin
             self.browser_index = max(0, min(max(0, len(self.entries())-1), self.browser_index+delta))
             if self.browser.prehear and self.browser_index!=previous:
                 selected=self.browser.selected()
-                if selected is not None and self.browser.kit_source(selected):
+                if selected is not None and not self.browser.expansion_samples and self.browser.kit_source(selected):
                     self.defer_browser_preview()
                 else:
                     self.browser_preview_pending=None

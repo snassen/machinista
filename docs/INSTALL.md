@@ -22,7 +22,7 @@ Use a spare SD card: writing the image erases the card you choose.
 ## Prepare the SD card on your computer
 
 1. Download the `.img.xz` file and `SHA256SUMS` from the
-   [current beta release](https://github.com/photogeen/machinista/releases/tag/v0.1.0-beta.18).
+   [current beta release](https://github.com/photogeen/machinista/releases/tag/v0.1.0-beta.19).
    The public image includes Machinista Synth sounds, but no drum sample pack
    or third-party plug-ins. Private tester editions list their extras separately.
 2. Open Raspberry Pi Imager. Choose **Use custom** and select the `.img.xz` file.

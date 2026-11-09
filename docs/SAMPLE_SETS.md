@@ -97,6 +97,13 @@ for projects that still reference them. Deleting a set removes it from the
 catalog/controller browser and permanently removes its bundle;
 projects referring to that removed set should have their samples collected first.
 
+## Load a single expansion sample
+
+Open **BROWSE → SD CARD or USB → EXPANSION SAMPLES → expansion → kit**.
+Choose a WAV and press **LOAD** to assign it to the selected pad. **PREH**
+auditions the highlighted WAV. Use **SAMPLE KITS** when you want to load the
+whole kit instead.
+
 ## Storage and limits
 
 SD kits are stored in `presets/Groups`. New sets have stable internal IDs, a

@@ -63,12 +63,50 @@ class SetEditorTests(unittest.TestCase):
         self.assertEqual(draft['pads'][0]['asset'], draft['pads'][1]['asset'])
         self.assertEqual(self.library.sets.listing(), [])
 
+        alternate = kit.replace(ids + bytes.fromhex('01090101') + ids * 4,
+                                ids + bytes.fromhex('000101') + ids * 4)
+        alternate_draft = self.editor.inspect_maschine_kit('My Kit.mxgrp', io.BytesIO(alternate), len(alternate))
+        self.assertEqual([pad['name'] for pad in alternate_draft['pads']],
+                         [pad['name'] for pad in draft['pads']])
+        self.assertEqual(alternate_draft['notes'], draft['notes'])
+
         (path / 'Snare.wav').write_bytes(self.wav())
         draft = self.editor.inspect_maschine_kit('My Kit.mxgrp', io.BytesIO(kit), len(kit))
         pads = draft['pads'] + [None] * 13
         result = self.editor.save(dict(name=draft['name'], banks=[dict(name='My Kit', pads=pads)]))
         saved = self.editor.item(result['id'])
         self.assertEqual(saved['banks'][0]['pads'][2]['name'], 'Snare')
+
+    def test_expansion_sample_browser_loads_one_wav_on_the_selected_pad(self):
+        from app.browser import browser_from_snapshot, browser_snapshot
+        from app.model import Application
+
+        draft = self.draft()
+        draft['expansion'] = 'Test Expansion'
+        self.editor.save(draft)
+        app = Application(self.root)
+        app.browser.refresh([])
+        app.browser.directory = None
+        app.page = 'BROWSE'
+        app.pad = 3
+        app.enter()  # SD CARD
+        app.browser.index = app.entries().index(app.samples / '.expansion-samples')
+        self.assertEqual(app.softkeys()[1], 'OPEN')
+        app.enter()
+        for label in ('Test Expansion', draft['name']):
+            self.assertEqual(app.browser.label(app.browser.selected()), label)
+            app.enter()
+        view, _, _ = browser_from_snapshot(browser_snapshot(app.browser))
+        asset, = view.entries()
+        self.assertEqual(view.label(asset), 'My Kick.wav')
+        self.assertEqual(app.browser_preview_path(), asset)
+        app.enter()
+        self.assertEqual(app.track()['sample'], str(asset))
+        self.assertIsNone(app.project['groups'][0]['pads'][0]['sample'])
+        for title in ('Test Expansion', 'EXPANSION SAMPLES', 'SD CARD', 'SD / USB'):
+            app.browser.up()
+            self.assertEqual(app.browser.title(), title)
+        self.assertFalse(app.browser.expansion_samples)
 
     def test_expansion_folder_contains_separately_editable_kits(self):
         first = self.draft()

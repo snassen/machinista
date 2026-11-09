@@ -2,5 +2,5 @@
   "enabled": true,
   "repository": "photogeen/machinista",
   "public_key": "/etc/machinista/update-public.pem",
-  "current_version": "0.1.0-beta.18"
+  "current_version": "0.1.0-beta.19"
 }

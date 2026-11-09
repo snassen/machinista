@@ -10,7 +10,7 @@ _SOUND = re.compile(
     re.DOTALL,
 )
 _GROUP = re.compile(
-    rb'\x02..\x01[\x01\x09](?:\x00|\x01[\x00\x01])(?:\x02..){4}'
+    rb'\x02..(?:\x00\x01\x01|\x01[\x01\x09](?:\x00|\x01[\x00\x01]))(?:\x02..){4}'
     + _RECORD + rb'\x00(?:\x00|\x01.){3}\x00{2}(?:\x02..){2}\x00\x01',
     re.DOTALL,
 )
