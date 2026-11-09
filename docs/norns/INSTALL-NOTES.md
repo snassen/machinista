@@ -100,8 +100,8 @@ sudo usermod -aG docker machinista   # new sessions only; use `sg docker -c …`
 separate `docker-cli` package you get "docker: not found".
 
 ## 8. norns runtime image
-- Copy norns-lab to the Pi (rsync from a workstation avoids storing GitHub
-  credentials on the Pi), then run `bash scripts/smoke-runtime.sh`.
+- Clone [norns-lab](https://github.com/snassen/norns-lab) on the Pi (it is
+  public, so no GitHub credentials are needed), then run `bash scripts/smoke-runtime.sh`.
 - The build compiles libmonome, nng and norns natively on the Pi 5. Build time
   was not measured; wrap it in `time` next run.
 - **Gotcha (fixed in norns-lab `7cc4f0e`):** jackd died with `Bus error` and

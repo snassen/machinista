@@ -53,8 +53,9 @@ Status: **prototype, working on the MK3** (2026-11-08, Pi 5).
 | `norns/tools/osc_send.py` | Sends a test OSC message to a norns instance |
 | `tests/test_norns_mode.py` | Unit tests |
 
-The norns runtime image comes from norns-lab (a separate, currently private
-repository): upstream norns built for ARM64 Linux in Docker.
+The norns runtime image comes from
+[norns-lab](https://github.com/snassen/norns-lab) (a separate repository):
+upstream norns built for ARM64 Linux in Docker.
 
 ## Putting the fork on a Pi
 Both Pis run the official Machinista release the fork is built on (beta 19
