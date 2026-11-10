@@ -23,7 +23,7 @@ concurrency:
   cancel-in-progress: false
 env:
   # norns-lab revision the fork needs: JACK period and post-ready hook.
-  NORNS_LAB_REF: 2cd9392e
+  NORNS_LAB_REF: 2cd93926e7e25b56826260bc5873587d7cf792f1
 jobs:
   images:
     runs-on: ubuntu-24.04-arm
@@ -43,7 +43,7 @@ jobs:
         run: |
           owner="$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')"
           tag="${{ inputs.tag || github.ref_name }}"
-          echo "runtime=ghcr.io/$owner/norns-lab-runtime:${NORNS_LAB_REF}" >> "$GITHUB_OUTPUT"
+          echo "runtime=ghcr.io/$owner/norns-lab-runtime:${NORNS_LAB_REF:0:7}" >> "$GITHUB_OUTPUT"
           echo "station=ghcr.io/$owner/norns-station" >> "$GITHUB_OUTPUT"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
       - name: Log in to ghcr.io
