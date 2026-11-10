@@ -100,6 +100,13 @@ sudo usermod -aG docker machinista   # new sessions only; use `sg docker -c …`
 separate `docker-cli` package you get "docker: not found".
 
 ## 8. norns runtime image
+**Since the first release:** skip this and the `docker build` in section 11.
+Pull the ready-made image instead (built by `.github/workflows/norns-images.yml`):
+```bash
+docker pull ghcr.io/snassen/norns-station:latest
+docker tag ghcr.io/snassen/norns-station:latest norns-station
+```
+The steps below build it on the Pi.
 - Clone [norns-lab](https://github.com/snassen/norns-lab) on the Pi (it is
   public, so no GitHub credentials are needed), then run `bash scripts/smoke-runtime.sh`.
 - The build compiles libmonome, nng and norns natively on the Pi 5. Build time
@@ -165,8 +172,7 @@ Then in Machinista: MIDI IN and MIDI OUT = NORNS MIDI BUS, MIDI SYNC = OUT
 - Unique hostname per device.
 - Password change or key-only SSH (**DECISION**).
 - Power-supply check with a clear warning.
-- Measure and log build duration; prebuild and pull an ARM64 norns image
-  instead of compiling on every Pi.
+- Measure and log build duration. (Prebuilt ARM64 image: done, see section 8.)
 - Audio bridge between norns' JACK and Machinista's ALSA engine (open design).
 
 ## clone-to-nvme.sh (as run)

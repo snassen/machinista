@@ -1,0 +1,76 @@
+# Builds the ARM64 norns images for the norns-mode fork and publishes them to
+# GitHub's container registry, so a Pi can pull them instead of compiling
+# norns and SuperCollider extras itself:
+#   ghcr.io/<owner>/norns-lab-runtime:<norns-lab commit>
+#   ghcr.io/<owner>/norns-station:<tag> and :latest
+# Runs for a norns release tag (v...-norns.N), a test tag (v0-norns.testN,
+# leaves latest alone) or by hand from the Actions tab (default branch only).
+name: norns images
+'on':
+  push:
+    tags: ['v*-norns.*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Image tag for norns-station (e.g. test)
+        required: true
+        default: test
+permissions:
+  contents: read
+  packages: write
+concurrency:
+  group: norns-images-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  # norns-lab revision the fork needs: JACK period and post-ready hook.
+  NORNS_LAB_REF: 2cd9392e
+jobs:
+  images:
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v7
+        with:
+          repository: snassen/norns-lab
+          ref: ${{ env.NORNS_LAB_REF }}
+          path: norns-lab
+          persist-credentials: false
+      - name: Names
+        id: names
+        run: |
+          owner="$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')"
+          tag="${{ inputs.tag || github.ref_name }}"
+          echo "runtime=ghcr.io/$owner/norns-lab-runtime:${NORNS_LAB_REF}" >> "$GITHUB_OUTPUT"
+          echo "station=ghcr.io/$owner/norns-station" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+      - name: Log in to ghcr.io
+        run: echo '${{ secrets.GITHUB_TOKEN }}' | docker login ghcr.io -u '${{ github.actor }}' --password-stdin
+      - name: Build norns-lab runtime
+        run: |
+          docker build -t '${{ steps.names.outputs.runtime }}' \
+            --label org.opencontainers.image.source=https://github.com/${{ github.repository }} \
+            -f norns-lab/runtime/Dockerfile norns-lab
+      - name: Build norns-station
+        run: |
+          docker build -t '${{ steps.names.outputs.station }}:${{ steps.names.outputs.tag }}' \
+            --build-arg BASE='${{ steps.names.outputs.runtime }}' \
+            --label org.opencontainers.image.source=https://github.com/${{ github.repository }} \
+            --label org.opencontainers.image.description="norns for the Machinista norns-mode fork (ARM64)" \
+            --label org.opencontainers.image.licenses=GPL-3.0-or-later \
+            norns/container
+      - name: Smoke test
+        run: |
+          docker run --rm --entrypoint bash '${{ steps.names.outputs.station }}:${{ steps.names.outputs.tag }}' -c \
+            'test -n "$(find /home/we/norns/build -name matron -type f)" && ls /home/we/.local/share/SuperCollider/Extensions/mi-UGens/MiBeads.so && cat /home/we/version.txt'
+      - name: Push
+        run: |
+          docker push '${{ steps.names.outputs.runtime }}'
+          docker push '${{ steps.names.outputs.station }}:${{ steps.names.outputs.tag }}'
+          # A tag with "test" in it (e.g. v0-norns.test1) builds without moving latest.
+          if [[ '${{ github.event_name }}' == push && '${{ github.ref_name }}' != *test* ]]; then
+            docker tag '${{ steps.names.outputs.station }}:${{ steps.names.outputs.tag }}' '${{ steps.names.outputs.station }}:latest'
+            docker push '${{ steps.names.outputs.station }}:latest'
+          fi

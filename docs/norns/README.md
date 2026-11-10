@@ -66,8 +66,8 @@ tools/deploy-fork.sh machinista@<pi>   # refuses if the Pi runs another version
 ```
 Run it again after every Machinista update (an update overwrites the files
 the fork changes). A new Pi also needs Docker (`apt install docker.io`, user
-in the docker group), the `norns-station` image (built here, or
-`docker save | docker load` from another Pi), `~/norns` (the script library
+in the docker group), the `norns-station` image (pulled ready-made, see
+below, or built here), `~/norns` (the script library
 and data), linger, the Norns plug-ins uploaded once, and the boot service
 `norns/systemd/norns-instances.service` (instances listed in
 `~/norns/instances`). Without it, Docker restarts the containers at boot
@@ -76,13 +76,20 @@ without norns' clean-start step and every norns comes up with no script.
 ## Quick start (on the Pi)
 ```bash
 loginctl enable-linger machinista   # once: keeps /dev/shm/norns alive (below)
-docker build -t norns-station norns/container   # once, after the norns-lab image
+docker pull ghcr.io/snassen/norns-station:latest   # once: the ready-made ARM64 image
+docker tag ghcr.io/snassen/norns-station:latest norns-station
 norns/library/install-pack.sh   # the script pack into ~/norns/code (shared)
 norns/run-norns.sh 1        # OSC on 127.0.0.1:10111, files in /dev/shm/norns/1
 norns/run-norns.sh 2        # OSC on 127.0.0.1:10112, files in /dev/shm/norns/2
 norns/bridge/build.sh plugin
 norns/bridge/test.sh        # guard + drift tests in a throwaway container
 ```
+The image is built and published by `.github/workflows/norns-images.yml`
+for every release tag. To build it yourself instead, build norns-lab's
+runtime image first (`bash scripts/smoke-runtime.sh` in a norns-lab checkout),
+then `docker build -t norns-station norns/container`. That compiles norns and
+SuperCollider extras on the Pi and takes a long time.
+
 Install the plug-ins: zip the `norns/bridge/build/norns.lv2` **folder** (not its files) and
 upload it in the WebUI (LV2 Plugins), or with `POST /api/lv2/upload`.
 Machinista picks up the new catalog by itself while the transport is stopped.
