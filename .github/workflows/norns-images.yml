@@ -64,7 +64,7 @@ jobs:
       - name: Smoke test
         run: |
           docker run --rm --entrypoint bash '${{ steps.names.outputs.station }}:${{ steps.names.outputs.tag }}' -c \
-            'test -n "$(find /home/we/norns/build -name matron -type f)" && ls /home/we/.local/share/SuperCollider/Extensions/mi-UGens/MiBeads.so && cat /home/we/version.txt'
+            'test -x /home/we/norns/build/norns/norns && ls /home/we/.local/share/SuperCollider/Extensions/mi-UGens/MiBeads.so && cat /home/we/version.txt'
       - name: Push
         run: |
           docker push '${{ steps.names.outputs.runtime }}'
